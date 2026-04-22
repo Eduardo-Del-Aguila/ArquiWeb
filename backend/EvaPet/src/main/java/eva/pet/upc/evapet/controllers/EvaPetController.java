@@ -25,10 +25,7 @@ public class EvaPetController {
     public ResponseEntity<List<EvaPetDTO>> List(){
         ModelMapper m = new ModelMapper();
         List<EvaPet> pets = eS.getAll().stream().filter(EvaPet::isActive).toList();
-
         List<EvaPetDTO> myPets = pets.stream().map(p -> m.map(p,EvaPetDTO.class)).toList();
-
-
         return ResponseEntity.ok(myPets);
     }
 
@@ -38,19 +35,15 @@ public class EvaPetController {
         if(evaI.getName() == null | evaI.getDescription() == null) return ResponseEntity.badRequest().body("Campos incompletos");
         List<String> names = eS.getAllNames();
         if(names.contains(evaI.getName())) return ResponseEntity.badRequest().body("Nombre ocupado");
-
         EvaPet eva = m.map(evaI, EvaPet.class);
         eva.setActive(true);
         eva.setCreateAt(LocalDateTime.now());
         eva.setLastInteraction(LocalDateTime.now());
         eva.setLevel(0);
         eva.setExperiencie(0);
-
         eS.create(eva);
-
         return ResponseEntity.ok("");
     }
-
 
     @PutMapping("/actuliza/{id}")
     public ResponseEntity<?> Update(@RequestBody EvaPetInsertDTO evaI, @PathVariable Long id){
@@ -71,10 +64,7 @@ public class EvaPetController {
             myEva.setStatus(evaI.getStatus());
 
             eS.update(myEva.getId(),myEva);
-
         EvaPetInsertDTO updated = m.map(myEva, EvaPetInsertDTO.class);
-
-
         return ResponseEntity.ok(updated);
     }
 
