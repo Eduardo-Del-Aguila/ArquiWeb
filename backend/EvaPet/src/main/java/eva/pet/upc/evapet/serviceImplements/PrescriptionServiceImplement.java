@@ -1,8 +1,7 @@
 package eva.pet.upc.evapet.serviceImplements;
 
 import eva.pet.upc.evapet.models.Prescription;
-import eva.pet.upc.evapet.repositories.IMedicationsRepository;
-import eva.pet.upc.evapet.repositories.IPrescriptionRespository;
+import eva.pet.upc.evapet.repositories.IPrescriptionRepository;
 import eva.pet.upc.evapet.serviceInterfaces.IPrescriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,7 @@ import java.util.Optional;
 public class PrescriptionServiceImplement implements IPrescriptionService {
 
     @Autowired
-    private IPrescriptionRespository pRepo;
+    private IPrescriptionRepository pRepo;
 
 
     @Override
