@@ -2,18 +2,16 @@ package eva.pet.upc.evapet.controllers;
 
 import eva.pet.upc.evapet.dtos.MedicationsDTO;
 import eva.pet.upc.evapet.dtos.MedicationsInsertDTO;
+import eva.pet.upc.evapet.models.Medications;
 import eva.pet.upc.evapet.serviceInterfaces.IMedicationsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,23 +28,74 @@ public class MedicationsControllers {
         return ResponseEntity.ok(listaMedications);
     }
 
-    @PostMapping("/web")
+    @PostMapping("/medications")
     public ResponseEntity<?> registrar(@RequestBody MedicationsInsertDTO dto){
 
-        if (dto.() == null ) {
+        if (dto.getName() == null || dto.getName().isEmpty()) {
             return ResponseEntity.badRequest()
-                    .body("Las fecha no pueden ser nulas");
+                    .body("El nombre no puede ser vacío");
         }
-        if (!dto.getBirthDateAuthor().isBefore(LocalDate.now())) {
-            return ResponseEntity.badRequest()
-                    .body("La fecha debe ser anterior a la actual");
-        }
+
         ModelMapper m=new ModelMapper();
-        Author a=m.map(dto, Author.class);
-        Author autor= aS.insert(a);
-        AuthorInsertDTO responseDTO=m.map(autor,AuthorInsertDTO.class);
-        return  ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        Medications med = m.map(dto, Medications.class);
+
+        Medications nuevo = mS.insert(med);
+
+        MedicationsInsertDTO responseDTO = m.map(nuevo, MedicationsInsertDTO.class);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
+
+    @GetMapping("/medications/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable int id) {
+        ModelMapper m = new ModelMapper();
+        Optional<Medications> med = mS.listId(id);
+
+        if (med.isPresent()) {
+            MedicationsInsertDTO dto = m.map(med.get(), MedicationsInsertDTO.class);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Medicamento no encontrado");
+        }
+    }
+
+    @PutMapping("/medications")
+    public ResponseEntity<String> actualizar(@RequestBody MedicationsInsertDTO dto) {
+
+        Optional<Medications> existente = mS.listId(dto.getIdMedication());
+
+        if (existente.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Medicamento no encontrado");
+        }
+
+        Medications m = existente.get();
+
+        m.setName(dto.getName());
+        m.setDescription(dto.getDescription());
+        m.setActive(dto.isActive());
+
+        mS.update(m);
+
+        return ResponseEntity.ok("Medicamento actualizado correctamente");
+    }
+
+    @DeleteMapping("/medications/{id}")
+    public ResponseEntity<String> eliminar(@PathVariable int id) {
+
+        Optional<Medications> med = mS.listId(id);
+
+        if (med.isPresent()) {
+            mS.delete(id);
+            return ResponseEntity.ok("Medication eliminado correctamente");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Medication no encontrado");
+        }
+    }
+
+
 
 
 }
