@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MedicationsServiceImplement implements IMedicationsService {
@@ -17,5 +18,26 @@ public class MedicationsServiceImplement implements IMedicationsService {
     public List<Medications> list()
     {
         return mRepo.findAll();
+    }
+
+    @Override
+    public Medications insert(Medications med) {
+        return mRepo.save(med);
+    }
+
+    @Override
+    public Optional<Medications> listId(int id) {
+        return mRepo.findById(id);
+    }
+
+    @Override
+    public void update(Medications m) {
+        mRepo.save(m);
+    }
+
+    @Override
+    public void delete(int id) {
+        mRepo.deleteById(id);
+
     }
 }
