@@ -1,0 +1,133 @@
+package eva.pet.upc.evapet.controllers;
+
+import eva.pet.upc.evapet.dtos.MedicamentoUsoDTO;
+import eva.pet.upc.evapet.dtos.PrescriptionMedicationsDTO;
+import eva.pet.upc.evapet.dtos.PrescriptionMedicationsInsertDTO;
+import eva.pet.upc.evapet.models.PrescriptionMedications;
+import eva.pet.upc.evapet.serviceInterfaces.IPrescriptionMedicationsService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/prescription-medications")
+public class PrescriptionMedicationsControllers {
+    @Autowired
+    private IPrescriptionMedicationsService pMS;
+
+    @GetMapping
+    public ResponseEntity<List<PrescriptionMedicationsDTO>> listar() {
+        ModelMapper m = new ModelMapper();
+
+        List<PrescriptionMedicationsDTO> lista = pMS.list().stream()
+                .map(y -> m.map(y, PrescriptionMedicationsDTO.class))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(lista);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> registrar(@RequestBody PrescriptionMedicationsInsertDTO dto) {
+
+        if (dto.getIdPrescription() == 0 || dto.getIdMedication() == 0) {
+            return ResponseEntity.badRequest()
+                    .body("Los IDs de prescription y medication son obligatorios");
+        }
+
+        ModelMapper m = new ModelMapper();
+        PrescriptionMedications pm = m.map(dto, PrescriptionMedications.class);
+
+        PrescriptionMedications nuevo = pMS.insert(pm);
+
+        PrescriptionMedicationsInsertDTO responseDTO =
+                m.map(nuevo, PrescriptionMedicationsInsertDTO.class);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable int id) {
+
+        ModelMapper m = new ModelMapper();
+        Optional<PrescriptionMedications> pm = pMS.listId(id);
+
+        if (pm.isPresent()) {
+            PrescriptionMedicationsInsertDTO dto =
+                    m.map(pm.get(), PrescriptionMedicationsInsertDTO.class);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Registro no encontrado");
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<String> actualizar(@RequestBody PrescriptionMedicationsInsertDTO dto) {
+
+        Optional<PrescriptionMedications> existente =
+                pMS.listId(dto.getIdPrescriptionMedications());
+
+        if (existente.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Registro no encontrado");
+        }
+
+        PrescriptionMedications pm = existente.get();
+
+        pm.setDose(dto.getDose());
+        pm.setFrequency(dto.getFrequency());
+        pm.setDuration(dto.getDuration());
+        pm.setIdPrescription(dto.getIdPrescription());
+        pm.setIdMedication(dto.getIdMedication());
+
+        pMS.update(pm);
+
+        return ResponseEntity.ok("Registro actualizado correctamente");
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> eliminar(@PathVariable int id) {
+
+        Optional<PrescriptionMedications> pm = pMS.listId(id);
+
+        if (pm.isPresent()) {
+            pMS.delete(id);
+            return ResponseEntity.ok("Registro eliminado correctamente");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Registro no encontrado");
+        }
+    }
+
+    @GetMapping("/medicamentos-mas-usados")
+    public ResponseEntity<?> medicamentosMasUsados() {
+
+        List<Object[]> lista = pMS.medicamentosMasUsados();
+
+        if(lista.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No hay registros");
+        }
+
+        List<MedicamentoUsoDTO> respuesta = new ArrayList<>();
+
+        for(Object[] fila : lista){
+            MedicamentoUsoDTO dto = new MedicamentoUsoDTO();
+
+            dto.setName((String) fila[0]);
+            dto.setTotalUso(((Number) fila[1]).intValue());
+
+            respuesta.add(dto);
+        }
+
+        return ResponseEntity.ok(respuesta);
+    }
+
+}
