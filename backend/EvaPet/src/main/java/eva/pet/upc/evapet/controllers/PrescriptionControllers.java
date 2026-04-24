@@ -2,6 +2,7 @@ package eva.pet.upc.evapet.controllers;
 
 import eva.pet.upc.evapet.dtos.PrescriptionDTO;
 import eva.pet.upc.evapet.dtos.PrescriptionInsertDTO;
+import eva.pet.upc.evapet.dtos.RecetasPacienteDTO;
 import eva.pet.upc.evapet.models.Prescription;
 import eva.pet.upc.evapet.serviceInterfaces.IPrescriptionService;
 import org.modelmapper.ModelMapper;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -97,6 +99,30 @@ public class PrescriptionControllers {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Prescription no encontrado");
         }
+    }
+
+    @GetMapping("/recetas-por-paciente")
+    public ResponseEntity<?> recetasPorPaciente(){
+
+        List<Object[]> lista = pS.recetasPorPaciente();
+
+        if(lista.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No hay registros");
+        }
+
+        List<RecetasPacienteDTO> respuesta = new ArrayList<>();
+
+        for(Object[] fila : lista){
+            RecetasPacienteDTO dto = new RecetasPacienteDTO();
+
+            dto.setIdUserPatient(((Number) fila[0]).intValue());
+            dto.setTotalRecetas(((Number) fila[1]).intValue());
+
+            respuesta.add(dto);
+        }
+
+        return ResponseEntity.ok(respuesta);
     }
 
 }

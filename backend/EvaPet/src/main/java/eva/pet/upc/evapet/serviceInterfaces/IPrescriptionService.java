@@ -16,4 +16,6 @@ public interface IPrescriptionService {
     void update(Prescription p);
 
     void delete(int id);
+
+    List<Object[]> recetasPorPaciente();
 }

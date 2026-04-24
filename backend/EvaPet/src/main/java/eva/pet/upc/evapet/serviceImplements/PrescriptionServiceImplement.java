@@ -40,4 +40,9 @@ public class PrescriptionServiceImplement implements IPrescriptionService {
     public void delete(int id) {
         pRepo.deleteById(id);
     }
+
+    @Override
+    public List<Object[]> recetasPorPaciente() {
+        return pRepo.recetasPorPaciente();
+    }
 }
