@@ -1,9 +1,9 @@
 package eva.pet.upc.evapet.repositories;
 
-import eva.pet.upc.evapet.models.Specialty;
+import eva.pet.upc.evapet.models.Symptom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ISpecialtyRepository extends JpaRepository<Specialty,Integer> {
+public interface ISymptomRepository extends JpaRepository<Symptom,Long> {
 }
