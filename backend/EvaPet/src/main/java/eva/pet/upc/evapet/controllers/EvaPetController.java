@@ -24,7 +24,7 @@ public class EvaPetController {
     @GetMapping("/mascotas")
     public ResponseEntity<List<EvaPetDTO>> List(){
         ModelMapper m = new ModelMapper();
-        List<EvaPet> pets = eS.getAll().stream().filter(EvaPet::isActive).toList();
+        List<EvaPet> pets = eS.getAll();
         List<EvaPetDTO> myPets = pets.stream().map(p -> m.map(p,EvaPetDTO.class)).toList();
         return ResponseEntity.ok(myPets);
     }
@@ -45,7 +45,7 @@ public class EvaPetController {
         return ResponseEntity.ok("");
     }
 
-    @PutMapping("/actuliza/{id}")
+    @PutMapping("/actulizar/{id}")
     public ResponseEntity<?> Update(@RequestBody EvaPetInsertDTO evaI, @PathVariable Long id){
         ModelMapper m = new ModelMapper();
         Optional<EvaPet> optional =eS.getById(id);

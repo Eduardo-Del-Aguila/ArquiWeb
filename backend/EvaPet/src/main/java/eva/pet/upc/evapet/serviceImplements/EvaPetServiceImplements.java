@@ -18,7 +18,9 @@ public class EvaPetServiceImplements implements IEvaPetService {
     //Ejecutamos todos los métodos de mi IEvaPetInterface ya que lo estamos ejecutanto con impleents
     @Override
     public List<EvaPet> getAll() {
-        return eR.findAll();
+        return eR.findAll()
+                .stream()
+                .filter(EvaPet::isActive).toList();
     }
 
     @Override

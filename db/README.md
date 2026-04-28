@@ -36,3 +36,8 @@ ENUM('salud', 'comportamiento', 'medicamento', 'inactividad')
 
 5. symptom.severidad
 ENUM('leve', 'moderado', 'grave')
+
+28/04/2026
+
+Considerar una elimicacion de la talba intermedia 
+
