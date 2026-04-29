@@ -14,11 +14,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/api/sintomas")
 public class SymptomController {
     @Autowired
     private ISymptomService sS;
 
-    @GetMapping
+    @GetMapping("/listar")
     public ResponseEntity<List<SymptomInsertDTO>> listar() {
         ModelMapper m = new ModelMapper();
         List<SymptomInsertDTO> listaSymptoms = sS.List().stream()
@@ -28,7 +29,7 @@ public class SymptomController {
         return ResponseEntity.ok(listaSymptoms);
     }
 
-    @PostMapping("/web")
+    @PostMapping("/insertar")
     public ResponseEntity<?> registrar(@RequestBody SymptomInsertDTO dto) {
 
         if (dto.getName() == null || dto.getName().isEmpty()) {
@@ -84,7 +85,7 @@ public class SymptomController {
         return ResponseEntity.ok("Síntoma actualizado correctamente");
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminar(@PathVariable long id) {
         Optional<Symptom> symptom = sS.ListById(id);
 
