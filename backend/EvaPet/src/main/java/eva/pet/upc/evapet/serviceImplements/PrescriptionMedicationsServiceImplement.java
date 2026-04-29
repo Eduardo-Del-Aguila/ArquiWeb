@@ -40,7 +40,7 @@ public class PrescriptionMedicationsServiceImplement implements IPrescriptionMed
     }
 
     @Override
-    public List<Object[]> medicamentosMasUsados() {
-        return pmRepo.medicamentosMasUsados();
+    public List<Object[]> MostUsedMedications() {
+        return pmRepo.MostUsedMedications();
     }
 }

@@ -1,4 +1,4 @@
-package eva.pet.upc.evapet.dtos;
+package eva.pet.upc.evapet.dtos.medications;
 
 public class MedicationsDTO {
     private String name;

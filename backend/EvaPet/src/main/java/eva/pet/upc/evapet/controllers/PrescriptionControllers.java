@@ -1,8 +1,8 @@
 package eva.pet.upc.evapet.controllers;
 
-import eva.pet.upc.evapet.dtos.PrescriptionDTO;
-import eva.pet.upc.evapet.dtos.PrescriptionInsertDTO;
-import eva.pet.upc.evapet.dtos.RecetasPacienteDTO;
+import eva.pet.upc.evapet.dtos.prescription.PrescriptionDTO;
+import eva.pet.upc.evapet.dtos.prescription.PrescriptionInsertDTO;
+import eva.pet.upc.evapet.dtos.prescriptionmedications.RecipesPatientDTO;
 import eva.pet.upc.evapet.models.Prescription;
 import eva.pet.upc.evapet.serviceInterfaces.IPrescriptionService;
 import org.modelmapper.ModelMapper;
@@ -17,12 +17,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/prescriptions")
+@RequestMapping("/api/prescripcion")
 public class PrescriptionControllers {
     @Autowired
     private IPrescriptionService pS;
 
-    @GetMapping
+    @GetMapping("/listar")
     public ResponseEntity<List<PrescriptionDTO>> listar(){
         ModelMapper m = new ModelMapper();
 
@@ -33,7 +33,7 @@ public class PrescriptionControllers {
         return ResponseEntity.ok(lista);
     }
 
-    @PostMapping
+    @PostMapping("/insertar")
     public ResponseEntity<?> registrar(@RequestBody PrescriptionInsertDTO dto){
 
         if(dto.getDiagnosis() == null || dto.getDiagnosis().isEmpty()){
@@ -50,7 +50,7 @@ public class PrescriptionControllers {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/listar/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable int id){
 
         ModelMapper m = new ModelMapper();
@@ -65,7 +65,7 @@ public class PrescriptionControllers {
         }
     }
 
-    @PutMapping
+    @PutMapping("/actualizar")
     public ResponseEntity<String> actualizar(@RequestBody PrescriptionInsertDTO dto){
 
         Optional<Prescription> existente = pS.listId(dto.getIdPrescription());
@@ -87,7 +87,7 @@ public class PrescriptionControllers {
         return ResponseEntity.ok("Prescripcion actualizado correctamente");
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminar(@PathVariable int id){
 
         Optional<Prescription> p = pS.listId(id);
@@ -104,17 +104,17 @@ public class PrescriptionControllers {
     @GetMapping("/recetas-por-paciente")
     public ResponseEntity<?> recetasPorPaciente(){
 
-        List<Object[]> lista = pS.recetasPorPaciente();
+        List<Object[]> lista = pS.RecipesPerPatient();
 
         if(lista.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("No hay registros");
         }
 
-        List<RecetasPacienteDTO> respuesta = new ArrayList<>();
+        List<RecipesPatientDTO> respuesta = new ArrayList<>();
 
         for(Object[] fila : lista){
-            RecetasPacienteDTO dto = new RecetasPacienteDTO();
+            RecipesPatientDTO dto = new RecipesPatientDTO();
 
             dto.setIdUserPatient(((Number) fila[0]).intValue());
             dto.setTotalRecetas(((Number) fila[1]).intValue());

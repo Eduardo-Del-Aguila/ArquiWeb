@@ -16,5 +16,5 @@ public interface IPrescriptionMedicationsService {
 
     void delete(int id);
 
-    List<Object[]> medicamentosMasUsados();
+    List<Object[]> MostUsedMedications();
 }

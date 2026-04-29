@@ -42,7 +42,7 @@ public class PrescriptionServiceImplement implements IPrescriptionService {
     }
 
     @Override
-    public List<Object[]> recetasPorPaciente() {
-        return pRepo.recetasPorPaciente();
+    public List<Object[]> RecipesPerPatient() {
+        return pRepo.RecipesPerPatient();
     }
 }

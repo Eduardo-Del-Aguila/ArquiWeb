@@ -13,6 +13,6 @@ public interface IPrescriptionRepository extends JpaRepository<Prescription, Int
     @Query(value = "SELECT p.id_user_patient, COUNT(p.id_prescription) " +
             "FROM prescription p " +
             "GROUP BY p.id_user_patient ORDER BY COUNT(p.id_prescription) DESC", nativeQuery = true)
-    List<Object[]> recetasPorPaciente();
+    List<Object[]> RecipesPerPatient();
 
 }

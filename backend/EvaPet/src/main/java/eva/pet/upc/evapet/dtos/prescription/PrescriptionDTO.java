@@ -1,21 +1,12 @@
-package eva.pet.upc.evapet.dtos;
+package eva.pet.upc.evapet.dtos.prescription;
 
 import java.time.LocalDate;
 
-public class PrescriptionInsertDTO {
-    private int idPrescription;
+public class PrescriptionDTO {
     private int idUserPatient;
     private int idEva;
     private String diagnosis;
     private LocalDate date;
-
-    public int getIdPrescription() {
-        return idPrescription;
-    }
-
-    public void setIdPrescription(int idPrescription) {
-        this.idPrescription = idPrescription;
-    }
 
     public int getIdUserPatient() {
         return idUserPatient;

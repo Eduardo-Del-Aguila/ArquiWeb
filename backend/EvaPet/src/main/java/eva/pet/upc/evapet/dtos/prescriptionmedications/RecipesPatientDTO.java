@@ -1,6 +1,6 @@
-package eva.pet.upc.evapet.dtos;
+package eva.pet.upc.evapet.dtos.prescriptionmedications;
 
-public class RecetasPacienteDTO {
+public class RecipesPatientDTO {
 
     private int idUserPatient;
     private int totalRecetas;

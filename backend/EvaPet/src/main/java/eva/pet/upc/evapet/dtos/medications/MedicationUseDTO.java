@@ -1,6 +1,6 @@
-package eva.pet.upc.evapet.dtos;
+package eva.pet.upc.evapet.dtos.medications;
 
-public class MedicamentoUsoDTO {
+public class MedicationUseDTO {
 
     private String name;
     private int totalUso;

@@ -1,4 +1,4 @@
-package eva.pet.upc.evapet.dtos;
+package eva.pet.upc.evapet.dtos.prescriptionmedications;
 
 public class PrescriptionMedicationsInsertDTO {
     private int idPrescriptionMedications;

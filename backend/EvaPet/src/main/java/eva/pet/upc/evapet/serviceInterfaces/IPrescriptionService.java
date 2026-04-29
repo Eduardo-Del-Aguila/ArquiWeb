@@ -17,5 +17,5 @@ public interface IPrescriptionService {
 
     void delete(int id);
 
-    List<Object[]> recetasPorPaciente();
+    List<Object[]> RecipesPerPatient();
 }

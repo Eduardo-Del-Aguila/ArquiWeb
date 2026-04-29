@@ -1,7 +1,7 @@
 package eva.pet.upc.evapet.controllers;
 
-import eva.pet.upc.evapet.dtos.MedicationsDTO;
-import eva.pet.upc.evapet.dtos.MedicationsInsertDTO;
+import eva.pet.upc.evapet.dtos.medications.MedicationsDTO;
+import eva.pet.upc.evapet.dtos.medications.MedicationsInsertDTO;
 import eva.pet.upc.evapet.models.Medications;
 import eva.pet.upc.evapet.serviceInterfaces.IMedicationsService;
 import org.modelmapper.ModelMapper;
@@ -15,10 +15,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/api/medicamentos")
 public class MedicationsControllers {
     @Autowired
     private IMedicationsService mS;
-    @GetMapping
+    @GetMapping("/listar")
     public ResponseEntity<List<MedicationsDTO>> listar(){
         ModelMapper m=new ModelMapper();
         List<MedicationsDTO> listaMedications=mS.list().stream()
@@ -28,7 +29,7 @@ public class MedicationsControllers {
         return ResponseEntity.ok(listaMedications);
     }
 
-    @PostMapping("/medications")
+    @PostMapping("/insertar")
     public ResponseEntity<?> registrar(@RequestBody MedicationsInsertDTO dto){
 
         if (dto.getName() == null || dto.getName().isEmpty()) {
@@ -46,7 +47,7 @@ public class MedicationsControllers {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    @GetMapping("/medications/{id}")
+    @GetMapping("/listar/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable int id) {
         ModelMapper m = new ModelMapper();
         Optional<Medications> med = mS.listId(id);
@@ -60,7 +61,7 @@ public class MedicationsControllers {
         }
     }
 
-    @PutMapping("/medications")
+    @PutMapping("/actualizar")
     public ResponseEntity<String> actualizar(@RequestBody MedicationsInsertDTO dto) {
 
         Optional<Medications> existente = mS.listId(dto.getIdMedication());
@@ -81,7 +82,7 @@ public class MedicationsControllers {
         return ResponseEntity.ok("Medicamento actualizado correctamente");
     }
 
-    @DeleteMapping("/medications/{id}")
+    @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
 
         Optional<Medications> med = mS.listId(id);
