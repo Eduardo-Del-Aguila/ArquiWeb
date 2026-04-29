@@ -1,6 +1,6 @@
 package eva.pet.upc.evapet.controllers;
 
-import eva.pet.upc.evapet.dtos.SymptomInsertDTO;
+import eva.pet.upc.evapet.dtos.symptoms.SymptomInsertDTO;
 import eva.pet.upc.evapet.models.Symptom;
 import eva.pet.upc.evapet.serviceInterfaces.ISymptomService;
 import org.modelmapper.ModelMapper;
