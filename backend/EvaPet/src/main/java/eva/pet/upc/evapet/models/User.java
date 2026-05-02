@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table
-@Entity(name = "user")
+@Entity
+@Table(name = "user")
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "name",nullable = false)
     private String name;
@@ -36,6 +36,6 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "rol_id")
-    private Rol idRol;
+    private Rol rol;
 
 }

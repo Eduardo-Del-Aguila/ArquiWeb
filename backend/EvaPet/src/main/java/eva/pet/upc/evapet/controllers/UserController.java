@@ -63,7 +63,7 @@ public class UserController {
         user.setCreateAt(LocalDateTime.now());
 
         Rol myRol = rol.get();
-        user.setIdRol(myRol);
+        user.setRol(myRol);
 
         uS.insert(user);
         return ResponseEntity.ok(user);
@@ -94,8 +94,5 @@ public class UserController {
         uS.update(existing.get());
         return ResponseEntity.ok("Usuario eliminado correctamente");
     }
-
-
-
 
 }

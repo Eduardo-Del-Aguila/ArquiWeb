@@ -1,11 +1,17 @@
 package eva.pet.upc.evapet.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
-@Table(name = "eva_pet")
+@Table(name = "pet")
 public class EvaPet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,75 +33,8 @@ public class EvaPet {
     @Column(name = "status", nullable = false)
     private String status;
 
-    public Long getId() {
-        return Id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "id_patient")
+    private User patient;
 
-    public void setId(Long id) {
-        Id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public int getExperiencie() {
-        return experiencie;
-    }
-
-    public void setExperiencie(int experiencie) {
-        this.experiencie = experiencie;
-    }
-
-    public LocalDateTime getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(LocalDateTime createAt) {
-        this.createAt = createAt;
-    }
-
-    public LocalDateTime getLastInteraction() {
-        return lastInteraction;
-    }
-
-    public void setLastInteraction(LocalDateTime lastInteraction) {
-        this.lastInteraction = lastInteraction;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }

@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 public class RolController {
     @Autowired
     private IRolService rS;
+
+
     @GetMapping
     public ResponseEntity<?> listar() {
         ModelMapper m= new ModelMapper();
@@ -54,10 +56,9 @@ public class RolController {
         }
     }
 
-    @PutMapping("/actualiza")
-    public ResponseEntity<String> actualizar(@RequestBody RolInsertDTO dto) {
-
-        Optional<Rol> existente = rS.listId(dto.getIdRol());
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<String> actualizar(@RequestBody RolInsertDTO dto, @PathVariable Long id) {
+        Optional<Rol> existente = rS.listId(id);
         if (existente.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Rol no encontrado");

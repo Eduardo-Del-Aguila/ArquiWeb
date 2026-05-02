@@ -2,9 +2,15 @@ package eva.pet.upc.evapet.models;
 
 import eva.pet.upc.evapet.enums.AlertType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "Alerts")
 public class Alerts {
@@ -32,71 +38,5 @@ public class Alerts {
     private int idEva;
     // NO ESTAN AVANZADAS AUN
 
-    public Alerts() {
-    }
-    public Alerts(int idAlerts, AlertType type, String message, Boolean isRead, LocalDateTime scheduledAt, LocalDateTime createdAt, int idPatient, int idEva) {
-        this.idAlerts = idAlerts;
-        this.type = type;
-        this.message = message;
-        this.isRead = isRead;
-        this.createdAt = createdAt;
-        this.idPatient = idPatient;
-        this.idEva = idEva;
-    }
 
-    public int getIdAlerts() {
-        return idAlerts;
-    }
-
-    public void setIdAlerts(int idAlerts) {
-        this.idAlerts = idAlerts;
-    }
-
-    public AlertType getType() {
-        return type;
-    }
-
-    public void setType(AlertType type) {
-        this.type = type;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Boolean getRead() {
-        return isRead;
-    }
-
-    public void setRead(Boolean read) {
-        isRead = read;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public int getIdPatient() {
-        return idPatient;
-    }
-
-    public void setIdPatient(int idPatient) {
-        this.idPatient = idPatient;
-    }
-
-    public int getIdEva() {
-        return idEva;
-    }
-
-    public void setIdEva(int idEva) {
-        this.idEva = idEva;
-    }
 }
