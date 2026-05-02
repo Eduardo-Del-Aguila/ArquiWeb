@@ -17,15 +17,25 @@ public class User {
     @Id
     @GeneratedValue
     private Long id;
+    @Column(name = "name",nullable = false)
     private String name;
+    @Column(name = "lastName",nullable = false)
     private String lastName;
+    @Column(name = "mail",nullable = false)
     private String mail;
+    @Column(name = "password",nullable = false)
     private String password;
+    @Column(name = "image_url",nullable = false)
     private String image_url;
+    @Column(name = "phoneNumber",nullable = false)
     private String phoneNumber;
+    @Column(name = "isActive")
     private boolean isActive;
+    @Column(name = "createAt")
     private LocalDateTime createAt;
 
-
+    @ManyToOne
+    @JoinColumn(name = "rol_id")
+    private Rol idRol;
 
 }
