@@ -1,13 +1,16 @@
-package eva.pet.upc.evapet.dtos;
+package eva.pet.upc.evapet.dtos.user;
 
+import lombok.Data;
+
+@Data
 public class UsersInsertDTO {
-    private int usersId;
+    private String name;
+    private String lastName;
+    private String mail;
+    private String password;
+    private String image_url;
+    private String phoneNumber;
+    private Long rolId;
 
-    public int getUsersId() {
-        return usersId;
-    }
 
-    public void setUsersId(int usersId) {
-        this.usersId = usersId;
-    }
 }

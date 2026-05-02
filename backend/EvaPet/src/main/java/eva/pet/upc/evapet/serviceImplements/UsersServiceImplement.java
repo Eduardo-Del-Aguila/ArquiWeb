@@ -1,7 +1,6 @@
 package eva.pet.upc.evapet.serviceImplements;
 
-import eva.pet.upc.evapet.models.Rol;
-import eva.pet.upc.evapet.models.Users;
+import eva.pet.upc.evapet.models.User;
 import eva.pet.upc.evapet.repositories.IUsersRepository;
 import eva.pet.upc.evapet.serviceInterfaces.IUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +15,30 @@ public class UsersServiceImplement implements IUsersService {
     private IUsersRepository uR;
 
     @Override
-    public List<Users> list() {
-        return uR.findAll();
+    public List<User> list() {
+        return uR.findAll().stream().filter(User::isActive).toList();
     }
 
     @Override
-    public Users insert(Users u) {
+    public User insert(User u) {
         return uR.save(u);
     }
+
+    @Override
+    public Optional<User> listById(Long id) {
+        return uR.findById(id);
+    }
+
+    @Override
+    public User update(User u) {
+        return uR.save(u);
+    }
+
+    //Quizas se añada una eliminacion lógica como querie
+    @Override
+    public void deleteById(Long id) {
+
+    }
+
 
 }
