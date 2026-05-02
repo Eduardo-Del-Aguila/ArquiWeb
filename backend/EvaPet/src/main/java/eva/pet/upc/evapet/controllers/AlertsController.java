@@ -43,7 +43,7 @@ public class AlertsController {
         Alerts alerta = m.map(dto, Alerts.class);
 
 
-        alerta.setRead(false);
+        alerta.setIsRead(false);
         if (alerta.getCreatedAt() == null) {
             alerta.setCreatedAt(LocalDateTime.now());
         }
@@ -81,7 +81,7 @@ public class AlertsController {
 
         alertaActualizar.setType(dto.getType());
         alertaActualizar.setMessage(dto.getMessage());
-        alertaActualizar.setRead(dto.getRead());
+        alertaActualizar.setIsRead(true);
         alertaActualizar.setIdPatient(dto.getIdPatient());
         alertaActualizar.setIdEva(dto.getIdEva());
 
