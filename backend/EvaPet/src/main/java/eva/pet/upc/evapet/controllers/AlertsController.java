@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/alerts")
+
+//@PreAuthorize()
 public class AlertsController {
 
     @Autowired
@@ -54,7 +57,11 @@ public class AlertsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
+    //Marcamos por controladore que rol puede acceder a esta peticion
+    //@PreAuthorize("hasAnyAuthority('nombredelrol')")
+    // la autorización tambien puede ser definida en el config
     @GetMapping("/listar/{id}")
+    @PreAuthorize("hasAuthority('family')")
     public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
         ModelMapper m = new ModelMapper();
         Optional<Alerts> alerta = aS.listId(id);

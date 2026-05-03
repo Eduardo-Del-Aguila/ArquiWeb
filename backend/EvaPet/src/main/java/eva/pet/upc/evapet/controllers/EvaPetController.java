@@ -35,6 +35,9 @@ public class EvaPetController {
         List<EvaPetDTO> myPets = pets.stream().map(p -> m.map(p,EvaPetDTO.class)).toList();
         return ResponseEntity.ok(myPets);
     }
+
+
+
     @PostMapping("/insertar")
     public ResponseEntity<?> insert(@RequestBody EvaPetInsertDTO dto, Authentication authentication) {
         ModelMapper m = new ModelMapper();
