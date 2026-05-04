@@ -11,13 +11,13 @@ public class PrescriptionMedications {
     private int idPrescriptionMedications;
 
     @Column(name = "dose", length = 50)
-    private String dose;
-
+    private int dose;
+ 
     @Column(name = "frequency", length = 50)
-    private String frequency;
+    private int frequency;
 
     @Column(name = "duration", length = 50)
-    private String duration;
+    private int duration;
 
     @Column(name = "idPrescription", nullable = false)
     private int idPrescription;
@@ -36,27 +36,27 @@ public class PrescriptionMedications {
         this.idPrescriptionMedications = idPrescriptionMedications;
     }
 
-    public String getDose() {
+    public int getDose() {
         return dose;
     }
 
-    public void setDose(String dose) {
+    public void setDose(int dose) {
         this.dose = dose;
     }
 
-    public String getFrequency() {
+    public int getFrequency() {
         return frequency;
     }
 
-    public void setFrequency(String frequency) {
+    public void setFrequency(int frequency) {
         this.frequency = frequency;
     }
 
-    public String getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 
