@@ -1,9 +1,15 @@
 package eva.pet.upc.evapet.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "prescription")
 public class Prescription {
@@ -23,46 +29,5 @@ public class Prescription {
     @Column(name = "date")
     private LocalDate date;
 
-    public Prescription() {
-    }
 
-    public int getIdPrescription() {
-        return idPrescription;
-    }
-
-    public void setIdPrescription(int idPrescription) {
-        this.idPrescription = idPrescription;
-    }
-
-    public int getIdUserPatient() {
-        return idUserPatient;
-    }
-
-    public void setIdUserPatient(int idUserPatient) {
-        this.idUserPatient = idUserPatient;
-    }
-
-    public int getIdEva() {
-        return idEva;
-    }
-
-    public void setIdEva(int idEva) {
-        this.idEva = idEva;
-    }
-
-    public String getDiagnosis() {
-        return diagnosis;
-    }
-
-    public void setDiagnosis(String diagnosis) {
-        this.diagnosis = diagnosis;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
 }
