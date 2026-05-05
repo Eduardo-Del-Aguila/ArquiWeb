@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IMedicationsRepository extends JpaRepository<Medications,Integer> {
+    boolean existsByNameIgnoreCase(String name);
 }

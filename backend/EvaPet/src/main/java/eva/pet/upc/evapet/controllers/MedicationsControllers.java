@@ -32,12 +32,23 @@ public class MedicationsControllers {
     @PostMapping("/insertar")
     public ResponseEntity<?> registrar(@RequestBody MedicationsInsertDTO dto){
 
-        if (dto.getName() == null || dto.getName().isEmpty()) {
+        if (dto.getName() == null || dto.getName().trim().isEmpty()) {
             return ResponseEntity.badRequest()
                     .body("El nombre no puede ser vacío");
         }
 
-        ModelMapper m=new ModelMapper();
+        if (dto.getDescription() == null || dto.getDescription().trim().isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body("La descripción no puede ser vacía");
+        }
+
+        boolean existe = mS.existsByName(dto.getName());
+        if (existe) {
+            return ResponseEntity.badRequest()
+                    .body("Ya existe un medicamento con ese nombre");
+        }
+
+        ModelMapper m = new ModelMapper();
         Medications med = m.map(dto, Medications.class);
 
         Medications nuevo = mS.insert(med);
@@ -71,13 +82,29 @@ public class MedicationsControllers {
                     .body("Medicamento no encontrado");
         }
 
-        Medications m = existente.get();
+        if (dto.getName() == null || dto.getName().trim().isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body("El nombre no puede ser vacío");
+        }
 
-        m.setName(dto.getName());
-        m.setDescription(dto.getDescription());
-        m.setActive(dto.isActive());
+        if (dto.getDescription() == null || dto.getDescription().trim().isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body("La descripción no puede ser vacía");
+        }
 
-        mS.update(m);
+        boolean existe = mS.existsByName(dto.getName());
+        Medications actual = existente.get();
+
+        if (existe && !actual.getName().equalsIgnoreCase(dto.getName())) {
+            return ResponseEntity.badRequest()
+                    .body("Ya existe otro medicamento con ese nombre");
+        }
+
+        actual.setName(dto.getName().trim());
+        actual.setDescription(dto.getDescription().trim());
+        actual.setActive(dto.isActive());
+
+        mS.update(actual);
 
         return ResponseEntity.ok("Medicamento actualizado correctamente");
     }

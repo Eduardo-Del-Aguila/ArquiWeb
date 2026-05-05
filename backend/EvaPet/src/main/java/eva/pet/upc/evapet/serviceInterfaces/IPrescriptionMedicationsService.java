@@ -17,4 +17,10 @@ public interface IPrescriptionMedicationsService {
     void delete(int id);
 
     List<Object[]> MostUsedMedications();
+
+    boolean existsPrescription(int idPrescription);
+
+    boolean existsMedication(int idMedication);
+
+    List<PrescriptionMedications> findByPrescription(int idPrescription);
 }

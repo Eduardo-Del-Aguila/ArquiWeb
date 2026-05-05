@@ -1,7 +1,9 @@
 package eva.pet.upc.evapet.serviceImplements;
 
 import eva.pet.upc.evapet.models.PrescriptionMedications;
+import eva.pet.upc.evapet.repositories.IMedicationsRepository;
 import eva.pet.upc.evapet.repositories.IPrescriptionMedicationsRepository;
+import eva.pet.upc.evapet.repositories.IPrescriptionRepository;
 import eva.pet.upc.evapet.serviceInterfaces.IPrescriptionMedicationsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,12 @@ import java.util.Optional;
 public class PrescriptionMedicationsServiceImplement implements IPrescriptionMedicationsService {
     @Autowired
     private IPrescriptionMedicationsRepository pmRepo;
+
+    @Autowired
+    private IPrescriptionRepository pRepo;
+
+    @Autowired
+    private IMedicationsRepository mRepo;
 
     @Override
     public List<PrescriptionMedications> list() {
@@ -42,5 +50,20 @@ public class PrescriptionMedicationsServiceImplement implements IPrescriptionMed
     @Override
     public List<Object[]> MostUsedMedications() {
         return pmRepo.MostUsedMedications();
+    }
+
+    @Override
+    public boolean existsPrescription(int idPrescription) {
+        return pRepo.existsById(idPrescription);
+    }
+
+    @Override
+    public boolean existsMedication(int idMedication) {
+        return mRepo.existsById(idMedication);
+    }
+
+    @Override
+    public List<PrescriptionMedications> findByPrescription(int idPrescription) {
+        return pmRepo.findByIdPrescription(idPrescription);
     }
 }

@@ -16,4 +16,6 @@ public interface IPrescriptionMedicationsRepository extends JpaRepository<Prescr
             "GROUP BY m.name ORDER BY COUNT(pm.id_prescription_medications) DESC",
             nativeQuery = true)
     List<Object[]> MostUsedMedications();
+
+    List<PrescriptionMedications> findByIdPrescription(int idPrescription);
 }

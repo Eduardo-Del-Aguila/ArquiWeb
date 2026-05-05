@@ -36,9 +36,39 @@ public class PrescriptionMedicationsControllers {
     @PostMapping("/insertar")
     public ResponseEntity<?> registrar(@RequestBody PrescriptionMedicationsInsertDTO dto) {
 
-        if (dto.getIdPrescription() == 0 || dto.getIdMedication() == 0) {
+        if (dto.getIdPrescription() <= 0) {
             return ResponseEntity.badRequest()
-                    .body("Los IDs de prescription y medication son obligatorios");
+                    .body("El ID de la prescripción debe ser mayor a 0");
+        }
+
+        if (dto.getIdMedication() <= 0) {
+            return ResponseEntity.badRequest()
+                    .body("El ID del medicamento debe ser mayor a 0");
+        }
+
+        if (!pMS.existsPrescription(dto.getIdPrescription())) {
+            return ResponseEntity.badRequest()
+                    .body("La prescripción no existe");
+        }
+
+        if (!pMS.existsMedication(dto.getIdMedication())) {
+            return ResponseEntity.badRequest()
+                    .body("El medicamento no existe");
+        }
+
+        if (dto.getDose() <= 0) {
+            return ResponseEntity.badRequest()
+                    .body("La dosis debe ser mayor a 0");
+        }
+
+        if (dto.getFrequency() <= 0) {
+            return ResponseEntity.badRequest()
+                    .body("La frecuencia debe ser mayor a 0");
+        }
+
+        if (dto.getDuration() <= 0) {
+            return ResponseEntity.badRequest()
+                    .body("La duración debe ser mayor a 0");
         }
 
         ModelMapper m = new ModelMapper();
@@ -52,31 +82,49 @@ public class PrescriptionMedicationsControllers {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    @GetMapping("/listar/{id}")
-    public ResponseEntity<?> buscarPorId(@PathVariable int id) {
+    @GetMapping("/medicamentos-por-prescripcion/{id}")
+    public ResponseEntity<?> listarPorPrescripcion(@PathVariable int id){
+
+        if (!pMS.existsPrescription(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("La prescripción no existe");
+        }
+
+        List<PrescriptionMedications> lista = pMS.findByPrescription(id);
 
         ModelMapper m = new ModelMapper();
-        Optional<PrescriptionMedications> pm = pMS.listId(id);
 
-        if (pm.isPresent()) {
-            PrescriptionMedicationsInsertDTO dto =
-                    m.map(pm.get(), PrescriptionMedicationsInsertDTO.class);
-            return ResponseEntity.ok(dto);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Registro no encontrado");
-        }
+        List<PrescriptionMedicationsDTO> respuesta = lista.stream()
+                .map(x -> m.map(x, PrescriptionMedicationsDTO.class))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(respuesta);
     }
 
     @PutMapping("/actualizar")
-    public ResponseEntity<String> actualizar(@RequestBody PrescriptionMedicationsInsertDTO dto) {
+    public ResponseEntity<?> actualizar(@RequestBody PrescriptionMedicationsInsertDTO dto) {
 
         Optional<PrescriptionMedications> existente =
                 pMS.listId(dto.getIdPrescriptionMedications());
 
         if (existente.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Registro no encontrado");
+                    .body("La relación no existe");
+        }
+
+        if (dto.getDose() <= 0) {
+            return ResponseEntity.badRequest()
+                    .body("La dosis debe ser mayor a 0");
+        }
+
+        if (dto.getFrequency() <= 0) {
+            return ResponseEntity.badRequest()
+                    .body("La frecuencia debe ser mayor a 0");
+        }
+
+        if (dto.getDuration() <= 0) {
+            return ResponseEntity.badRequest()
+                    .body("La duración debe ser mayor a 0");
         }
 
         PrescriptionMedications pm = existente.get();
@@ -84,22 +132,25 @@ public class PrescriptionMedicationsControllers {
         pm.setDose(dto.getDose());
         pm.setFrequency(dto.getFrequency());
         pm.setDuration(dto.getDuration());
-        pm.setIdPrescription(dto.getIdPrescription());
-        pm.setIdMedication(dto.getIdMedication());
 
         pMS.update(pm);
 
-        return ResponseEntity.ok("Registro actualizado correctamente");
+        return ResponseEntity.ok("Relación actualizada correctamente");
     }
 
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<String> eliminar(@PathVariable int id) {
+    public ResponseEntity<String> eliminar(@PathVariable int id){
+
+        if (id <= 0) {
+            return ResponseEntity.badRequest()
+                    .body("ID inválido");
+        }
 
         Optional<PrescriptionMedications> pm = pMS.listId(id);
 
-        if (pm.isPresent()) {
+        if(pm.isPresent()){
             pMS.delete(id);
-            return ResponseEntity.ok("Registro eliminado correctamente");
+            return ResponseEntity.ok("Medicamento eliminado de la prescripción");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Registro no encontrado");

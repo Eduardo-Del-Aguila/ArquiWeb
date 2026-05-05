@@ -15,4 +15,6 @@ public interface IMedicationsService {
     void update(Medications m);
 
     void delete(int id);
+
+    boolean existsByName(String name);
 }
