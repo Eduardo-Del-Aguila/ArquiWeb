@@ -9,6 +9,6 @@ public interface IHospialServiceInterface {
     public List<Hospital> listALL();
     public Optional<Hospital> listById(Long id);
     public Hospital update(Hospital h);
-    public void deleteById(Long id);
+    public void deleteById(Hospital h);
 
 }

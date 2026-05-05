@@ -1,5 +1,6 @@
 package eva.pet.upc.evapet.models;
 
+import eva.pet.upc.evapet.enums.StatusPet;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,8 +21,9 @@ public class EvaPet {
     private String name;
     @Column(name = "description", length = 200, nullable = false)
     private String description;
-    @Column(name = "active", nullable = false)
-    private boolean active;
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private StatusPet status;
     @Column(name = "level", nullable = false)
     private int level;
     @Column(name = "experiencie", nullable = false)
@@ -30,8 +32,8 @@ public class EvaPet {
     private LocalDateTime createAt;
     @Column(name = "lastInteraction", nullable = false)
     private LocalDateTime lastInteraction;
-    @Column(name = "status", nullable = false)
-    private String status;
+    @Column(name = "active", nullable = false)
+    private boolean active;
 
     @ManyToOne
     @JoinColumn(name = "id_patient")

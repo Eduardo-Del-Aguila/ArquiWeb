@@ -16,5 +16,13 @@ public class Hospital {
     private Long id;
     @Column(name = "name", nullable = false)
     private String name;
+    @Column(name = "direction", nullable = false)
+    private String direction;
+    @Column(name = "phone", nullable = false)
+    private String phone;
+    @Column(name = "city", nullable = false)
+    private String city;
+    @Column(name = "isActive", nullable = false)
+    private boolean isActive;
 
 }

@@ -63,9 +63,10 @@ public class WebSecurityConfig {
                                 "/v3/api-docs.yaml",
                                 "/webjars/**"
                         ).permitAll()
+//                        .anyRequest().permitAll()
 
                         // Login público
-                        .requestMatchers("/auth/login").permitAll()
+                       .requestMatchers("/auth/login").permitAll()
 
                         // Todo lo demás requiere autenticación
                         .anyRequest().authenticated()

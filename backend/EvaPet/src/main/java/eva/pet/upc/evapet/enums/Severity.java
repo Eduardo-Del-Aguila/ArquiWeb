@@ -1,5 +1,6 @@
 package eva.pet.upc.evapet.enums;
 
 public enum Severity {
-    Low, Moderate, High
+    LOW, MODERATE, HIGH
+//    Low, Moderate, High
 }

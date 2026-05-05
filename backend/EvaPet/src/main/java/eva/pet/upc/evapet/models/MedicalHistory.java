@@ -25,7 +25,9 @@ public class MedicalHistory {
     private String treatment;
     @Column(name = "observations", nullable = false)
     private String observations;
-    @Column(name = "diagnostics", nullable = false)
+    // Al crearse el historial médico no se pone el diagnóstico
+    // el doctor pone el diagnóstico por lo que esto va a iniciar en true
+    @Column(name = "diagnostics", nullable = true)
     private String  diagnostics;
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -36,21 +38,18 @@ public class MedicalHistory {
     private boolean isActive;
     @Column(name = "registerAt", nullable = false)
     private LocalDateTime registerAt;
-    @Column(name = "update", nullable = false)
+    @Column(name = "update", nullable = true)
     private LocalDateTime updateAt;
 
 
     @OneToOne
     private User idPatient;
-
-    @OneToOne
-    private User idDoctor;
-
-    @OneToOne
-    private User idHospital;
-
     @OneToOne(optional = false)
     private EvaPet idEva;
 
+
+    @OneToOne(optional = true)
+    private User idDoctor;
+    private int idHospital;
 
 }

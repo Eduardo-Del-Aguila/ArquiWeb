@@ -1,5 +1,6 @@
 package eva.pet.upc.evapet.serviceInterfaces;
 
+import eva.pet.upc.evapet.models.Hospital;
 import eva.pet.upc.evapet.models.User;
 
 import java.util.List;
@@ -12,8 +13,9 @@ public interface IUsersService {
 
     public Optional<User> listById(Long id);
     public User update(User u);
-    public void deleteById(Long id);
+    public void deleteById(User u);
 
+    public Optional<User> findUserByMail(String mail);
 
 
 }

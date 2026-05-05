@@ -15,10 +15,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@PreAuthorize("hasAuthority('ADMIN')")
 @RestController
 @RequestMapping("/api/alerts")
-
-//@PreAuthorize()
 public class AlertsController {
 
     @Autowired
@@ -74,6 +73,7 @@ public class AlertsController {
                     .body("Alerta no encontrada");
         }
     }
+
 
     @PutMapping("/actualizar")
     public ResponseEntity<String> actualizar(@RequestBody AlertsInsertDTO dto) {

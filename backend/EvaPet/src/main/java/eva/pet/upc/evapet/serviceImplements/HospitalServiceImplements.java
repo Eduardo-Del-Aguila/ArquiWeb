@@ -16,7 +16,7 @@ public class HospitalServiceImplements implements IHospialServiceInterface {
 
     @Override
     public List<Hospital> listALL() {
-        return hR.findAll();
+        return hR.findAll().stream().filter(Hospital::isActive).toList();
     }
 
     @Override
@@ -30,7 +30,7 @@ public class HospitalServiceImplements implements IHospialServiceInterface {
     }
 
     @Override
-    public void deleteById(Long id) {
-        hR.deleteById(id);
+    public void deleteById(Hospital h) {
+        hR.save(h);
     }
 }

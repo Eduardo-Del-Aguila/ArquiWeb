@@ -26,7 +26,7 @@ public class MedicalHistoryController {
         return ResponseEntity.ok(histories);
     }
     // /api/historial/paciente/3
-// /api/historial/doctor/3
+    // /api/historial/doctor/3
     @GetMapping("/{rol}/{id}")
     public ResponseEntity<?> listByRol(@PathVariable String rol, @PathVariable Long id) {
         Optional<MedicalHistory> result = switch (rol.toLowerCase()) {
@@ -48,6 +48,10 @@ public class MedicalHistoryController {
                 .toList();
         return ResponseEntity.ok(dtos);
     }
+
+
+
+
 
 
 
