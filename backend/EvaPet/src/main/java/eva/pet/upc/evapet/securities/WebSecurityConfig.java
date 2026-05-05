@@ -66,7 +66,7 @@ public class WebSecurityConfig {
 //                        .anyRequest().permitAll()
 
                         // Login público
-                       .requestMatchers("/auth/login", "/users/insertar").permitAll()
+                       .requestMatchers("/auth/login", "/api/usuario/insertar").permitAll()
 
                         // Todo lo demás requiere autenticación
                         .anyRequest().authenticated()
