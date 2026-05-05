@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize; // ✅ Importación de seguridad
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -21,6 +22,8 @@ public class AlertsController {
     @Autowired
     private IAlertsService aS;
 
+    // ✅ ADMIN y VETERINARIO pueden ver todas las alertas
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'VETERINARIO')")
     @GetMapping("/listar")
     public ResponseEntity<?> listar() {
         ModelMapper m = new ModelMapper();
@@ -31,9 +34,10 @@ public class AlertsController {
         return ResponseEntity.ok(listaAlertas);
     }
 
+    // ✅ ADMIN y VETERINARIO (o el sistema) pueden crear alertas
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'VETERINARIO')")
     @PostMapping("/insertar")
     public ResponseEntity<?> registrar(@RequestBody AlertsInsertDTO dto) {
-
         if (dto.getMessage() == null || dto.getMessage().trim().isEmpty()) {
             return ResponseEntity.badRequest()
                     .body("La alerta necesita un mensaje válido");
@@ -41,7 +45,6 @@ public class AlertsController {
 
         ModelMapper m = new ModelMapper();
         Alerts alerta = m.map(dto, Alerts.class);
-
 
         alerta.setIsRead(false);
         if (alerta.getCreatedAt() == null) {
@@ -54,6 +57,8 @@ public class AlertsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
+    // ✅ ADMIN y VETERINARIO pueden buscar una alerta específica
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'VETERINARIO')")
     @GetMapping("/listar/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
         ModelMapper m = new ModelMapper();
@@ -68,9 +73,10 @@ public class AlertsController {
         }
     }
 
+    // ✅ ADMIN y VETERINARIO pueden actualizar (ej. para marcar como leída)
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'VETERINARIO')")
     @PutMapping("/actualizar")
     public ResponseEntity<String> actualizar(@RequestBody AlertsInsertDTO dto) {
-
         Optional<Alerts> existente = aS.listId(dto.getIdAlerts());
         if (existente.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -81,7 +87,7 @@ public class AlertsController {
 
         alertaActualizar.setType(dto.getType());
         alertaActualizar.setMessage(dto.getMessage());
-        alertaActualizar.setIsRead(true);
+        alertaActualizar.setIsRead(true); // Asumiendo que al actualizar se marca como leída
         alertaActualizar.setIdPatient(dto.getIdPatient());
         alertaActualizar.setIdEva(dto.getIdEva());
 
@@ -90,6 +96,8 @@ public class AlertsController {
         return ResponseEntity.ok("Alerta actualizada correctamente");
     }
 
+    // ⛔ Solo ADMIN puede eliminar alertas del historial
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminar(@PathVariable Long id) {
         Optional<Alerts> alerta = aS.listId(id);

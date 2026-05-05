@@ -55,6 +55,11 @@ public class WebSecurityConfig {
                         //Acá asignamos los request publicos como listar(para que no dependan de un token)
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/pet/listar").permitAll()
+                        //nomefuncionaba sin esto son para liberar el swagger
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/swagger-ui.html").permitAll()
+                        //es para liberar 
                         .anyRequest().authenticated()
                 )
                 .httpBasic(AbstractHttpConfigurer::disable)  // ✅ deshabilita basic auth

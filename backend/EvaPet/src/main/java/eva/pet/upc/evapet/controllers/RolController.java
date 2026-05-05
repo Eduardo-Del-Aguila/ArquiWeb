@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,10 +17,12 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/rol")
 public class RolController {
+
     @Autowired
     private IRolService rS;
 
-
+    // ✅ 2. Añadir autorización: Solo un doctor puede ver la lista de roles
+    @PreAuthorize("hasAuthority('doctor')")
     @GetMapping
     public ResponseEntity<?> listar() {
         ModelMapper m= new ModelMapper();
@@ -29,9 +32,11 @@ public class RolController {
 
         return ResponseEntity.ok(listaRoles);
     }
+
+    // ✅ Solo doctor puede crear roles
+    @PreAuthorize("hasAuthority('doctor')")
     @PostMapping("/insertar")
     public ResponseEntity<?> registrar(@RequestBody RolInsertDTO dto){
-
         if (dto.getNameRol() == null ) {
             return ResponseEntity.badRequest()
                     .body("Necesita un nombre valido");
@@ -42,6 +47,9 @@ public class RolController {
         RolInsertDTO responseDTO=m.map(rol, RolInsertDTO.class);
         return  ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
+
+    // ✅ Solo doctor puede buscar un rol específico
+    @PreAuthorize("hasAuthority('doctor')")
     @GetMapping("/listar/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
         ModelMapper m = new ModelMapper();
@@ -56,6 +64,8 @@ public class RolController {
         }
     }
 
+    // ✅ Solo doctor puede actualizar roles
+    @PreAuthorize("hasAuthority('doctor')")
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<String> actualizar(@RequestBody RolInsertDTO dto, @PathVariable Long id) {
         Optional<Rol> existente = rS.listId(id);
@@ -63,18 +73,16 @@ public class RolController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Rol no encontrado");
         }
-
         Rol r = existente.get();
-
         r.setNameRol(dto.getNameRol());
         r.setDescriptionRol(dto.getDescription());
-
-
         rS.update(r);
 
         return ResponseEntity.ok("Rol actualizado correctamente");
     }
 
+    // ✅ Solo doctor puede eliminar roles
+    @PreAuthorize("hasAuthority('doctor')")
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminar(@PathVariable Long id) {
         Optional<Rol> autor = rS.listId(id);

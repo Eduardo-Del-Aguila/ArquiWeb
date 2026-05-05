@@ -18,7 +18,7 @@ public class Alerts {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idAlerts;
 
-    @Column(name = "type",length = 200, nullable = false)
+    @Column(name = "type",length = 20, nullable = false)
     @Enumerated(EnumType.STRING)
     private AlertType type;
 
