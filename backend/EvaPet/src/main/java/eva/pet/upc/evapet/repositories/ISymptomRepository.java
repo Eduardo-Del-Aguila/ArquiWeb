@@ -15,4 +15,10 @@ public interface ISymptomRepository extends JpaRepository<Symptom,Long> {
             "GROUP BY s.severity " +
             "ORDER BY COUNT(s.id_symptom) DESC", nativeQuery = true)
     List<Object[]> countSymptomsBySeverity();
+
+    @Query(value = "SELECT s.id_medical_history, COUNT(s.id_symptom) " +
+            "FROM symptom s " +
+            "GROUP BY s.id_medical_history " +
+            "ORDER BY COUNT(s.id_symptom) DESC", nativeQuery = true)
+    List<Object[]> symptomsPerMedicalHistory();
 }

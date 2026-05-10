@@ -185,4 +185,28 @@ public class SymptomController {
 
         return ResponseEntity.ok(lista);
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/symptoms-medical-history")
+    public ResponseEntity<?> symptomsPerMedicalHistory(Authentication authentication) {
+
+        String mail = authentication.getName();
+
+        Optional<User> user = uR.findUserByMail(mail);
+
+        if (user.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body("Usuario no encontrado");
+        }
+
+        if (!user.get().isActive()) {
+            return ResponseEntity.badRequest()
+                    .body("Usuario inactivo");
+        }
+
+        List<Object[]> lista =
+                sS.symptomsPerMedicalHistory();
+
+        return ResponseEntity.ok(lista);
+    }
 }

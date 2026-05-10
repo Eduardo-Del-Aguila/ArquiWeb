@@ -12,4 +12,5 @@ public interface ISymptomService {
     public void update(Symptom s);
     public void delete(Long id);
     List<Object[]> countSymptomsBySeverity();
+    List<Object[]> symptomsPerMedicalHistory();
 }

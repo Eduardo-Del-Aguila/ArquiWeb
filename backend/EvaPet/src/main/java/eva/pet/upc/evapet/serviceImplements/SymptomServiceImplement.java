@@ -44,4 +44,8 @@ public class SymptomServiceImplement implements ISymptomService {
         return sR.countSymptomsBySeverity();
     }
 
+    @Override
+    public List<Object[]> symptomsPerMedicalHistory() {
+        return sR.symptomsPerMedicalHistory();
+    }
 }
