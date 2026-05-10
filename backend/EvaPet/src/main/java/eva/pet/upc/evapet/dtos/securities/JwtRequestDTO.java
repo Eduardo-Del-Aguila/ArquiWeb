@@ -5,7 +5,7 @@ public class JwtRequestDTO  {
     private String password;
     public JwtRequestDTO() {
         super();
-        // TODO Auto-generated constructor stub
+        // TODO super que inicializa del padre
     }
     public JwtRequestDTO(String mail, String password) {
         super();

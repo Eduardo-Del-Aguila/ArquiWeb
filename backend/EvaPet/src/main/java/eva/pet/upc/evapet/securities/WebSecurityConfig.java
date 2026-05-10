@@ -61,13 +61,10 @@ public class WebSecurityConfig {
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**",
                                 "/v3/api-docs.yaml",
-                                "/webjars/**"
+                                "/webjars/**",
+                                "/auth/login", "/api/usuario/insertar", "/api/rol/insertar"
                         ).permitAll()
 //                        .anyRequest().permitAll()
-
-                        // Login público
-                       .requestMatchers("/auth/login", "/api/usuario/insertar", "/api/rol/insertar").permitAll()
-
                         // Todo lo demás requiere autenticación
                         .anyRequest().authenticated()
                 )

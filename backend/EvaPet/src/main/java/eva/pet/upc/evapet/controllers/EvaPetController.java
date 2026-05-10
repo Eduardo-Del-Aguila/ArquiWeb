@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@PreAuthorize("hasAuthority('admin')")
+@PreAuthorize("hasAuthority('ADMIN')")
 @RestController
 @RequestMapping("/api/pet")
 public class EvaPetController {
@@ -32,10 +32,20 @@ public class EvaPetController {
     @Autowired
     private IUsersRepository uR;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/listar")
-    public ResponseEntity<List<EvaPetDTO>> List(){
+    public ResponseEntity<?> List(Authentication authentication){
+
+        String mail = authentication.getName();
+        Optional<User> user = uR.findUserByMail(mail);
+        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
+        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
+
+
         ModelMapper m = new ModelMapper();
         List<EvaPet> pets = eS.listAll();
+        if (pets.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay macotas registradas");
+
         List<EvaPetDTO> myPets = pets.stream().map(p -> m.map(p,EvaPetDTO.class)).toList();
         return ResponseEntity.ok(myPets);
     }
@@ -43,8 +53,13 @@ public class EvaPetController {
     //CRUD COMPLETO
     @PreAuthorize("hasAuthority('PATIENT') or hasAuthority('ADMIN')")
     @GetMapping("listar/{id}")
-    public ResponseEntity<?> listByID(@PathVariable Long id){
+    public ResponseEntity<?> listByID(@PathVariable Long id, Authentication authentication){
         ModelMapper m = new ModelMapper();
+
+        String mail = authentication.getName();
+        Optional<User> user = uR.findUserByMail(mail);
+        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
+        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
 
         Optional<EvaPet> myEva = eS.listById(id);
         if(myEva.isEmpty()) return  ResponseEntity.badRequest().body("No exisite una mascota con el id: " + id);

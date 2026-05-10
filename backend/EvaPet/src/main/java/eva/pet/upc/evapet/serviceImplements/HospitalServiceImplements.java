@@ -25,6 +25,11 @@ public class HospitalServiceImplements implements IHospialServiceInterface {
     }
 
     @Override
+    public Hospital insert(Hospital h) {
+        return hR.save(h);
+    }
+
+    @Override
     public Hospital update(Hospital h) {
         return hR.save(h);
     }

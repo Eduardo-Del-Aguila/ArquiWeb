@@ -1,5 +1,6 @@
 package eva.pet.upc.evapet.serviceImplements;
 
+import eva.pet.upc.evapet.enums.UserRol;
 import eva.pet.upc.evapet.models.Rol;
 import eva.pet.upc.evapet.repositories.IRolRepository;
 import eva.pet.upc.evapet.serviceInterfaces.IRolService;
@@ -16,6 +17,11 @@ public class RolServiceImplement implements IRolService {
 
     @Override
     public List<Rol> list() { return rR.findAll(); }
+
+    @Override
+    public Optional<Rol> ListByName(UserRol nameRol) {
+        return rR.findRolByNameRol(nameRol);
+    }
 
     @Override
     public Rol insert(Rol r) {

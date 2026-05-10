@@ -3,6 +3,7 @@ package eva.pet.upc.evapet.controllers;
 import eva.pet.upc.evapet.dtos.eva.EvaPetDTO;
 import eva.pet.upc.evapet.dtos.eva.EvaPetInsertDTO;
 import eva.pet.upc.evapet.dtos.user.UserDTO;
+import eva.pet.upc.evapet.dtos.user.UserUpdateSImple;
 import eva.pet.upc.evapet.dtos.user.UsersInsertDTO;
 import eva.pet.upc.evapet.models.EvaPet;
 import eva.pet.upc.evapet.models.Rol;
@@ -24,9 +25,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
-//@PreAuthorize("hasAuthority('ADMIN')")
+@PreAuthorize("hasAuthority('ADMIN')")
 @RestController
 @RequestMapping("/api/usuario")
 public class UserController {
@@ -106,20 +108,39 @@ public class UserController {
         uS.insert(user);
         return ResponseEntity.ok(user);
     }
+
     @PutMapping("/actualizar/{id}")
-    public ResponseEntity<?> update(@RequestBody UsersInsertDTO dto, @PathVariable Long id) {
+    public ResponseEntity<?> update(
+            @RequestBody UserUpdateSImple dto,
+            @PathVariable Long id
+    ) {
+
         ModelMapper m = new ModelMapper();
+
         Optional<User> existing = uS.listById(id);
 
-        if (existing.isEmpty()) return ResponseEntity.notFound().build();
-        if (!existing.get().isActive()) return ResponseEntity.notFound().build();
-        m.map(dto, existing);
+        if (existing.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
 
         User user = existing.get();
+
+        if (!user.isActive())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario desactivado");
+
+        Optional<Rol> rolsito = rS.ListByName(dto.getNameRol());
+
+        if (rolsito.isEmpty())
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("rol incorrecto");
+
         m.map(dto, user);
 
+        user.setRol(rolsito.get());
+
         uS.update(user);
-        return ResponseEntity.ok(user);
+
+        return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("/eliminar/{id}")

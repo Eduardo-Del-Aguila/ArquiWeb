@@ -3,7 +3,7 @@ package eva.pet.upc.evapet.dtos.hospital;
 import lombok.Data;
 
 @Data
-public class HospitalInsertDTO {
+public class ShowHospital {
     private String name;
     private String direction;
     private String phone;

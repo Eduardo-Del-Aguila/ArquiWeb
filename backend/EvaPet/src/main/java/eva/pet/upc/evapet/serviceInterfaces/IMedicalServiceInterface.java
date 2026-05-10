@@ -1,5 +1,6 @@
 package eva.pet.upc.evapet.serviceInterfaces;
 
+import eva.pet.upc.evapet.dtos.medicalHistory.MedicalHistoryInsertDTO;
 import eva.pet.upc.evapet.models.MedicalHistory;
 
 import java.util.List;
@@ -12,8 +13,8 @@ public interface IMedicalServiceInterface {
     public Optional<MedicalHistory> ListByIdDoctor(Long id);
     public Optional<MedicalHistory> ListByIdPatient(Long id);
 
-    public MedicalHistory Insert(MedicalHistory m);
-    public MedicalHistory Update(MedicalHistory m);
-    public void Delete(Long id);
+    public MedicalHistory insert(MedicalHistoryInsertDTO m, Long evaId, Long patientId);
+    public MedicalHistory update(Long id, MedicalHistoryInsertDTO m);
+    public void delete(Long id);
 
 }

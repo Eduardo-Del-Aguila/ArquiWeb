@@ -1,6 +1,7 @@
 package eva.pet.upc.evapet.controllers;
 
 import eva.pet.upc.evapet.dtos.hospital.HospitalInsertDTO;
+import eva.pet.upc.evapet.dtos.hospital.ShowHospital;
 import eva.pet.upc.evapet.models.Hospital;
 import eva.pet.upc.evapet.serviceImplements.HospitalServiceImplements;
 import org.modelmapper.ModelMapper;
@@ -31,6 +32,7 @@ public class HospitalController {
     public ResponseEntity<?> ListAll(@PathVariable Long id){
         Optional<Hospital> myHospital = hS.listById(id);
         if (myHospital.isEmpty()) return ResponseEntity.badRequest().body("No se contró ningun hospital con el ID: " + id);
+        if (!myHospital.get().isActive()) return ResponseEntity.badRequest().body("El hospital con el id: " + id + " está desactivado");
 
         Hospital hosp = myHospital.get();
 
@@ -43,8 +45,11 @@ public class HospitalController {
         if (dto.getName().isEmpty()) return ResponseEntity.badRequest().body("Llenar todos los campos");
         Hospital hosp = m.map(dto, Hospital.class);
         hosp.setActive(true);
-        hS.update(hosp);
-        return ResponseEntity.ok(hosp);
+        hS.insert(hosp);
+
+
+        ShowHospital hospital = m.map(hosp, ShowHospital.class);
+        return ResponseEntity.ok(hospital);
     }
 
     @PutMapping("/actualizar/{id}")
@@ -53,32 +58,31 @@ public class HospitalController {
         Optional<Hospital> myHosp = hS.listById(id);
 
         if (myHosp.isEmpty()) return ResponseEntity.badRequest().body("no exixte ningun hospital con el ID: " + id);
+        if (!myHosp.get().isActive()) return ResponseEntity.badRequest().body("El hospital con el id: " + id + " está desactivado");
 
-        Hospital hospi = m.map(myHosp.get(), Hospital.class);
+        Hospital hosp = m.map(myHosp.get(), Hospital.class);
 
-        Hospital nuevito = hS.update(hospi);
-
-        return ResponseEntity.ok(nuevito);
+        ShowHospital hospital = m.map(hosp, ShowHospital.class);
+        return ResponseEntity.ok(hospital);
     }
 
 
-    @DeleteMapping("/actualizar/{id}")
+    @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<?> Delete(@RequestBody HospitalInsertDTO dto, @PathVariable Long id){
         ModelMapper m = new ModelMapper();
         Optional<Hospital> myHosp = hS.listById(id);
 
         if (myHosp.isEmpty()) return ResponseEntity.badRequest().body("no exixte ningun hospital con el ID: " + id);
+        if (!myHosp.get().isActive()) return ResponseEntity.badRequest().body("El hospital con el id: " + id + " está desactivado");
+
 
         Hospital hospi = m.map(myHosp.get(), Hospital.class);
+        hospi.setActive(false);
 
-        Hospital nuevito = hS.update(hospi);
+        hS.deleteById(hospi);
 
+        ShowHospital nuevito = m.map(hospi, ShowHospital.class);
         return ResponseEntity.ok(nuevito);
-    }
-
-    @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<?> Delete(@PathVariable Long id){
-        return ResponseEntity.ok("");
     }
 
 
