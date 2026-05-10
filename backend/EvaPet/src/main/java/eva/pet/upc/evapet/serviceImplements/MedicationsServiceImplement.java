@@ -45,4 +45,9 @@ public class MedicationsServiceImplement implements IMedicationsService {
     public boolean existsByName(String name) {
         return mRepo.existsByNameIgnoreCase(name);
     }
+
+    @Override
+    public List<Medications> listarMedicamentosActivos() {
+        return mRepo.listarMedicamentosActivos();
+    }
 }

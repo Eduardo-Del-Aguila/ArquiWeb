@@ -148,6 +148,24 @@ public class MedicationsControllers {
         }
     }
 
+    @GetMapping("/medicamentos-activos")
+    public ResponseEntity<?> listarActivos(){
+
+        ModelMapper m = new ModelMapper();
+
+        List<MedicationsDTO> lista = mS.listarMedicamentosActivos()
+                .stream()
+                .map(x -> m.map(x, MedicationsDTO.class))
+                .collect(Collectors.toList());
+
+        if(lista.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No hay medicamentos activos");
+        }
+
+        return ResponseEntity.ok(lista);
+    }
+
 
 
 

@@ -17,4 +17,6 @@ public interface IMedicationsService {
     void delete(int id);
 
     boolean existsByName(String name);
+
+    List<Medications> listarMedicamentosActivos();
 }
