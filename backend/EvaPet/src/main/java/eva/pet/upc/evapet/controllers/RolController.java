@@ -19,88 +19,115 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 //@PreAuthorize("hasAuthority('ADMIN')")
+
 @RestController
 @RequestMapping("/api/rol")
 public class RolController {
+
     @Autowired
     private RolServiceImplement rS;
 
     @Autowired
     private IUsersRepository uR;
 
-    @GetMapping
+    @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
+    @GetMapping("/listar")
     public ResponseEntity<?> listar(Authentication authentication) {
-
         String mail = authentication.getName();
-        Optional<User> user = uR.findUserByMail(mail);
-        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
-        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
+        Optional<User> currentUser = uR.findUserByMail(mail);
+        if (currentUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autorizado");
+        }
 
-
-        ModelMapper m= new ModelMapper();
-        List<RolInsertDTO> listaRoles= rS.list().stream()
-                .map(y->m.map(y, RolInsertDTO.class))
+        ModelMapper m = new ModelMapper();
+        List<RolInsertDTO> listaRoles = rS.list().stream()
+                .map(y -> m.map(y, RolInsertDTO.class))
                 .collect(Collectors.toList());
-
 
         return ResponseEntity.ok(listaRoles);
     }
+
+    @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
     @PostMapping("/insertar")
-    public ResponseEntity<?> registrar(@RequestBody RolInsertDTO dto){
+    public ResponseEntity<?> registrar(@RequestBody RolInsertDTO dto, Authentication authentication){
+        String mail = authentication.getName();
+        Optional<User> currentUser = uR.findUserByMail(mail);
+        if (currentUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autorizado");
+        }
 
         if (dto.getNameRol() == null ) {
-            return ResponseEntity.badRequest()
-                    .body("Necesita un nombre valido");
+            return ResponseEntity.badRequest().body("Necesita un nombre válido");
         }
-        ModelMapper m=new ModelMapper();
-        Rol r=m.map(dto, Rol.class);
-        Rol rol= rS.insert(r);
-        RolInsertDTO responseDTO=m.map(rol, RolInsertDTO.class);
-        return  ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
-    }
-    @GetMapping("/listar/{id}")
-    public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
-        ModelMapper m = new ModelMapper();
-        Optional<Rol> autor = rS.listId(id);
 
-        if (autor.isPresent()) {
-            RolInsertDTO dto = m.map(autor.get(), RolInsertDTO.class);
+        ModelMapper m = new ModelMapper();
+        Rol r = m.map(dto, Rol.class);
+        Rol rol = rS.insert(r);
+
+        RolInsertDTO responseDTO = m.map(rol, RolInsertDTO.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+    }
+
+    // Solo doctor puede buscar un rol específico
+    @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
+    @GetMapping("/listar/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable Long id, Authentication authentication) {
+        String mail = authentication.getName();
+        Optional<User> currentUser = uR.findUserByMail(mail);
+        if (currentUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autorizado");
+        }
+
+        ModelMapper m = new ModelMapper();
+        Optional<Rol> rolEncontrado = rS.listId(id);
+
+        if (rolEncontrado.isPresent()) {
+            RolInsertDTO dto = m.map(rolEncontrado.get(), RolInsertDTO.class);
             return ResponseEntity.ok(dto);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Rol no encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rol no encontrado");
         }
     }
 
+    @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
     @PutMapping("/actualizar/{id}")
-    public ResponseEntity<String> actualizar(@RequestBody RolInsertDTO dto, @PathVariable Long id) {
+    public ResponseEntity<?> actualizar(@RequestBody RolInsertDTO dto, @PathVariable Long id, Authentication authentication) {
+        String mail = authentication.getName();
+        Optional<User> currentUser = uR.findUserByMail(mail);
+        if (currentUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autorizado");
+        }
+
         Optional<Rol> existente = rS.listId(id);
         if (existente.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Rol no encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rol no encontrado");
         }
 
+        ModelMapper m = new ModelMapper();
         Rol r = existente.get();
 
-        r.setNameRol(dto.getNameRol());
-        r.setDescriptionRol(dto.getDescription());
-
-
+        m.map(dto, r);
         rS.update(r);
 
-        return ResponseEntity.ok("Rol actualizado correctamente");
+        return ResponseEntity.ok(m.map(r, RolInsertDTO.class));
     }
 
+    @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<String> eliminar(@PathVariable Long id) {
-        Optional<Rol> autor = rS.listId(id);
+    public ResponseEntity<String> eliminar(@PathVariable Long id, Authentication authentication) {
+        String mail = authentication.getName();
+        Optional<User> currentUser = uR.findUserByMail(mail);
+        if (currentUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autorizado");
+        }
 
-        if (autor.isPresent()) {
+        Optional<Rol> rolEncontrado = rS.listId(id);
+
+        if (rolEncontrado.isPresent()) {
             rS.delete(id);
             return ResponseEntity.ok("Rol eliminado correctamente");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Rol no encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rol no encontrado");
         }
     }
 }

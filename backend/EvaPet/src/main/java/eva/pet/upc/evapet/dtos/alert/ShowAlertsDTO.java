@@ -4,10 +4,9 @@ import eva.pet.upc.evapet.enums.AlertType;
 import lombok.Data;
 
 @Data
-public class AlertsInsertDTO {
+public class ShowAlertsDTO {
     private AlertType type;
     private String message;
-    //private Boolean isRead;
-    private Long idPatient;
-    private Long idEva;
+    private Boolean isRead;
+    private String patientName;
 }

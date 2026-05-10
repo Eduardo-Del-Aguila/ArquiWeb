@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class RolInsertDTO {
+    private Long idRol; 
     private UserRol nameRol;
     private String description;
 
