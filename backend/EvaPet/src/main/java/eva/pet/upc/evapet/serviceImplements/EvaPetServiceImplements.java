@@ -15,36 +15,39 @@ public class EvaPetServiceImplements implements IEvaPetService {
     @Autowired
     private IEvaPetRepository eR;
 
-    //Ejecutamos todos los métodos de mi IEvaPetInterface ya que lo estamos ejecutanto con impleents
     @Override
-    public List<EvaPet> getAll() {
-        return eR.findAll()
-                .stream()
-                .filter(EvaPet::isActive).toList();
+    public List<EvaPet> listAll() {
+        return eR.findAll();
     }
 
     @Override
-    public Optional<EvaPet> getById(Long id) {
+    public Optional<EvaPet> listById(Long id) {
         return eR.findById(id);
     }
 
     @Override
-    public EvaPet create(EvaPet e) {
+    public EvaPet insert(EvaPet e) {
         return eR.save(e);
     }
 
     @Override
-    public void update(Long id, EvaPet dto) {
+    public void update(EvaPet dto) {
         eR.save(dto);
     }
 
     @Override
-    public void delete(Long id, EvaPet e) {
+    public void delete(EvaPet e) {
         eR.save(e);
     }
 
+    //definir a futuro
     @Override
-    public List<String> getAllNames() {
-        return eR.listNames();
+    public List<String> listByName() {
+        return List.of();
     }
+
+//    @Override
+//    public List<String> getAllNames() {
+//        return eR.listNames();
+//    }
 }

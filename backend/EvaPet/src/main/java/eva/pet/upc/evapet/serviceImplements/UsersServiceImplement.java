@@ -36,8 +36,13 @@ public class UsersServiceImplement implements IUsersService {
 
     //Quizas se añada una eliminacion lógica como querie
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(User u) {
+        uR.save(u);
+    }
 
+    @Override
+    public Optional<User> findUserByMail(String mail) {
+        return uR.findUserByMail(mail);
     }
 
 
