@@ -4,21 +4,29 @@ import eva.pet.upc.evapet.dtos.medications.MedicationUseDTO;
 import eva.pet.upc.evapet.dtos.prescriptionmedications.PrescriptionMedicationsDTO;
 import eva.pet.upc.evapet.dtos.prescriptionmedications.PrescriptionMedicationsInsertDTO;
 import eva.pet.upc.evapet.models.PrescriptionMedications;
+import eva.pet.upc.evapet.models.User;
+import eva.pet.upc.evapet.repositories.IUsersRepository;
 import eva.pet.upc.evapet.serviceInterfaces.IPrescriptionMedicationsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+@PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
 @RestController
 @RequestMapping("/api/prescripcion-medicamentos")
 public class PrescriptionMedicationsControllers {
+
+    @Autowired
+    private IUsersRepository uR;
+
     @Autowired
     private IPrescriptionMedicationsService pMS;
 
@@ -34,7 +42,12 @@ public class PrescriptionMedicationsControllers {
     }
 
     @PostMapping("/insertar")
-    public ResponseEntity<?> registrar(@RequestBody PrescriptionMedicationsInsertDTO dto) {
+    public ResponseEntity<?> registrar(@RequestBody PrescriptionMedicationsInsertDTO dto, Authentication a) {
+
+        String mail = a.getName();
+        Optional<User> user = uR.findUserByMail(mail);
+        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
+        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
 
         if (dto.getIdPrescription() <= 0) {
             return ResponseEntity.badRequest()
@@ -83,7 +96,12 @@ public class PrescriptionMedicationsControllers {
     }
 
     @GetMapping("/medicamentos-por-prescripcion/{id}")
-    public ResponseEntity<?> listarPorPrescripcion(@PathVariable int id){
+    public ResponseEntity<?> listarPorPrescripcion(@PathVariable int id, Authentication a){
+
+        String mail = a.getName();
+        Optional<User> user = uR.findUserByMail(mail);
+        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
+        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
 
         if (!pMS.existsPrescription(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -102,7 +120,12 @@ public class PrescriptionMedicationsControllers {
     }
 
     @PutMapping("/actualizar")
-    public ResponseEntity<?> actualizar(@RequestBody PrescriptionMedicationsInsertDTO dto) {
+    public ResponseEntity<?> actualizar(@RequestBody PrescriptionMedicationsInsertDTO dto, Authentication a) {
+
+        String mail = a.getName();
+        Optional<User> user = uR.findUserByMail(mail);
+        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
+        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
 
         Optional<PrescriptionMedications> existente =
                 pMS.listId(dto.getIdPrescriptionMedications());
@@ -139,7 +162,12 @@ public class PrescriptionMedicationsControllers {
     }
 
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<String> eliminar(@PathVariable int id){
+    public ResponseEntity<String> eliminar(@PathVariable int id, Authentication a){
+
+        String mail = a.getName();
+        Optional<User> user = uR.findUserByMail(mail);
+        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
+        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
 
         if (id <= 0) {
             return ResponseEntity.badRequest()
