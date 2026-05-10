@@ -20,12 +20,11 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenUtil {
 
-    private static final long TOKEN_VALIDITY = 5 * 60 * 60 * 1000; // 5 horas
+    private static final long TOKEN_VALIDITY = 5 * 60 * 60 * 1000;
 
     @Value("${jwt.secret}")
     private String secret;
 
-    // helper para no repetir la decodificación
     private Key getKey() {
         return new SecretKeySpec(
                 Base64.getDecoder().decode(secret),

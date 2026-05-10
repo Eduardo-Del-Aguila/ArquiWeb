@@ -25,7 +25,7 @@ public class User {
     private String mail;
     @Column(name = "password",nullable = false)
     private String password;
-    @Column(name = "image_url",nullable = false)
+    @Column(name = "image_url",nullable = true)
     private String image_url;
     @Column(name = "phoneNumber",nullable = false)
     private String phoneNumber;

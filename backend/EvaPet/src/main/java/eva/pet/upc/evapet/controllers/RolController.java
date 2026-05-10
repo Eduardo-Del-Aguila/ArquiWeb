@@ -2,30 +2,46 @@ package eva.pet.upc.evapet.controllers;
 
 import eva.pet.upc.evapet.dtos.rol.RolInsertDTO;
 import eva.pet.upc.evapet.models.Rol;
+import eva.pet.upc.evapet.models.User;
+import eva.pet.upc.evapet.repositories.IUsersRepository;
+import eva.pet.upc.evapet.serviceImplements.RolServiceImplement;
 import eva.pet.upc.evapet.serviceInterfaces.IRolService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+//@PreAuthorize("hasAuthority('ADMIN')")
 @RestController
 @RequestMapping("/api/rol")
 public class RolController {
     @Autowired
-    private IRolService rS;
+    private RolServiceImplement rS;
 
+    @Autowired
+    private IUsersRepository uR;
 
     @GetMapping
-    public ResponseEntity<?> listar() {
+    public ResponseEntity<?> listar(Authentication authentication) {
+
+        String mail = authentication.getName();
+        Optional<User> user = uR.findUserByMail(mail);
+        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
+        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
+
+
         ModelMapper m= new ModelMapper();
-        List<RolInsertDTO> listaRoles=rS.list().stream()
+        List<RolInsertDTO> listaRoles= rS.list().stream()
                 .map(y->m.map(y, RolInsertDTO.class))
                 .collect(Collectors.toList());
+
 
         return ResponseEntity.ok(listaRoles);
     }

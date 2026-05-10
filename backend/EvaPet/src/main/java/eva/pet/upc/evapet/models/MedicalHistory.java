@@ -25,32 +25,35 @@ public class MedicalHistory {
     private String treatment;
     @Column(name = "observations", nullable = false)
     private String observations;
-    @Column(name = "diagnostics", nullable = false)
+
+
+    @Column(name = "diagnostics", nullable = true)
     private String  diagnostics;
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private MedicalStatus status;
 
-
     @Column(name = "isActive", nullable = false)
     private boolean isActive;
     @Column(name = "registerAt", nullable = false)
     private LocalDateTime registerAt;
-    @Column(name = "update", nullable = false)
+    @Column(name = "updateAt", nullable = true)
     private LocalDateTime updateAt;
 
+    @ManyToOne
+    @JoinColumn(name = "id_patient")
+    private User patient;
 
-    @OneToOne
-    private User idPatient;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_eva")
+    private EvaPet eva;
 
-    @OneToOne
-    private User idDoctor;
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "id_doctor")
+    private User doctor;
 
-    @OneToOne
-    private User idHospital;
-
-    @OneToOne(optional = false)
-    private EvaPet idEva;
-
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "id_hospital")
+    private Hospital hospital;
 
 }

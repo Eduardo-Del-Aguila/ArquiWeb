@@ -7,12 +7,12 @@ import java.util.Optional;
 
 public interface IEvaPetService {
 
-    public List<EvaPet> getAll();
-    public Optional<EvaPet> getById(Long id);
-    public EvaPet create(EvaPet e);
-    public void update(Long id, EvaPet e);
-    public void delete(Long id, EvaPet e);
+    public List<EvaPet> listAll();
+    public Optional<EvaPet> listById(Long id);
+    public EvaPet insert(EvaPet e);
+    public void update( EvaPet e);
+    public void delete(EvaPet e);
 
-    public List<String> getAllNames();
+    public List<String> listByName();
 
 }

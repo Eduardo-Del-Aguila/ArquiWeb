@@ -25,12 +25,13 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(@NonNull String mail) throws UsernameNotFoundException {
+        
         Optional<User> user = repo.findUserByMail(mail);
+
 
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("Usuario no encontrado: " + mail);
         }
-
         User u = user.get();
 
         if (!u.isActive()) {

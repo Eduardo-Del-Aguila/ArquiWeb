@@ -3,22 +3,33 @@ package eva.pet.upc.evapet.controllers;
 import eva.pet.upc.evapet.dtos.eva.EvaPetDTO;
 import eva.pet.upc.evapet.dtos.eva.EvaPetInsertDTO;
 import eva.pet.upc.evapet.dtos.user.UserDTO;
+import eva.pet.upc.evapet.dtos.user.UserUpdateSImple;
 import eva.pet.upc.evapet.dtos.user.UsersInsertDTO;
+import eva.pet.upc.evapet.enums.UserRol;
 import eva.pet.upc.evapet.models.EvaPet;
 import eva.pet.upc.evapet.models.Rol;
 import eva.pet.upc.evapet.models.User;
+import eva.pet.upc.evapet.serviceImplements.CloudinaryService;
 import eva.pet.upc.evapet.serviceImplements.RolServiceImplement;
 import eva.pet.upc.evapet.serviceImplements.UsersServiceImplement;
 import org.apache.coyote.Response;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
+//@PreAuthorize("hasAuthority('ADMIN')")
 @RestController
 @RequestMapping("/api/usuario")
 public class UserController {
@@ -27,7 +38,10 @@ public class UserController {
     public UsersServiceImplement uS;
     @Autowired
     public RolServiceImplement rS;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     @GetMapping("/listar")
     public ResponseEntity<?> ListAll(){
@@ -49,39 +63,103 @@ public class UserController {
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping("/insertar")
-    public ResponseEntity<?> Insert(@RequestBody UsersInsertDTO dto){
-        ModelMapper m = new ModelMapper();
-        Optional<Rol> rol = rS.listId(dto.getRolId());
-        if (rol.isEmpty()) return ResponseEntity.badRequest().body("Rol no encontrado");
 
-        //if(user.getName() == null | user.get() == null) return ResponseEntity.badRequest().body("Campos incompletos");
-        //TODO: Hasher la contraseña
-        User user = m.map(dto, User.class);
 
+    @PostMapping(value = "/insertar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> insert(
+            @RequestParam("name") String name,
+            @RequestParam("lastName") String lastName,
+            @RequestParam("phoneNumber") String phoneNumber,
+            @RequestParam("mail") String mail,
+            @RequestParam("password") String password,
+            @RequestParam("rolId") Long rolId,
+            @RequestParam(value = "imagen", required = false) MultipartFile imagen) {
+
+        Optional<Rol> rol = rS.listId(rolId);
+        //el más comun not_Found
+        if (rol.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rol no encontrado");
+
+        Optional<User> myUser = uS.findUserByMail(mail);
+        if (myUser.isPresent()){
+            //CONFLICT su mismo nombre lo dice hay un conflicto
+           return ResponseEntity.status(HttpStatus.CONFLICT).body("Usuario ya registrado");
+        }
+
+        String imageUrl = "https://res.cloudinary.com/demo/image/upload/sample.jpg";
+        if (imagen != null && !imagen.isEmpty()) {
+            try {
+                imageUrl = cloudinaryService.upload(imagen);
+            } catch (IOException e) {
+                //INTERNAL_SERVER_ERROR para errores del servidor
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al subir la imagen");
+            }
+        }
+
+        User user = new User();
+        user.setName(name);
+        user.setLastName(lastName);
+        user.setMail(mail);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setPhoneNumber(phoneNumber);
+        user.setImage_url(imageUrl);
+        user.setRol(rol.get());
         user.setActive(true);
         user.setCreateAt(LocalDateTime.now());
-
-        Rol myRol = rol.get();
-        user.setRol(myRol);
 
         uS.insert(user);
         return ResponseEntity.ok(user);
     }
 
-    @PutMapping("/actualizar/{id}")
-    public ResponseEntity<?> update(@RequestBody UsersInsertDTO dto, @PathVariable Long id) {
+    @PutMapping(value ="/actualizar/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> update(
+            @RequestParam("name") String name,
+            @RequestParam("lastName") String lastName,
+            @RequestParam("phoneNumber") String phoneNumber,
+            @RequestParam("nameRol") UserRol nameRol,
+            @RequestParam(value = "imagen", required = false) MultipartFile imagen,
+            @PathVariable Long id
+    ) {
+
         ModelMapper m = new ModelMapper();
+
         Optional<User> existing = uS.listById(id);
-        if (existing.isEmpty()) return ResponseEntity.notFound().build();
-        if (!existing.get().isActive()) return ResponseEntity.notFound().build();
-        m.map(dto, existing);
+
+        if (existing.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
 
         User user = existing.get();
-        m.map(dto, user);
 
+        if (!user.isActive())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario desactivado");
+
+        Optional<Rol> rolsito = rS.ListByName(nameRol);
+
+        if (rolsito.isEmpty())
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("rol incorrecto");
+
+        String imageUrl = "https://res.cloudinary.com/demo/image/upload/sample.jpg";
+        if (imagen != null && !imagen.isEmpty()) {
+            try {
+                imageUrl = cloudinaryService.upload(imagen);
+            } catch (IOException e) {
+                //INTERNAL_SERVER_ERROR para errores del servidor
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al subir la imagen");
+            }
+        }
+
+
+        user.setName(name);
+        user.setLastName(lastName);
+        user.setPhoneNumber(phoneNumber);
+        user.setImage_url(imageUrl);
+        user.setRol(rolsito.get());
         uS.update(user);
-        return ResponseEntity.ok(user);
+
+        UserDTO toShow = m.map(user, UserDTO.class);
+
+        return ResponseEntity.ok(toShow);
     }
 
     @DeleteMapping("/eliminar/{id}")
