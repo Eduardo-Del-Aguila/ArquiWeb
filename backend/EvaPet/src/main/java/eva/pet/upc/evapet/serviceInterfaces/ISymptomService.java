@@ -11,4 +11,5 @@ public interface ISymptomService {
     public Symptom insert(Symptom s);
     public void update(Symptom s);
     public void delete(Long id);
+    List<Object[]> countSymptomsBySeverity();
 }

@@ -39,4 +39,9 @@ public class SymptomServiceImplement implements ISymptomService {
         sR.deleteById(id);
     }
 
+    @Override
+    public List<Object[]> countSymptomsBySeverity() {
+        return sR.countSymptomsBySeverity();
+    }
+
 }

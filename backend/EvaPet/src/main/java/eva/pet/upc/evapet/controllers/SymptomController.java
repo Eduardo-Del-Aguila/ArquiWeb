@@ -162,4 +162,27 @@ public class SymptomController {
                     .body("Síntoma no encontrado");
         }
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/severity-count")
+    public ResponseEntity<?> countBySeverity(Authentication authentication) {
+
+        String mail = authentication.getName();
+
+        Optional<User> user = uR.findUserByMail(mail);
+
+        if (user.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body("Usuario no encontrado");
+        }
+
+        if (!user.get().isActive()) {
+            return ResponseEntity.badRequest()
+                    .body("Usuario inactivo");
+        }
+
+        List<Object[]> lista = sS.countSymptomsBySeverity();
+
+        return ResponseEntity.ok(lista);
+    }
 }
