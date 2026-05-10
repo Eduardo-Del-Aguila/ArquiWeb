@@ -70,7 +70,7 @@ public class AlertsController {
             return ResponseEntity.badRequest().body("El paciente asignado no existe");
         }
 
-        Optional<EvaPet> pet = eS.getById(dto.getIdEva());
+        Optional<EvaPet> pet = eS.listById(dto.getIdEva());
         if (pet.isEmpty()) {
             return ResponseEntity.badRequest().body("La mascota asignada no existe");
         }
