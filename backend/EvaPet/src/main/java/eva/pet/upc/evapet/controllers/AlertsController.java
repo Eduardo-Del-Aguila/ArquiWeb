@@ -75,7 +75,7 @@ public class AlertsController {
         }
 
         ModelMapper m = new ModelMapper();
-        Alerts alerta = new Alerts(); 
+        Alerts alerta = new Alerts();
         alerta.setType(dto.getType());
         alerta.setMessage(dto.getMessage());
         alerta.setCreatedAt(LocalDateTime.now());
@@ -105,7 +105,7 @@ public class AlertsController {
     }
 
     //TODO:Logica a elimnarse(quizas)
-    //@PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<?> actualizar(@RequestBody AlertsInsertDTO dto, @PathVariable Long id, Authentication authentication) {
         ModelMapper m = new ModelMapper();
@@ -122,8 +122,6 @@ public class AlertsController {
         }
 
         Alerts alertaActualizar = existente.get();
-        // Opcional: Validar si el Doctor actual tiene permisos sobre esta alerta específica
-        // if (!alertaActualizar.getCreatedBy().equals(currentUser.get().getId()) && noEsAdmin) { ... }
 
         alertaActualizar.setType(dto.getType());
         alertaActualizar.setMessage(dto.getMessage());
@@ -135,7 +133,7 @@ public class AlertsController {
 
     }
 
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminar(@PathVariable Long id) {
         Optional<Alerts> alerta = aS.listId(id);
@@ -148,7 +146,7 @@ public class AlertsController {
         }
     }
 
-    //@PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
     @GetMapping("/no-leidas/{idPaciente}")
     public ResponseEntity<?> listarNoLeidasPorPaciente(@PathVariable Long idPaciente, Authentication authentication) {
 
@@ -163,10 +161,8 @@ public class AlertsController {
             return ResponseEntity.badRequest().body("El paciente no existe");
         }
 
-        // 3. LLAMAMOS AL SERVICIO (El servicio se encarga de ejecutar el Query)
         List<Alerts> alertasNoLeidas = aS.listarNoLeidasPorPaciente(idPaciente);
 
-        // 4. Mapeamos a DTO (Usamos ShowAlertsDTO para devolver la info completa con ID)
         ModelMapper m = new ModelMapper();
         List<ShowAlertsDTO> response = alertasNoLeidas.stream()
                 .map(alerta -> m.map(alerta, ShowAlertsDTO.class))
