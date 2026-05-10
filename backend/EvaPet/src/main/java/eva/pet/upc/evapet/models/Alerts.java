@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class Alerts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idAlerts;
+    private Long idAlerts;
 
     @Column(name = "type",length = 20, nullable = false)
     @Enumerated(EnumType.STRING)
@@ -31,12 +31,12 @@ public class Alerts {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    //NO ESTAN AVANZADAS SE PONE ASI PARA PODER AVANZAR
-    @Column(name = "id_patient", nullable = false)
-    private int idPatient;
-    @Column(name = "id_eva", nullable = false)
-    private int idEva;
-    // NO ESTAN AVANZADAS AUN
+    @ManyToOne
+    @JoinColumn(name = "id_patient")
+    private User patient;
 
+    @ManyToOne
+    @JoinColumn(name = "id_eva")
+    private EvaPet evaPet;
 
 }

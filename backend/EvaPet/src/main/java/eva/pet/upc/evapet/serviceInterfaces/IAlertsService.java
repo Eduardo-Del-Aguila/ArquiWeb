@@ -12,5 +12,6 @@ public interface IAlertsService {
     public Optional<Alerts> listId(Long id);
     public void update(Alerts a);
     public void delete(Long id);
+    List<Alerts> listarNoLeidasPorPaciente(Long idPaciente);
 
 }

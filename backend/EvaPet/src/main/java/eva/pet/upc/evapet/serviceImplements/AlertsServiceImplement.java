@@ -39,4 +39,9 @@ public class AlertsServiceImplement implements IAlertsService {
     public void update(Alerts a) {
         aR.save(a);
     }
+
+    @Override
+    public List<Alerts> listarNoLeidasPorPaciente(Long idPaciente) {
+        return aR.findNoLeidasPorPaciente(idPaciente);
+    }
 }
