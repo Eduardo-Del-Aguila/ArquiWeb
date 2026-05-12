@@ -1,7 +1,7 @@
 package eva.pet.upc.evapet.controllers;
 
 import eva.pet.upc.evapet.dtos.hospital.HospitalInsertDTO;
-import eva.pet.upc.evapet.dtos.hospital.ShowHospital;
+import eva.pet.upc.evapet.dtos.hospital.HospitalShowDTO;
 import eva.pet.upc.evapet.models.Hospital;
 import eva.pet.upc.evapet.serviceImplements.HospitalServiceImplements;
 import org.modelmapper.ModelMapper;
@@ -24,8 +24,11 @@ public class HospitalController {
     public ResponseEntity<?> ListAll(){
         List<Hospital> hospitals = hS.listALL();
         if (hospitals.isEmpty()) return ResponseEntity.badRequest().body("No se contró ningun hospital");
+        ModelMapper m = new ModelMapper();
+        List<HospitalShowDTO> show = hospitals.stream().map( h -> m.map(h ,HospitalShowDTO.class)).toList();
 
-        return ResponseEntity.ok(hospitals);
+
+        return ResponseEntity.ok(show);
     }
 
     @GetMapping("/listar/{id}")
@@ -34,9 +37,12 @@ public class HospitalController {
         if (myHospital.isEmpty()) return ResponseEntity.badRequest().body("No se contró ningun hospital con el ID: " + id);
         if (!myHospital.get().isActive()) return ResponseEntity.badRequest().body("El hospital con el id: " + id + " está desactivado");
 
+        ModelMapper m = new ModelMapper();
         Hospital hosp = myHospital.get();
 
-        return ResponseEntity.ok(hosp);
+        HospitalShowDTO show = m.map(hosp,HospitalShowDTO.class);
+
+        return ResponseEntity.ok(show);
     }
 
     @PostMapping("/insertar")
@@ -48,7 +54,7 @@ public class HospitalController {
         hS.insert(hosp);
 
 
-        ShowHospital hospital = m.map(hosp, ShowHospital.class);
+        HospitalShowDTO hospital = m.map(hosp, HospitalShowDTO.class);
         return ResponseEntity.ok(hospital);
     }
 
@@ -62,7 +68,8 @@ public class HospitalController {
 
         Hospital hosp = m.map(myHosp.get(), Hospital.class);
 
-        ShowHospital hospital = m.map(hosp, ShowHospital.class);
+        HospitalShowDTO hospital = m.map(hosp, HospitalShowDTO.class);
+
         return ResponseEntity.ok(hospital);
     }
 
@@ -81,7 +88,7 @@ public class HospitalController {
 
         hS.deleteById(hospi);
 
-        ShowHospital nuevito = m.map(hospi, ShowHospital.class);
+        HospitalShowDTO nuevito = m.map(hospi, HospitalShowDTO.class);
         return ResponseEntity.ok(nuevito);
     }
 

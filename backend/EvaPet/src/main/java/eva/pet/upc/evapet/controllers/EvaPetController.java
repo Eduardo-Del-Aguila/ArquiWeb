@@ -3,6 +3,7 @@ package eva.pet.upc.evapet.controllers;
 
 import eva.pet.upc.evapet.dtos.eva.EvaPetDTO;
 import eva.pet.upc.evapet.dtos.eva.EvaPetInsertDTO;
+import eva.pet.upc.evapet.dtos.eva.EvaPetShowDTO;
 import eva.pet.upc.evapet.enums.StatusPet;
 import eva.pet.upc.evapet.models.EvaPet;
 import eva.pet.upc.evapet.models.User;
@@ -91,10 +92,12 @@ public class EvaPetController {
         eva.setLastInteraction(LocalDateTime.now());
         eva.setLevel(0);
         eva.setExperiencie(0);
-        eva.setStatus(StatusPet.SAD);
+        eva.setStatus(dto.getStatus());
 
         eS.insert(eva);
-        return ResponseEntity.ok("Pet creada correctamente");
+        EvaPetShowDTO show = m.map(eva, EvaPetShowDTO.class);
+
+        return ResponseEntity.ok(show);
     }
 
     @PreAuthorize("hasAuthority('PATIENT') or hasAuthority('ADMIN')")
@@ -145,6 +148,6 @@ public class EvaPetController {
         if (evi.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe eva con ese Id: " + myEva.getId());
 
         eS.delete(evi.get());
-        return ResponseEntity.ok("Mascota eliminada correctamente");
+        return ResponseEntity.ok("Mascota " + myEva.getName() + " eliminada correctamente");
     }
 }

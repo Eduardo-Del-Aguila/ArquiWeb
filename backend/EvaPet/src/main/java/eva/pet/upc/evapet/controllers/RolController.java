@@ -1,6 +1,7 @@
 package eva.pet.upc.evapet.controllers;
 
 import eva.pet.upc.evapet.dtos.rol.RolInsertDTO;
+import eva.pet.upc.evapet.enums.UserRol;
 import eva.pet.upc.evapet.models.Rol;
 import eva.pet.upc.evapet.models.User;
 import eva.pet.upc.evapet.repositories.IUsersRepository;
@@ -60,12 +61,15 @@ public class RolController {
             return ResponseEntity.badRequest().body("Necesita un nombre válido");
         }
 
-        ModelMapper m = new ModelMapper();
-        Rol r = m.map(dto, Rol.class);
+        Rol r = new Rol();
+        r.setDescriptionRol(dto.getDescription());
+        r.setNameRol(dto.getNameRol());
+
         Rol rol = rS.insert(r);
 
-        RolInsertDTO responseDTO = m.map(rol, RolInsertDTO.class);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(rol);
     }
 
     // Solo doctor puede buscar un rol específico

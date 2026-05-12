@@ -3,6 +3,7 @@ package eva.pet.upc.evapet.controllers;
 import eva.pet.upc.evapet.dtos.eva.EvaPetDTO;
 import eva.pet.upc.evapet.dtos.eva.EvaPetInsertDTO;
 import eva.pet.upc.evapet.dtos.user.UserDTO;
+import eva.pet.upc.evapet.dtos.user.UserShowDTO;
 import eva.pet.upc.evapet.dtos.user.UserUpdateSImple;
 import eva.pet.upc.evapet.dtos.user.UsersInsertDTO;
 import eva.pet.upc.evapet.enums.UserRol;
@@ -15,6 +16,7 @@ import eva.pet.upc.evapet.serviceImplements.UsersServiceImplement;
 import org.apache.coyote.Response;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -73,11 +75,17 @@ public class UserController {
             @RequestParam("mail") String mail,
             @RequestParam("password") String password,
             @RequestParam("rolId") Long rolId,
-            @RequestParam(value = "imagen", required = false) MultipartFile imagen) {
+            @RequestParam(value = "imagen", required = false) MultipartFile imagen, HttpMethod httpMethod) {
 
         Optional<Rol> rol = rS.listId(rolId);
         //el más comun not_Found
         if (rol.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rol no encontrado");
+
+        Optional<User> userD = uS.listByIdDeleted(mail);
+
+        if (userD.isPresent()){
+            return ResponseEntity.ok("usuario " +  mail + " activado correctamente");
+        }
 
         Optional<User> myUser = uS.findUserByMail(mail);
         if (myUser.isPresent()){
@@ -95,6 +103,10 @@ public class UserController {
             }
         }
 
+
+
+        ModelMapper m = new ModelMapper();
+
         User user = new User();
         user.setName(name);
         user.setLastName(lastName);
@@ -107,7 +119,11 @@ public class UserController {
         user.setCreateAt(LocalDateTime.now());
 
         uS.insert(user);
-        return ResponseEntity.ok(user);
+
+        UserShowDTO show = m.map(user, UserShowDTO.class);
+
+
+        return ResponseEntity.ok(show);
     }
 
     @PutMapping(value ="/actualizar/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -170,7 +186,7 @@ public class UserController {
 
         existing.get().setActive(false);
         uS.update(existing.get());
-        return ResponseEntity.ok("Usuario eliminado correctamente");
+        return ResponseEntity.ok("Usuario " + id + " eliminado correctamente");
     }
 
 }

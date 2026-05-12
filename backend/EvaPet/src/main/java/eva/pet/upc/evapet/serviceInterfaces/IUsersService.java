@@ -12,6 +12,8 @@ public interface IUsersService {
     public User insert(User u);
 
     public Optional<User> listById(Long id);
+    public Optional<User> listByIdDeleted(String mail);
+
     public User update(User u);
     public void deleteById(User u);
 

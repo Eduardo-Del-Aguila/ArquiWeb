@@ -25,10 +25,9 @@ public class MedicalHistory {
     private String treatment;
     @Column(name = "observations", nullable = false)
     private String observations;
-
-
     @Column(name = "diagnostics", nullable = true)
     private String  diagnostics;
+
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private MedicalStatus status;

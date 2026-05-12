@@ -2,8 +2,7 @@ package eva.pet.upc.evapet.controllers;
 
 
 import eva.pet.upc.evapet.dtos.medicalHistory.MedicalHistoryInsertDTO;
-import eva.pet.upc.evapet.dtos.medicalHistory.ShowMedicalHistory;
-import eva.pet.upc.evapet.models.EvaPet;
+import eva.pet.upc.evapet.dtos.medicalHistory.MedicalHistoryShowDTO;
 import eva.pet.upc.evapet.models.MedicalHistory;
 import eva.pet.upc.evapet.models.User;
 import eva.pet.upc.evapet.repositories.IEvaPetRepository;
@@ -45,7 +44,7 @@ public class MedicalHistoryController {
         List<MedicalHistory> histories = mS.ListAll();
         if(histories.isEmpty()) return ResponseEntity.badRequest().body("No ningun historial medico");
 
-        ShowMedicalHistory medicalShow =  m.map(histories, ShowMedicalHistory.class);
+        List<MedicalHistoryShowDTO> medicalShow = histories.stream().map(h-> m.map(h, MedicalHistoryShowDTO.class)).toList();
         return ResponseEntity.ok(medicalShow);
     }
     // GET /api/historial-medico/paciente/3
@@ -89,7 +88,7 @@ public class MedicalHistoryController {
         try {
             MedicalHistory saved = mS.insert(dto, evaId, hospitalId);
 
-            ShowMedicalHistory response = new ShowMedicalHistory();
+            MedicalHistoryInsertDTO response = new MedicalHistoryInsertDTO();
             response.setReason(saved.getReason());
             response.setTreatment(saved.getTreatment());
             response.setObservations(saved.getObservations());
@@ -117,8 +116,12 @@ public class MedicalHistoryController {
         if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
 
         try {
+            ModelMapper m = new ModelMapper();
             MedicalHistory updated = mS.update(id, dto);
-            return ResponseEntity.ok(updated);
+
+            MedicalHistoryShowDTO show = m.map(updated, MedicalHistoryShowDTO.class);
+
+            return ResponseEntity.ok(show);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

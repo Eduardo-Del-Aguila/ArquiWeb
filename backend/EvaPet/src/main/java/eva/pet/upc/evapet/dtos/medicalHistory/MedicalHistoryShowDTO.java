@@ -4,16 +4,13 @@ import eva.pet.upc.evapet.enums.MedicalStatus;
 import lombok.Data;
 
 @Data
-public class ShowMedicalHistory {
+public class MedicalHistoryShowDTO {
     private String reason;
     private String treatment;
     private String observations;
     private String diagnostics;
     private MedicalStatus status;
-    
-    private String evaName;
-    private String patientName;
-    private String doctorName;
-    private String nameHospital;
+
+
 
 }

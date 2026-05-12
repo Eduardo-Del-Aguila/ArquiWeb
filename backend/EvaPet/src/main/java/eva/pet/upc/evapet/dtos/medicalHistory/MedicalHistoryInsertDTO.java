@@ -17,5 +17,9 @@ public class MedicalHistoryInsertDTO {
     private String observations;
     private String  diagnostics;
     private MedicalStatus status;
-    
+
+    private String evaName;
+    private String patientName;
+    private String doctorName;
+    private String nameHospital;
 }
