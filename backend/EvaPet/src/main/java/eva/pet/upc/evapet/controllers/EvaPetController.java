@@ -150,4 +150,22 @@ public class EvaPetController {
         eS.delete(evi.get());
         return ResponseEntity.ok("Mascota " + myEva.getName() + " eliminada correctamente");
     }
+
+    @PreAuthorize("hasAuthority('PATIENT') or hasAuthority('ADMIN')")
+    @GetMapping("/mis-mascotas/por-nivel")
+    public ResponseEntity<?> listMyPetsByLevel(Authentication authentication) {
+        ModelMapper m = new ModelMapper();
+
+        String mail = authentication.getName();
+        Optional<User> user = uR.findUserByMail(mail);
+        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
+        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
+
+        List<EvaPet> pets = eS.findTopByPatientOrderedByLevel(user.get().getId());
+        if (pets.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No tienes mascotas registradas");
+
+        List<EvaPetDTO> myPets = pets.stream().map(p -> m.map(p, EvaPetDTO.class)).toList();
+        return ResponseEntity.ok(myPets);
+    }
+
 }

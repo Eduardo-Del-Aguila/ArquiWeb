@@ -30,7 +30,13 @@ public class MedicationsControllers {
     private IUsersRepository uR;
 
     @GetMapping("/listar")
-    public ResponseEntity<List<MedicationsDTO>> listar(){
+    public ResponseEntity<?> listar(Authentication a){
+
+        String mail = a.getName();
+        Optional<User> user = uR.findUserByMail(mail);
+        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
+        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
+
         ModelMapper m=new ModelMapper();
         List<MedicationsDTO> listaMedications=mS.list().stream()
                 .map(y->m.map(y,MedicationsDTO.class))

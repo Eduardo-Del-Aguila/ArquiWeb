@@ -78,7 +78,7 @@ public class MedicalHistoryController {
     @PostMapping("/insertar/eva/{evaId}/hospital/{hospitalId}")
     public ResponseEntity<?> insert(@PathVariable Long evaId,
                                     @PathVariable Long hospitalId,
-                                    @RequestBody MedicalHistoryInsertDTO dto,
+                                    @RequestBody MedicalHistoryShowDTO dto,
                                     Authentication authentication) {
         String mail = authentication.getName();
         Optional<User> user = uR.findUserByMail(mail);
@@ -108,7 +108,7 @@ public class MedicalHistoryController {
     // PUT /api/historial-medico/actualizar/1
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<?> update(@PathVariable Long id,
-                                    @RequestBody MedicalHistoryInsertDTO dto,
+                                    @RequestBody MedicalHistoryShowDTO dto,
                                     Authentication authentication) {
         String mail = authentication.getName();
         Optional<User> user = uR.findUserByMail(mail);

@@ -10,7 +10,5 @@ public class MedicalHistoryShowDTO {
     private String observations;
     private String diagnostics;
     private MedicalStatus status;
-
-
-
+    
 }

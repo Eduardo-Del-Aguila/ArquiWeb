@@ -3,6 +3,7 @@ package eva.pet.upc.evapet.repositories;
 import eva.pet.upc.evapet.models.EvaPet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -41,6 +42,12 @@ public interface IEvaPetRepository extends JpaRepository<EvaPet, Long> {
     // Avanzado	deleteAllByIdInBatch(Iterable<ID> ids)
     @Query("SELECT e.name FROM EvaPet e")
     List<String> listNames();
+
+    @Query("SELECT COUNT(e.patient) FROM EvaPet e")
+    List<Object> listByQuantity(Long id);
+
+    @Query("SELECT p FROM EvaPet p WHERE p.patient.id = :patientId ORDER BY p.level DESC")
+    List<EvaPet> findTopByPatientOrderedByLevel(@Param("patientId") Long patientId);
 
 
 }

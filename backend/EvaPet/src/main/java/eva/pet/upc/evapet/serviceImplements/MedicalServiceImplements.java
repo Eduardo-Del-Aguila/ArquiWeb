@@ -1,6 +1,7 @@
 package eva.pet.upc.evapet.serviceImplements;
 
 import eva.pet.upc.evapet.dtos.medicalHistory.MedicalHistoryInsertDTO;
+import eva.pet.upc.evapet.dtos.medicalHistory.MedicalHistoryShowDTO;
 import eva.pet.upc.evapet.enums.MedicalStatus;
 import eva.pet.upc.evapet.models.EvaPet;
 import eva.pet.upc.evapet.models.Hospital;
@@ -56,7 +57,7 @@ public class MedicalServiceImplements implements IMedicalServiceInterface {
     }
 
     @Override
-    public MedicalHistory insert(MedicalHistoryInsertDTO dto, Long evaId, Long hospitalId) {
+    public MedicalHistory insert(MedicalHistoryShowDTO dto, Long evaId, Long hospitalId) {
         EvaPet eva = eR.findById(evaId)
                 .orElseThrow(() -> new RuntimeException("Eva Pet no encontrada con id: " + evaId));
         Long patientId = eva.getPatient().getId();
@@ -85,7 +86,7 @@ public class MedicalServiceImplements implements IMedicalServiceInterface {
     }
 
     @Override
-    public MedicalHistory update(Long id, MedicalHistoryInsertDTO dto) {
+    public MedicalHistory update(Long id, MedicalHistoryShowDTO dto) {
         MedicalHistory history = mR.findById(id)
                 .orElseThrow(() -> new RuntimeException("Historial médico no encontrado con id: " + id));
 
