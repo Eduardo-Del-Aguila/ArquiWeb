@@ -62,7 +62,7 @@ public class WebSecurityConfig {
                                 "/v3/api-docs/**",
                                 "/v3/api-docs.yaml",
                                 "/webjars/**",
-                                "/auth/login", "/api/usuario/insertar", "/api/rol/insertar, "
+                                "/auth/login", "/api/rol/insertar, /api/sintomas/severity-count , /api/alerts/listar"
                         ).permitAll()
 //                        .anyRequest().permitAll()
                         // Todo lo demás requiere autenticación

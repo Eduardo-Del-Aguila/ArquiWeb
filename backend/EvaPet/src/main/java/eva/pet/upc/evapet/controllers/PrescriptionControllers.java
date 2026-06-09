@@ -176,7 +176,7 @@ public class PrescriptionControllers {
             RecipesPatientDTO dto = new RecipesPatientDTO();
 
             dto.setIdUserPatient(((Number) fila[0]).intValue());
-            dto.setTotalRecetas(((Number) fila[1]).intValue());
+            //dto.setTotalRecetas(((Number) fila[1]).intValue());
 
             respuesta.add(dto);
         }
