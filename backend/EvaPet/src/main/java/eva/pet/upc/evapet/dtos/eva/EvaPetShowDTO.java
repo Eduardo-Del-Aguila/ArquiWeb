@@ -8,6 +8,7 @@ import lombok.Data;
 
 @Data
 public class EvaPetShowDTO {
+    private  Long idEva;
     private String name;
     private String description;
     private StatusPet status;

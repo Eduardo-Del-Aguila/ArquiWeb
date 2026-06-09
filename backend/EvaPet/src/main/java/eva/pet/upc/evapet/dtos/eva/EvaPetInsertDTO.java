@@ -8,8 +8,4 @@ public class EvaPetInsertDTO {
     private String name;
     private String description;
     private StatusPet status;
-
-
-
-
 }
