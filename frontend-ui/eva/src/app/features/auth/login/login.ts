@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../../core/services/AuthService';
 import { Router } from '@angular/router';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { AuthService } from '../../../core/services/authService';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +14,7 @@ import { MatCardModule } from '@angular/material/card';
   templateUrl: './login.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export  class Login {
+export class Login {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -28,8 +28,8 @@ export  class Login {
     console.log("quieto entrar");
     if (this.form.invalid) return;
     this.authService.login(this.form.value as any).subscribe({
-      next: () => this.router.navigate(['/pets']),
-      error: (err) => console.error(err)
+      next: () => this.router.navigate(['/layout/pets']),
+      error: (err) => console.error(err + "credenciales erroneas")
     });
   }
 }
