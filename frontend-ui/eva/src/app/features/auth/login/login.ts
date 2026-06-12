@@ -25,10 +25,18 @@ export class Login {
   });
 
   login() {
-    if (this.form.invalid) return;
-    this.authService.login(this.form.value as any).subscribe({
-      next: () => this.router.navigate(['/layout/pets']),
-      error: (err) => console.error(err + "credenciales erroneas")
-    });
-  }
+  if (this.form.invalid) return;
+
+  console.log("FORM:", this.form.value);
+
+  this.authService.login(this.form.value as any).subscribe({
+    next: (res) => {
+      console.log("LOGIN OK", res);
+      this.router.navigate(['/layout/pets']);
+    },
+    error: (err) => {
+      console.log("LOGIN ERROR", err);
+    }
+  });
+}
 }

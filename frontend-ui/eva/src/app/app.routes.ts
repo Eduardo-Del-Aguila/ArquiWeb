@@ -23,6 +23,10 @@ export const routes: Routes = [
       {
         path:'pets',
         loadComponent: () => import('../app/pages/pet-page/pet-page').then(m => m.PetPage)
+      },
+      {
+      path:'hospitals',
+      loadComponent: () => import('../app/pages/hospital-page/hospital-page').then(m => m.HospitalPage)
       }
 
     ]

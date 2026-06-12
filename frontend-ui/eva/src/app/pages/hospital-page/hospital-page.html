@@ -1,0 +1,9 @@
+<h1>Hospitales</h1>
+
+<p>Cantidad: {{ hospitals().length }}</p>
+
+<app-generic-table
+  [data]="hospitals()"
+  [columns]="columns"
+  [actions]="actions">
+</app-generic-table>
