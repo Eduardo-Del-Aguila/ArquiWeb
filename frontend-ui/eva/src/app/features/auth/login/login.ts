@@ -25,7 +25,6 @@ export class Login {
   });
 
   login() {
-    console.log("quieto entrar");
     if (this.form.invalid) return;
     this.authService.login(this.form.value as any).subscribe({
       next: () => this.router.navigate(['/layout/pets']),

@@ -13,19 +13,21 @@ export class EvaPetService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
 
-  private url = 'http://localhost:8080/api/pet';
+  private url = base_url;
 
-  private getHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      Authorization: `Bearer ${this.authService.getToken()}`
-    });
-  }
-
+private getHeaders(): HttpHeaders {
+  const token = this.authService.getToken();
+  console.log('token:', token);
+  return new HttpHeaders({
+    Authorization: `Bearer ${token}`
+  });
+}
+// http://localhost:8081/api/pet/listar
   listar() {
-    return this.http.get<EvaPetShow[]>(`${this.url}/listar`, { headers: this.getHeaders() });
+    return this.http.get<EvaPetShow[]>(`${this.url}/pet/listar`, { headers: this.getHeaders() });
   }
 
   insertar(dto: EvaPetInsert) {
-    return this.http.post<EvaPetShow>(`${this.url}/insertar`, dto, { headers: this.getHeaders() });
+    return this.http.post<EvaPetShow>(`${this.url}/pet/insertar`, dto, { headers: this.getHeaders() });
   }
 }

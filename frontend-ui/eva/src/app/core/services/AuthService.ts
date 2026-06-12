@@ -14,11 +14,14 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private url = base_url;
+  private url = 'http://localhost:8081/auth/login';
 
   login(dto: LoginRequest) {
     return this.http.post<LoginResponse>(this.url, dto).pipe(
-      tap(res => localStorage.setItem('token', res.token))
+      tap(res => {
+        console.log('respuesta login:', res);
+        localStorage.setItem('token', res.jwttoken);
+      })
     );
   }
 

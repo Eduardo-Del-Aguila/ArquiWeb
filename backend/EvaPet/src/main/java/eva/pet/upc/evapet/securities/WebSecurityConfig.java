@@ -52,7 +52,15 @@ public class WebSecurityConfig {
 
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-
+                //IDENTIFICAMOS GRACIAS A CORS QUE NUESTRA WEB (LOCAL EN ESTE CASO) QUE TODO FLUYA
+                .cors(cors -> cors.configurationSource(request -> {
+                    var config = new org.springframework.web.cors.CorsConfiguration();
+                    config.setAllowedOrigins(java.util.List.of("http://localhost:4200"));
+                    config.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    config.setAllowedHeaders(java.util.List.of("*"));
+                    config.setAllowCredentials(true);
+                    return config;
+                }))
                 .authorizeHttpRequests(req -> req
 
                         // Swagger
