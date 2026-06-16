@@ -46,7 +46,6 @@ export class PetPage implements OnInit {
             key,
             label: key
           }));
-          console.log(this.columns);
         }
         this.pets.set(data);
       },
@@ -69,7 +68,8 @@ export class PetPage implements OnInit {
   eliminar(row: EvaPetShow) {
     const ref = this.dialog.open(ConfirmDialog, {
       width: '350px',
-      data: { nombre: row.name }
+      data: { titulo: `¿Deseas eliminar el rol ${row.name}?`, mensaje: 'Esta acción no se puede deshacer.' }
+
     });
 
     ref.afterClosed().subscribe(confirmado => {

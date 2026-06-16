@@ -23,7 +23,7 @@ export class RolForm {
 
 form = this.fb.group({
   nameRol: ['PATIENT' as UserRol, Validators.required],
-  description: ['', [Validators.required, Validators.maxLength(200)]]
+  descriptionRol: ['', [Validators.required, Validators.maxLength(200)]]
 });
 
   guardar() {

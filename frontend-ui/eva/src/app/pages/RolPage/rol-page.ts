@@ -29,7 +29,7 @@ export class RolPage implements OnInit {
   ];
 
   ngOnInit() { this.cargar(); }
-  
+
   private recargarEffect = effect(() => {
     this.stateService.recargar();
     this.cargar();
@@ -40,8 +40,9 @@ export class RolPage implements OnInit {
     this.rolService.listar().subscribe({
       next: data => {
         if (data.length > 0) {
+
           this.columns = Object.keys(data[0]).map(key => ({ key, label: key }));
-          console.log(this.columns);
+          console.log('columnas: ',this.columns);
         }
         this.roles.set(data);
       },

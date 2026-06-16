@@ -24,7 +24,7 @@ export class RolEditDialog {
 
 form = this.fb.group({
   nameRol: [this.data.nameRol as UserRol, Validators.required],
-  description: [this.data.descriptionRol, [Validators.required, Validators.maxLength(200)]]
+  descriptionRol: [this.data.descriptionRol, [Validators.required, Validators.maxLength(200)]]
 });
 
   guardar() {

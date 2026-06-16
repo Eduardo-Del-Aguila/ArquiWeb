@@ -48,6 +48,7 @@ public class EvaPetController {
         if (pets.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay macotas registradas");
 
         List<EvaPetShowDTO> myPets = pets.stream().map(p -> m.map(p,EvaPetShowDTO.class)).toList();
+
 //        List<EvaPetDTO> myPets = pets.stream().map(p -> m.map(p,EvaPetDTO.class)).toList();
         return ResponseEntity.ok(myPets);
     }
