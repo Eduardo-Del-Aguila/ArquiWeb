@@ -1,0 +1,9 @@
+<div class="p-6">
+  <h2 class="text-lg font-semibold mb-2">{{ titulo }}</h2>
+  <p class="text-sm text-gray-500 mb-6">{{ mensaje }}</p>
+
+  <div class="flex justify-end gap-2">
+    <button mat-button (click)="cancelar()">No</button>
+    <button mat-raised-button color="warn" (click)="confirmar()">Sí, eliminar</button>
+  </div>
+</div>

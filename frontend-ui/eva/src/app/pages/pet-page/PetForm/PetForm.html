@@ -1,0 +1,42 @@
+<div class="w-full p-4">
+  <form [formGroup]="form" (ngSubmit)="guardar()" class="flex flex-col gap-4">
+
+    <h2 class="text-lg font-semibold">Nueva Mascota</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="name" maxlength="25">
+        @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+          <mat-error>El nombre es requerido</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Descripción</mat-label>
+        <input matInput formControlName="description" maxlength="200">
+        @if (form.get('description')?.hasError('required') && form.get('description')?.touched) {
+          <mat-error>La descripción es requerida</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Estado</mat-label>
+        <mat-select formControlName="status">
+          @for (s of statuses; track s) {
+            <mat-option [value]="s">{{ s }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+
+    <div class="flex justify-end">
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+        Guardar
+      </button>
+    </div>
+
+  </form>
+</div>

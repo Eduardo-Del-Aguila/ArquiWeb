@@ -1,6 +1,7 @@
 package eva.pet.upc.evapet.controllers;
 
 import eva.pet.upc.evapet.dtos.rol.RolInsertDTO;
+import eva.pet.upc.evapet.dtos.rol.RolShowDTO;
 import eva.pet.upc.evapet.enums.UserRol;
 import eva.pet.upc.evapet.models.Rol;
 import eva.pet.upc.evapet.models.User;
@@ -41,8 +42,8 @@ public class RolController {
         }
 
         ModelMapper m = new ModelMapper();
-        List<RolInsertDTO> listaRoles = rS.list().stream()
-                .map(y -> m.map(y, RolInsertDTO.class))
+        List<RolShowDTO> listaRoles = rS.list().stream()
+                .map(y -> m.map(y, RolShowDTO.class))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(listaRoles);
@@ -62,12 +63,10 @@ public class RolController {
         }
 
         Rol r = new Rol();
-        r.setDescriptionRol(dto.getDescription());
+        r.setDescriptionRol(dto.getDescriptionRol());
         r.setNameRol(dto.getNameRol());
 
         Rol rol = rS.insert(r);
-
-
 
         return ResponseEntity.status(HttpStatus.CREATED).body(rol);
     }

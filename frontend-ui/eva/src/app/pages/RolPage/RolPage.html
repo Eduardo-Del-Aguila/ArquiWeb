@@ -1,9 +1,8 @@
-
-<app-pet-form></app-pet-form>
-
 <div class="p-4">
+  <app-rol-form />
+
   <app-generic-table
-    [data]="pets()"
+    [data]="roles()"
     [columns]="columns"
     [actions]="actions"
   />
