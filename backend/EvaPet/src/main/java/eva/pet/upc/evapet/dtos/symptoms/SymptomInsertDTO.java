@@ -1,7 +1,9 @@
 package eva.pet.upc.evapet.dtos.symptoms;
 
 import eva.pet.upc.evapet.enums.Severity;
+import lombok.Data;
 
+@Data
 public class SymptomInsertDTO {
     private String name;
     private Severity severity;

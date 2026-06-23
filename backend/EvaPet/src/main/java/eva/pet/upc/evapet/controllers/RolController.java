@@ -45,7 +45,7 @@ public class RolController {
         List<RolShowDTO> listaRoles = rS.list().stream()
                 .map(y -> m.map(y, RolShowDTO.class))
                 .collect(Collectors.toList());
-
+        System.out.println( "Aqui están los roles" + listaRoles);
         return ResponseEntity.ok(listaRoles);
     }
 

@@ -1,5 +1,8 @@
 package eva.pet.upc.evapet.dtos.medications;
 
+import lombok.Data;
+
+@Data
 public class MedicationsInsertDTO {
     private int idMedication;
     private String name;

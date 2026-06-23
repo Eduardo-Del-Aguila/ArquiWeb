@@ -34,7 +34,7 @@ public class AlertsController {
     @Autowired
     private IEvaPetService eS;
 
-    //@PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
     @GetMapping("/listar")
     public ResponseEntity<?> listar(Authentication authentication) {
         String mail = authentication.getName();

@@ -1,12 +1,15 @@
 package eva.pet.upc.evapet.dtos.eva;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import eva.pet.upc.evapet.enums.StatusPet;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
 
+
 @Data
+@JsonPropertyOrder({ "idEva", "name", "description", "status", "level", "experiencie" })
 public class EvaPetShowDTO {
     private  Long idEva;
     private String name;

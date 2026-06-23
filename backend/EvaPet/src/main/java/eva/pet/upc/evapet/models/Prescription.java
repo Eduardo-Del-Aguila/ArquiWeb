@@ -28,6 +28,4 @@ public class Prescription {
 
     @Column(name = "date")
     private LocalDate date;
-
-
 }
