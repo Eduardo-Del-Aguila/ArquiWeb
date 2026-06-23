@@ -8,4 +8,5 @@ public class HospitalShowDTO {
     private String direction;
     private String phone;
     private String city;
+    private Long id;
 }
