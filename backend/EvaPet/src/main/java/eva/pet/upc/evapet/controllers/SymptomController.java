@@ -48,7 +48,7 @@ public class SymptomController {
                 .map(y -> m.map(y, SymptomInsertDTO.class))
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(listaSymptoms);
+        return ResponseEntity.ok(sS.List());
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR')")
