@@ -18,3 +18,26 @@ Historial médico solo para el paciente, prohibido mezclarlo con el perfil del d
 
 1. Se eliminarán las tablas familiares, medicos y pacientes las cuales serán reemplazadas por "rol".
 2. Completar el historial medico con mas tablas para especificar.
+
+
+//21/04/2026
+
+1. eva_pet_responses.severidad
+ENUM('leve', 'moderado', 'grave')
+
+2. medical_history.state
+ENUM('pendiente', 'revisado', 'cerrado')
+
+3. prescription.status
+ENUM('sugerida', 'aprobada', 'activa', 'completada', 'cancelada')
+
+4. alerts.type
+ENUM('salud', 'comportamiento', 'medicamento', 'inactividad')
+
+5. symptom.severidad
+ENUM('leve', 'moderado', 'grave')
+
+28/04/2026
+
+Considerar una elimicacion de la talba intermedia 
+
