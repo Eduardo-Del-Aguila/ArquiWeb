@@ -1,0 +1,7 @@
+<button class="float-btn" (click)="toggle()" [title]="isOpen ? 'Cerrar videollamada' : 'Iniciar videollamada'">
+  {{ isOpen ? '✕' : '📹' }}
+</button>
+
+@if (isOpen) {
+  <div class="jitsi-container" id="jitsi-container"></div>
+}

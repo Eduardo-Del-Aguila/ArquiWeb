@@ -23,10 +23,10 @@ export const routes: Routes = [
       {
         path:'pets',
         loadComponent: () => import('../app/pages/pet-page/pet-page').then(m => m.PetPage)
+      },
+      { 
+        path: 'symptoms', loadComponent: () => import('../app/pages/symptom-page/symptom-page').then(m => m.SymptomPage) 
       }
-
     ]
   }
-
-
 ];

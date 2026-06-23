@@ -1,0 +1,33 @@
+<div class="p-4">
+
+  <!-- Formulario para insertar -->
+  <div class="flex gap-4 mb-6 items-center flex-wrap">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre del síntoma</mat-label>
+      <input matInput [(ngModel)]="nuevoSintoma.name" placeholder="Ej: Vómito" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Severidad</mat-label>
+      <mat-select [(ngModel)]="nuevoSintoma.severity">
+        @for (s of severityOptions; track s) {
+          <mat-option [value]="s">{{ s }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="insertar()">
+      Agregar Síntoma
+    </button>
+
+  </div>
+
+  <!-- Tabla de síntomas -->
+  <app-generic-table
+    [data]="symptoms()"
+    [columns]="columns"
+    [actions]="actions"
+  />
+
+</div>
