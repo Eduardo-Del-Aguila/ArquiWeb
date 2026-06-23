@@ -1,0 +1,31 @@
+<div class="p-4 w-full">
+  <h2 class="text-lg font-semibold mb-4">Editar Rol</h2>
+
+  <form [formGroup]="form" (ngSubmit)="guardar()" class="flex flex-col gap-4">
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Rol</mat-label>
+      <mat-select formControlName="nameRol">
+        @for (r of roles; track r) {
+          <mat-option [value]="r">{{ r }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Descripción</mat-label>
+      <input matInput formControlName="descriptionRol" maxlength="200">
+      @if (form.get('descriptionRol')?.hasError('required') && form.get('descriptionRol')?.touched) {
+        <mat-error>La descripción es requerida</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="flex justify-end gap-2">
+      <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+        Actualizar
+      </button>
+    </div>
+
+  </form>
+</div>

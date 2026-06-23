@@ -1,0 +1,34 @@
+<div class="w-full p-4">
+  <form [formGroup]="form" (ngSubmit)="guardar()" class="flex flex-col gap-4">
+
+    <h2 class="text-lg font-semibold">Nuevo Rol</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Rol</mat-label>
+        <mat-select formControlName="nameRol">
+          @for (r of roles; track r) {
+            <mat-option [value]="r">{{ r }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Descripción</mat-label>
+        <input matInput formControlName="descriptionRol" maxlength="200">
+        @if (form.get('descriptionRol')?.hasError('required') && form.get('descriptionRol')?.touched) {
+          <mat-error>La descripción es requerida</mat-error>
+        }
+      </mat-form-field>
+
+    </div>
+
+    <div class="flex justify-end">
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+        Guardar
+      </button>
+    </div>
+
+  </form>
+</div>

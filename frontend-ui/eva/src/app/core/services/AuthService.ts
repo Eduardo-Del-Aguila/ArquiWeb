@@ -5,7 +5,6 @@ import { LoginRequest, LoginResponse } from '../interfaces/auth.interface';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../env/environment';
 
-const base_url = environment.base_url;
 
 @Injectable({
   providedIn: 'root',

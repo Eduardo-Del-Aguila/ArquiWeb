@@ -1,4 +1,5 @@
 export interface EvaPetShow {
+  idEva:       number;
   description: string;
   experiencie: number;
   level:       number;
@@ -12,9 +13,4 @@ export interface EvaPetInsert {
   status: StatusPet;
 }
 
-export enum StatusPet{
-    PATIENT,
-    DOCTOR,
-    FAMILY,
-    ADMIN
-}
+export type StatusPet = 'SAD' | 'HAPPY' | 'ANGRY' | 'MELANCOLIC';

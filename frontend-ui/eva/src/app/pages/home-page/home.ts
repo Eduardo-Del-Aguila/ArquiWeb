@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Sidebar } from "../../shared/components/sidebar/sidebar";
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [Sidebar],
   templateUrl: './home.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

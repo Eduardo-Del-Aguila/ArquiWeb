@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Login } from "./features/auth/login/login";
-import { AuthService } from './core/services/authService';
+import { AuthService } from './core/services/AuthService';
 
 @Component({
   selector: 'app-root',

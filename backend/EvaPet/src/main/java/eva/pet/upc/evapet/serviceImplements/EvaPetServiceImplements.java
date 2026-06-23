@@ -17,7 +17,7 @@ public class EvaPetServiceImplements implements IEvaPetService {
 
     @Override
     public List<EvaPet> listAll() {
-        return eR.findAll();
+        return eR.findAll().stream().filter(EvaPet::isActive).toList();
     }
 
     @Override
