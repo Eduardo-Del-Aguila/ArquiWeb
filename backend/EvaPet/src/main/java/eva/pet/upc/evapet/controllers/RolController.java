@@ -1,9 +1,11 @@
 package eva.pet.upc.evapet.controllers;
 
 import eva.pet.upc.evapet.dtos.rol.RolInsertDTO;
+import eva.pet.upc.evapet.enums.UserRol;
 import eva.pet.upc.evapet.models.Rol;
 import eva.pet.upc.evapet.models.User;
 import eva.pet.upc.evapet.repositories.IUsersRepository;
+import eva.pet.upc.evapet.serviceImplements.RolServiceImplement;
 import eva.pet.upc.evapet.serviceInterfaces.IRolService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +19,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+//@PreAuthorize("hasAuthority('ADMIN')")
 
 @RestController
 @RequestMapping("/api/rol")
 public class RolController {
 
     @Autowired
-    private IRolService rS;
+    private RolServiceImplement rS;
 
     @Autowired
     private IUsersRepository uR;
 
-    //  2. Añadir autorización: Solo un doctor puede ver la lista de roles
     @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
     @GetMapping("/listar")
     public ResponseEntity<?> listar(Authentication authentication) {
@@ -46,7 +48,6 @@ public class RolController {
         return ResponseEntity.ok(listaRoles);
     }
 
-    //  Solo doctor puede crear roles
     @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
     @PostMapping("/insertar")
     public ResponseEntity<?> registrar(@RequestBody RolInsertDTO dto, Authentication authentication){
@@ -60,12 +61,15 @@ public class RolController {
             return ResponseEntity.badRequest().body("Necesita un nombre válido");
         }
 
-        ModelMapper m = new ModelMapper();
-        Rol r = m.map(dto, Rol.class);
+        Rol r = new Rol();
+        r.setDescriptionRol(dto.getDescription());
+        r.setNameRol(dto.getNameRol());
+
         Rol rol = rS.insert(r);
 
-        RolInsertDTO responseDTO = m.map(rol, RolInsertDTO.class);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(rol);
     }
 
     // Solo doctor puede buscar un rol específico
@@ -89,7 +93,6 @@ public class RolController {
         }
     }
 
-    //  Solo doctor puede actualizar roles
     @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<?> actualizar(@RequestBody RolInsertDTO dto, @PathVariable Long id, Authentication authentication) {

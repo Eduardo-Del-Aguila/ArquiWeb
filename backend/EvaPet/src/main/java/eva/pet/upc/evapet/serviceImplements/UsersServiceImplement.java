@@ -30,6 +30,11 @@ public class UsersServiceImplement implements IUsersService {
     }
 
     @Override
+    public Optional<User> listByIdDeleted(String mail) {
+        return uR.findUserByMail(mail).filter(u -> !u.isActive());
+    }
+
+    @Override
     public User update(User u) {
         return uR.save(u);
     }

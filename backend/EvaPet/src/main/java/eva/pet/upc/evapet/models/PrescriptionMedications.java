@@ -16,19 +16,20 @@ public class PrescriptionMedications {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idPrescriptionMedications;
 
-    @Column(name = "dose", length = 50)
-    private String dose;
+    @Column(name = "dose")
+    private int dose;
 
-    @Column(name = "frequency", length = 50)
-    private String frequency;
+    @Column(name = "frequency")
+    private int frequency;
 
-    @Column(name = "duration", length = 50)
-    private String duration;
+    @Column(name = "duration")
+    private int duration;
 
     @Column(name = "idPrescription", nullable = false)
     private int idPrescription;
 
     @Column(name = "idMedication", nullable = false)
     private int idMedication;
+
 
 }

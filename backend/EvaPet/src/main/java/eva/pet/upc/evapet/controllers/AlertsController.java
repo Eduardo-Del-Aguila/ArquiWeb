@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -50,21 +51,19 @@ public class AlertsController {
         return ResponseEntity.ok(listaAlertas);
     }
 
-    //@PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
     @PostMapping("/insertar")
     public ResponseEntity<?> registrar(@RequestBody AlertsInsertDTO dto, Authentication authentication) {
         if (dto.getMessage() == null || dto.getMessage().trim().isEmpty()) {
             return ResponseEntity.badRequest().body("La alerta necesita un mensaje válido");
         }
 
-        // CORRECCIÓN 3: Validar quién está creando la alerta
         String mail = authentication.getName();
         Optional<User> currentUser = uR.findUserByMail(mail);
         if (currentUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autorizado");
         }
 
-        // CORRECCIÓN 4: Validar que el paciente y la mascota (EvaPet) realmente existen en la BD
         Optional<User> patient = uR.findById(dto.getIdPatient());
         if (patient.isEmpty()) {
             return ResponseEntity.badRequest().body("El paciente asignado no existe");
@@ -76,15 +75,14 @@ public class AlertsController {
         }
 
         ModelMapper m = new ModelMapper();
-        Alerts alerta = m.map(dto, Alerts.class);
-
+        Alerts alerta = new Alerts();
+        alerta.setType(dto.getType());
+        alerta.setMessage(dto.getMessage());
+        alerta.setCreatedAt(LocalDateTime.now());
+        alerta.setEvaPet(pet.get());
+        alerta.setPatient(patient.get());
         alerta.setIsRead(false);
-        if (alerta.getCreatedAt() == null) {
-            alerta.setCreatedAt(LocalDateTime.now());
-        }
 
-        // Opcional: Si tu modelo Alerts tiene un campo para registrar al creador, lo harías aquí.
-        // alerta.setCreatedBy(currentUser.get().getId());
 
         Alerts alertaGuardada = aS.insert(alerta);
         AlertsInsertDTO responseDTO = m.map(alertaGuardada, AlertsInsertDTO.class);
@@ -92,7 +90,7 @@ public class AlertsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    //@PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
     @GetMapping("/listar/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable Long id, Authentication authentication) {
 
@@ -115,9 +113,9 @@ public class AlertsController {
     }
 
     //TODO:Logica a elimnarse(quizas)
-    //@PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
-    @PutMapping("/actualizar")
-    public ResponseEntity<?> actualizar(@RequestBody AlertsInsertDTO dto, Authentication authentication) {
+    @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<?> actualizar(@RequestBody AlertsInsertDTO dto, @PathVariable Long id, Authentication authentication) {
         ModelMapper m = new ModelMapper();
         String mail = authentication.getName();
         Optional<User> currentUser = uR.findUserByMail(mail);
@@ -125,7 +123,7 @@ public class AlertsController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autorizado");
         }
 
-        Optional<Alerts> existente = aS.listId(dto.getIdAlerts());
+        Optional<Alerts> existente = aS.listId(id);
         if (existente.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Alerta no encontrada");
         }
@@ -142,7 +140,7 @@ public class AlertsController {
 
     }
 
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminar(@PathVariable Long id, Authentication authentication) {
 
@@ -162,7 +160,7 @@ public class AlertsController {
         return ResponseEntity.ok("Alerta eliminada correctamente");
     }
 
-    //@PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
     @GetMapping("/no-leidas/{idPaciente}")
     public ResponseEntity<?> listarNoLeidasPorPaciente(@PathVariable Long idPaciente, Authentication authentication) {
 
@@ -177,10 +175,8 @@ public class AlertsController {
             return ResponseEntity.badRequest().body("El paciente no existe");
         }
 
-        // 3. LLAMAMOS AL SERVICIO (El servicio se encarga de ejecutar el Query)
         List<Alerts> alertasNoLeidas = aS.listarNoLeidasPorPaciente(idPaciente);
 
-        // 4. Mapeamos a DTO (Usamos ShowAlertsDTO para devolver la info completa con ID)
         ModelMapper m = new ModelMapper();
         List<ShowAlertsDTO> response = alertasNoLeidas.stream()
                 .map(alerta -> m.map(alerta, ShowAlertsDTO.class))

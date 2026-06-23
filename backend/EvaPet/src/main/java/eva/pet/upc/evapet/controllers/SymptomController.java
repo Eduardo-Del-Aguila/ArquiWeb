@@ -2,11 +2,15 @@ package eva.pet.upc.evapet.controllers;
 
 import eva.pet.upc.evapet.dtos.symptoms.SymptomInsertDTO;
 import eva.pet.upc.evapet.models.Symptom;
+import eva.pet.upc.evapet.models.User;
+import eva.pet.upc.evapet.repositories.IUsersRepository;
 import eva.pet.upc.evapet.serviceInterfaces.ISymptomService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +23,26 @@ public class SymptomController {
     @Autowired
     private ISymptomService sS;
 
+    @Autowired
+    private IUsersRepository uR;
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/listar")
-    public ResponseEntity<List<SymptomInsertDTO>> listar() {
+    public ResponseEntity<?> listar(Authentication authentication) {
+        String mail = authentication.getName();
+
+        Optional<User> user = uR.findUserByMail(mail);
+
+        if (user.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body("Usuario no encontrado");
+        }
+
+        if (!user.get().isActive()) {
+            return ResponseEntity.badRequest()
+                    .body("Usuario inactivo");
+        }
+
         ModelMapper m = new ModelMapper();
         List<SymptomInsertDTO> listaSymptoms = sS.List().stream()
                 .map(y -> m.map(y, SymptomInsertDTO.class))
@@ -29,8 +51,22 @@ public class SymptomController {
         return ResponseEntity.ok(listaSymptoms);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR')")
     @PostMapping("/insertar")
-    public ResponseEntity<?> registrar(@RequestBody SymptomInsertDTO dto) {
+    public ResponseEntity<?> registrar(@RequestBody SymptomInsertDTO dto, Authentication authentication) {
+        String mail = authentication.getName();
+
+        Optional<User> user = uR.findUserByMail(mail);
+
+        if (user.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body("Usuario no encontrado");
+        }
+
+        if (!user.get().isActive()) {
+            return ResponseEntity.badRequest()
+                    .body("Usuario inactivo");
+        }
 
         if (dto.getName() == null || dto.getName().isEmpty()) {
             return ResponseEntity.badRequest()
@@ -50,10 +86,24 @@ public class SymptomController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR')")
     @PutMapping("/actualiza/{id}")
-    public ResponseEntity<String> actualizar(@RequestBody SymptomInsertDTO dto, @PathVariable Long id) {
+    public ResponseEntity<?> actualizar(@RequestBody SymptomInsertDTO dto, @PathVariable Long id,Authentication authentication) {
+        String mail = authentication.getName();
 
-        Optional<Symptom> existente = null;
+        Optional<User> user = uR.findUserByMail(mail);
+
+        if (user.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body("Usuario no encontrado");
+        }
+
+        if (!user.get().isActive()) {
+            return ResponseEntity.badRequest()
+                    .body("Usuario inactivo");
+        }
+
+        Optional<Symptom> existente = sS.ListById(id);
 
         try {
             existente = sS.ListById(id);
@@ -85,8 +135,23 @@ public class SymptomController {
         return ResponseEntity.ok("Síntoma actualizado correctamente");
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR')")
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<String> eliminar(@PathVariable long id) {
+    public ResponseEntity<?> eliminar(@PathVariable long id, Authentication authentication) {
+        String mail = authentication.getName();
+
+        Optional<User> user = uR.findUserByMail(mail);
+
+        if (user.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body("Usuario no encontrado");
+        }
+
+        if (!user.get().isActive()) {
+            return ResponseEntity.badRequest()
+                    .body("Usuario inactivo");
+        }
+
         Optional<Symptom> symptom = sS.ListById(id);
 
         if (symptom.isPresent()) {
@@ -96,5 +161,52 @@ public class SymptomController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Síntoma no encontrado");
         }
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/severity-count")
+    public ResponseEntity<?> countBySeverity(Authentication authentication) {
+
+        String mail = authentication.getName();
+
+        Optional<User> user = uR.findUserByMail(mail);
+
+        if (user.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body("Usuario no encontrado");
+        }
+
+        if (!user.get().isActive()) {
+            return ResponseEntity.badRequest()
+                    .body("Usuario inactivo");
+        }
+
+        List<Object[]> lista = sS.countSymptomsBySeverity();
+
+        return ResponseEntity.ok(lista);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/symptoms-medical-history")
+    public ResponseEntity<?> symptomsPerMedicalHistory(Authentication authentication) {
+
+        String mail = authentication.getName();
+
+        Optional<User> user = uR.findUserByMail(mail);
+
+        if (user.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body("Usuario no encontrado");
+        }
+
+        if (!user.get().isActive()) {
+            return ResponseEntity.badRequest()
+                    .body("Usuario inactivo");
+        }
+
+        List<Object[]> lista =
+                sS.symptomsPerMedicalHistory();
+
+        return ResponseEntity.ok(lista);
     }
 }

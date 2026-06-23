@@ -3,6 +3,7 @@ package eva.pet.upc.evapet.controllers;
 
 import eva.pet.upc.evapet.dtos.eva.EvaPetDTO;
 import eva.pet.upc.evapet.dtos.eva.EvaPetInsertDTO;
+import eva.pet.upc.evapet.dtos.eva.EvaPetShowDTO;
 import eva.pet.upc.evapet.enums.StatusPet;
 import eva.pet.upc.evapet.models.EvaPet;
 import eva.pet.upc.evapet.models.User;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@PreAuthorize("hasAuthority('admin')")
+@PreAuthorize("hasAuthority('ADMIN')")
 @RestController
 @RequestMapping("/api/pet")
 public class EvaPetController {
@@ -32,10 +33,20 @@ public class EvaPetController {
     @Autowired
     private IUsersRepository uR;
 
+//    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/listar")
-    public ResponseEntity<List<EvaPetDTO>> List(){
+    public ResponseEntity<?> List(Authentication authentication){
+
+        String mail = authentication.getName();
+        Optional<User> user = uR.findUserByMail(mail);
+        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
+        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
+
+
         ModelMapper m = new ModelMapper();
         List<EvaPet> pets = eS.listAll();
+        if (pets.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay macotas registradas");
+
         List<EvaPetDTO> myPets = pets.stream().map(p -> m.map(p,EvaPetDTO.class)).toList();
         return ResponseEntity.ok(myPets);
     }
@@ -43,8 +54,13 @@ public class EvaPetController {
     //CRUD COMPLETO
     @PreAuthorize("hasAuthority('PATIENT') or hasAuthority('ADMIN')")
     @GetMapping("listar/{id}")
-    public ResponseEntity<?> listByID(@PathVariable Long id){
+    public ResponseEntity<?> listByID(@PathVariable Long id, Authentication authentication){
         ModelMapper m = new ModelMapper();
+
+        String mail = authentication.getName();
+        Optional<User> user = uR.findUserByMail(mail);
+        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
+        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
 
         Optional<EvaPet> myEva = eS.listById(id);
         if(myEva.isEmpty()) return  ResponseEntity.badRequest().body("No exisite una mascota con el id: " + id);
@@ -76,10 +92,12 @@ public class EvaPetController {
         eva.setLastInteraction(LocalDateTime.now());
         eva.setLevel(0);
         eva.setExperiencie(0);
-        eva.setStatus(StatusPet.SAD);
+        eva.setStatus(dto.getStatus());
 
         eS.insert(eva);
-        return ResponseEntity.ok("Pet creada correctamente");
+        EvaPetShowDTO show = m.map(eva, EvaPetShowDTO.class);
+
+        return ResponseEntity.ok(show);
     }
 
     @PreAuthorize("hasAuthority('PATIENT') or hasAuthority('ADMIN')")
@@ -130,6 +148,24 @@ public class EvaPetController {
         if (evi.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe eva con ese Id: " + myEva.getId());
 
         eS.delete(evi.get());
-        return ResponseEntity.ok("Mascota eliminada correctamente");
+        return ResponseEntity.ok("Mascota " + myEva.getName() + " eliminada correctamente");
     }
+
+    @PreAuthorize("hasAuthority('PATIENT') or hasAuthority('ADMIN')")
+    @GetMapping("/mis-mascotas/por-nivel")
+    public ResponseEntity<?> listMyPetsByLevel(Authentication authentication) {
+        ModelMapper m = new ModelMapper();
+
+        String mail = authentication.getName();
+        Optional<User> user = uR.findUserByMail(mail);
+        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
+        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
+
+        List<EvaPet> pets = eS.findTopByPatientOrderedByLevel(user.get().getId());
+        if (pets.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No tienes mascotas registradas");
+
+        List<EvaPetDTO> myPets = pets.stream().map(p -> m.map(p, EvaPetDTO.class)).toList();
+        return ResponseEntity.ok(myPets);
+    }
+
 }

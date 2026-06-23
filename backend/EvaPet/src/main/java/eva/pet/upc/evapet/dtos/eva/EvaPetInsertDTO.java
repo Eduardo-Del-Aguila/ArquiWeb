@@ -1,33 +1,11 @@
 package eva.pet.upc.evapet.dtos.eva;
 
+import eva.pet.upc.evapet.enums.StatusPet;
+import lombok.Data;
+
+@Data
 public class EvaPetInsertDTO {
     private String name;
     private String description;
-    private String status;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-
+    private StatusPet status;
 }

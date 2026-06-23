@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface IHospialServiceInterface {
     public List<Hospital> listALL();
     public Optional<Hospital> listById(Long id);
+
+    public Hospital insert(Hospital h);
     public Hospital update(Hospital h);
     public void deleteById(Hospital h);
 

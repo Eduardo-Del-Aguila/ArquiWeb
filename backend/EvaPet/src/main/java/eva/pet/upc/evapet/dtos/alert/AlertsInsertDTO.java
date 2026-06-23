@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class AlertsInsertDTO {
-    private Long idAlerts;
     private AlertType type;
     private String message;
     //private Boolean isRead;

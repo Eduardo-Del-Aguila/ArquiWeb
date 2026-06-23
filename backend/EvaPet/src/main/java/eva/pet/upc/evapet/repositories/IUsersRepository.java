@@ -12,9 +12,7 @@ import java.util.Optional;
 @Repository
 public interface IUsersRepository extends JpaRepository<User, Long> {
 
-    //@Query("SELECT u FROM User u WHERE u.mail = :mail")
-    //Optional<User> findUserByMail2(String mail);
+    @Query("SELECT u FROM User u WHERE u.mail = :mail")
+    Optional<User> findUserByMail(@Param("mail") String mail);
 
-    //Forma automática por nomnre (mail) sorprendente que detecte nombre
-    Optional<User> findUserByMail(String mail);
 }

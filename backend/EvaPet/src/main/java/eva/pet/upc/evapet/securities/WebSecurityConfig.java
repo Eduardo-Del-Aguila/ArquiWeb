@@ -52,7 +52,15 @@ public class WebSecurityConfig {
 
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-
+                //IDENTIFICAMOS GRACIAS A CORS QUE NUESTRA WEB (LOCAL EN ESTE CASO) QUE TODO FLUYA
+                .cors(cors -> cors.configurationSource(request -> {
+                    var config = new org.springframework.web.cors.CorsConfiguration();
+                    config.setAllowedOrigins(java.util.List.of("http://localhost:4200"));
+                    config.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    config.setAllowedHeaders(java.util.List.of("*"));
+                    config.setAllowCredentials(true);
+                    return config;
+                }))
                 .authorizeHttpRequests(req -> req
 
                         // Swagger
@@ -61,13 +69,10 @@ public class WebSecurityConfig {
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**",
                                 "/v3/api-docs.yaml",
-                                "/webjars/**"
+                                "/webjars/**",
+                                "/auth/login", "/api/rol/insertar, /api/sintomas/severity-count , /api/alerts/listar"
                         ).permitAll()
 //                        .anyRequest().permitAll()
-
-                        // Login público
-                       .requestMatchers("/auth/login", "/api/usuario/insertar", "/api/rol/insertar").permitAll()
-
                         // Todo lo demás requiere autenticación
                         .anyRequest().authenticated()
                 )

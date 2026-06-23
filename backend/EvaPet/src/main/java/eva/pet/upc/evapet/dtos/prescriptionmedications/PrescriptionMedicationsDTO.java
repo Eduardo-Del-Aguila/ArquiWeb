@@ -1,33 +1,33 @@
 package eva.pet.upc.evapet.dtos.prescriptionmedications;
 
 public class PrescriptionMedicationsDTO {
-    private String dose;
-    private String frequency;
-    private String duration;
+    private int dose;
+    private int frequency;
+    private int duration;
     private int idPrescription;
     private int idMedication;
 
-    public String getDose() {
+    public int getDose() {
         return dose;
     }
 
-    public void setDose(String dose) {
+    public void setDose(int dose) {
         this.dose = dose;
     }
 
-    public String getFrequency() {
+    public int getFrequency() {
         return frequency;
     }
 
-    public void setFrequency(String frequency) {
+    public void setFrequency(int frequency) {
         this.frequency = frequency;
     }
 
-    public String getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 
