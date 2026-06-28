@@ -1,0 +1,32 @@
+<div class="flex justify-between items-center max-w-7xl mx-auto bg-[#b8b3b3] my-4">
+  <div>
+    <img src="" alt="logo" class="h-15 w-15">
+  </div>
+  <div class="hidden lg:flex">
+    <app-navbar></app-navbar>
+  </div>
+
+  <div class="hidden lg:flex"> <button>Reservar cita</button> </div>
+
+  <div class="flex lg:hidden">
+    <button (click)="openMenu()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" viewBox="0 0 24 24">
+      <path d="M0 0h24v24H0z" fill="none" />
+      <path fill="currentColor" d="M3 18v-2h18v2zm0-5v-2h18v2zm0-5V6h18v2z" />
+    </svg>
+    </button>
+  </div>
+
+  @if(menuOpen()){
+    <div class="fixed top-0 left-0 lg:hidden w-full min-h-screen bg-gray-500">
+      <div class="flex flex-col justify-center items-center gap-3 w-full min-h-screen ">
+        <div (click)="closeMenu()" class="text-red-600 border px-4 rounded-full">
+          X
+        </div>
+        <app-navbar></app-navbar>
+      </div>
+    </div>
+  }
+
+
+</div>
