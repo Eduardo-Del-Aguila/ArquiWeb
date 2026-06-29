@@ -66,7 +66,7 @@ public class UserController {
 
         UserDTO dto = m.map(existing.get(), UserDTO.class);
 
-        
+
 
         return ResponseEntity.ok(dto);
     }
@@ -132,6 +132,7 @@ public class UserController {
         return ResponseEntity.ok(show);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping(value ="/actualizar/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> update(
             @RequestParam("name") String name,
@@ -139,6 +140,7 @@ public class UserController {
             @RequestParam("phoneNumber") String phoneNumber,
             @RequestParam("nameRol") UserRol nameRol,
             @RequestParam(value = "imagen", required = false) MultipartFile imagen,
+            @RequestParam("mail") String mail,
             @PathVariable Long id
     ) {
 
@@ -175,6 +177,7 @@ public class UserController {
         user.setName(name);
         user.setLastName(lastName);
         user.setPhoneNumber(phoneNumber);
+        user.setMail(mail);
         user.setImage_url(imageUrl);
         user.setRol(rolsito.get());
         uS.update(user);

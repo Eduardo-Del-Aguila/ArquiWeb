@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { UserForm } from "./UserForm/UserForm";
 import { UserService } from '../../core/services/usersService';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -11,11 +11,15 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { RolService } from '../../core/services/rol';
+import { RolShowDTO } from '../../core/interfaces/rol';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 
 @Component({
   selector: 'app-users-page',
-  imports: [UserForm, MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule, MatDialogModule],
+  imports: [UserForm, MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule, MatDialogModule, MatFormFieldModule, MatSelect, MatOption],
   templateUrl: './users-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -23,6 +27,10 @@ export class UsersPage {
   private userService = inject(UserService);
   private dialog = inject(MatDialog);
   private stateService = inject(UserStateService);
+  private rolService = inject(RolService);
+
+  roles = signal<RolShowDTO[]>([]);
+  filtroRol = signal<string>('TODOS');
 
   users = signal<UserShowDTO[]>([]);
 
@@ -31,10 +39,27 @@ export class UsersPage {
     { label: 'Eliminar', icon: 'delete', action: (row) => this.eliminar(row) }
   ];
 
+  usersFiltrados = computed(() => {
+    const filtro = this.filtroRol();
+    if (filtro === 'TODOS') return this.users();
+    return this.users().filter(u => u.nameRol === filtro);
+  });
+
   private recargarEffect = effect(() => {
     this.stateService.recargar();
     this.cargar();
   });
+
+  ngOnInit() {
+    this.rolService.listar().subscribe({
+      next: data => this.roles.set(data),
+      error: err => console.error(err)
+    });
+  }
+
+  cambiarFiltro(rol: string) {
+    this.filtroRol.set(rol);
+  }
 
   cargar() {
     this.userService.listar().subscribe({

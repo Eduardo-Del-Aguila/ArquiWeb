@@ -33,7 +33,7 @@ public class EvaPetController {
     @Autowired
     private IUsersRepository uR;
 
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/listar")
     public ResponseEntity<?> List(Authentication authentication){
 

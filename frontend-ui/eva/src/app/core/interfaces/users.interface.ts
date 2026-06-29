@@ -13,8 +13,7 @@ export interface UserShowDTO {
   name: string;
   lastName: string;
   mail: string;
+  phoneNumber: string;
   image_url: string;
   nameRol: string;
 }
-
-

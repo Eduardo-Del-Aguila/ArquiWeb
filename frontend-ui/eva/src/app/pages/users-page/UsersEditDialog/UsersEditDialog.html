@@ -1,1 +1,66 @@
-<p>UsersEditDialog works!</p>,
+<div class="p-4 w-full">
+  <h2 class="text-lg font-semibold mb-4">Editar Usuario</h2>
+
+  <form [formGroup]="form" (ngSubmit)="guardar()" class="flex flex-col gap-4">
+
+    <div class="flex flex-col items-center gap-2">
+      @if (previewUrl()) {
+        <img [src]="previewUrl()" class="w-20 h-20 rounded-full object-cover border-2 border-green-500" alt="preview">
+      }
+      <input type="file" accept="image/*" (change)="onFileSelected($event)"
+        class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer file:mr-3 file:py-2 file:px-4 file:border-0 file:bg-green-50 file:text-green-700">
+    </div>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name">
+      @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+        <mat-error>El nombre es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Apellido</mat-label>
+      <input readonly matInput formControlName="lastName">
+      @if (form.get('lastName')?.hasError('required') && form.get('lastName')?.touched) {
+        <mat-error>El apellido es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field readonly appearance="outline" class="w-full">
+      <mat-label>Correo</mat-label>
+      <input matInput formControlName="mail" type="email">
+      @if (form.get('mail')?.hasError('required') && form.get('mail')?.touched) {
+        <mat-error>El correo es requerido</mat-error>
+      }
+      @if (form.get('mail')?.hasError('email') && form.get('mail')?.touched) {
+        <mat-error>Correo inválido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Teléfono</mat-label>
+      <input matInput formControlName="phoneNumber">
+      @if (form.get('phoneNumber')?.hasError('required') && form.get('phoneNumber')?.touched) {
+        <mat-error>El teléfono es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Rol</mat-label>
+      <mat-select formControlName="nameRol">
+        @for (r of roles; track r) {
+          <mat-option [value]="r">{{ r }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div class="flex justify-end gap-2">
+      <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+        Actualizar
+      </button>
+    </div>
+
+  </form>
+</div>
