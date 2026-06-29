@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { EvaPetInsert, EvaPetShow } from '../interfaces/pet.interface';
-import { AuthService } from './AuthService';
+import { AuthService } from './authService';
 import { environment } from '../../env/environment';
 
 const base_url = environment.base_url
@@ -21,7 +21,8 @@ export class EvaPetService {
       Authorization: `Bearer ${token}`
     });
   }
-  // http://localhost:8081/api/pet/listar
+
+
   listar() {
     return this.http.get<EvaPetShow[]>(`${this.url}/pet/listar`, { headers: this.getHeaders() });
   }

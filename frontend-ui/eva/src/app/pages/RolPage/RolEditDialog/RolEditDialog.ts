@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RolService } from '../../../core/services/Rol';
+import { RolService } from '../../../core/services/rol';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { RolInsertDTO, RolShowDTO, UserRol } from '../../../core/interfaces/rol';
 import { MatSelectModule } from '@angular/material/select';
@@ -22,10 +22,10 @@ export class RolEditDialog {
 
   roles: UserRol[] = ['PATIENT', 'DOCTOR', 'FAMILY', 'ADMIN'];
 
-form = this.fb.group({
-  nameRol: [this.data.nameRol as UserRol, Validators.required],
-  descriptionRol: [this.data.descriptionRol, [Validators.required, Validators.maxLength(200)]]
-});
+  form = this.fb.group({
+    nameRol: [this.data.nameRol as UserRol, Validators.required],
+    descriptionRol: [this.data.descriptionRol, [Validators.required, Validators.maxLength(200)]]
+  });
 
   guardar() {
     if (this.form.invalid) return;

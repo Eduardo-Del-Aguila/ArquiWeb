@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../env/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AuthService } from './AuthService';
+import { AuthService } from './authService';
 import { RolInsertDTO, RolShowDTO } from '../interfaces/rol';
 
 @Injectable({

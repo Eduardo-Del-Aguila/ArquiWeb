@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Login } from "./features/auth/login/login";
-import { AuthService } from './core/services/AuthService';
+import { AuthService } from './core/services/authService';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +13,7 @@ export class App {
   protected readonly title = signal('eva');
   private authService = inject(AuthService);
 
-  logout(){
+  logout() {
     this.authService.logout();
   }
 

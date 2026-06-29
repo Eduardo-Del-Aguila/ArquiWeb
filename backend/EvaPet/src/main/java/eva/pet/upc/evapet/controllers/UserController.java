@@ -10,6 +10,7 @@ import eva.pet.upc.evapet.enums.UserRol;
 import eva.pet.upc.evapet.models.EvaPet;
 import eva.pet.upc.evapet.models.Rol;
 import eva.pet.upc.evapet.models.User;
+import eva.pet.upc.evapet.repositories.IRolRepository;
 import eva.pet.upc.evapet.serviceImplements.CloudinaryService;
 import eva.pet.upc.evapet.serviceImplements.RolServiceImplement;
 import eva.pet.upc.evapet.serviceImplements.UsersServiceImplement;
@@ -41,6 +42,8 @@ public class UserController {
     @Autowired
     public RolServiceImplement rS;
     @Autowired
+    public IRolRepository rR;
+    @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private CloudinaryService cloudinaryService;
@@ -49,7 +52,7 @@ public class UserController {
     public ResponseEntity<?> ListAll(){
         ModelMapper m = new ModelMapper();
         List<User> usuarios = uS.list();
-        List<UserDTO> myUsers = usuarios.stream().map(p -> m.map(p, UserDTO.class)).toList();
+        List<UserShowDTO> myUsers = usuarios.stream().map(p -> m.map(p, UserShowDTO.class)).toList();
         return ResponseEntity.ok(myUsers);
     }
 
@@ -62,11 +65,14 @@ public class UserController {
         if (!existing.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
 
         UserDTO dto = m.map(existing.get(), UserDTO.class);
+
+        
+
         return ResponseEntity.ok(dto);
     }
 
 
-    @PreAuthorize("hasAuthority('FAMILY')")
+    @PreAuthorize("hasAuthority('FAMILY') || hasAuthority('ADMIN')")
     @PostMapping(value = "/insertar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> insert(
             @RequestParam("name") String name,

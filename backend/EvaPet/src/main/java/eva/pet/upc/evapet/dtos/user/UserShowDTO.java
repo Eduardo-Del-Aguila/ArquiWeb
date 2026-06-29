@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @JsonPropertyOrder({ "name", "lastName", "mail", "image_url", "nameRol" })
 public class UserShowDTO {
+    private Long idUser;
     private String name ;
     private String lastName ;
     private String  mail;

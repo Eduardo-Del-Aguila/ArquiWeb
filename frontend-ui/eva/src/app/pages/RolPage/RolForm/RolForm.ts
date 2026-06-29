@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RolService } from '../../../core/services/Rol';
+import { RolService } from '../../../core/services/rol';
 import { RolStateService } from '../../../core/services/state/RolStateService';
 import { RolInsertDTO, UserRol } from '../../../core/interfaces/rol';
 import { MatSelectModule } from '@angular/material/select';
@@ -10,7 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-rol-form',
- imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSelectModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSelectModule],
   templateUrl: './RolForm.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -21,10 +21,10 @@ export class RolForm {
 
   roles: UserRol[] = ['PATIENT', 'DOCTOR', 'FAMILY', 'ADMIN'];
 
-form = this.fb.group({
-  nameRol: ['PATIENT' as UserRol, Validators.required],
-  descriptionRol: ['', [Validators.required, Validators.maxLength(200)]]
-});
+  form = this.fb.group({
+    nameRol: ['PATIENT' as UserRol, Validators.required],
+    descriptionRol: ['', [Validators.required, Validators.maxLength(200)]]
+  });
 
   guardar() {
     if (this.form.invalid) return;

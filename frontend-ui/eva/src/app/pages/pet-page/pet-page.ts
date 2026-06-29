@@ -8,10 +8,15 @@ import { PetStateService } from '../../core/services/state/PetStateService';
 import { MatDialog } from '@angular/material/dialog';
 import { PetEditDialog } from './PetEditDialog/PetEditDialog';
 import { ConfirmDialog } from '../../core/components/ConfirmDialog/ConfirmDialog';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { StatusPetColorPipe } from '../../shared/pipes/status-pet-color-pipe';
 
 @Component({
   selector: 'app-pet-page',
-  imports: [GenericTable, PetForm],
+  imports: [ PetForm, MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule, StatusPetColorPipe],
   templateUrl: './pet-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

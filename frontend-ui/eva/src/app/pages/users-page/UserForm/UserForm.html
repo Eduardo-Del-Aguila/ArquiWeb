@@ -1,0 +1,108 @@
+<div class="w-full p-4 border rounded-2xl shadow-xl ">
+  <form [formGroup]="form" (ngSubmit)="guardar()" class="flex flex-col gap-4">
+
+    <h2 class="text-lg font-semibold">Nuevo Usuario</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="name">
+        @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+          <mat-error>El nombre es requerido</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Apellido</mat-label>
+        <input matInput formControlName="lastName">
+        @if (form.get('lastName')?.hasError('required') && form.get('lastName')?.touched) {
+          <mat-error>El apellido es requerido</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Correo</mat-label>
+        <input matInput formControlName="mail" type="email">
+        @if (form.get('mail')?.hasError('required') && form.get('mail')?.touched) {
+          <mat-error>El correo es requerido</mat-error>
+        }
+        @if (form.get('mail')?.hasError('email') && form.get('mail')?.touched) {
+          <mat-error>Correo inválido</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Contraseña</mat-label>
+        <input matInput formControlName="password" [type]="showPassword() ? 'text' : 'password'">
+        <button mat-icon-button matSuffix type="button" (click)="togglePassword()">
+          <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (form.get('password')?.hasError('required') && form.get('password')?.touched) {
+          <mat-error>La contraseña es requerida</mat-error>
+        }
+        @if (form.get('password')?.hasError('minlength') && form.get('password')?.touched) {
+          <mat-error>Mínimo 6 caracteres</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Confirmar contraseña</mat-label>
+        <input matInput formControlName="confirmPassword" [type]="showConfirmPassword() ? 'text' : 'password'">
+        <button mat-icon-button matSuffix type="button" (click)="toggleConfirmPassword()">
+          <mat-icon>{{ showConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (form.hasError('passwordsMismatch') && form.get('confirmPassword')?.touched) {
+          <mat-error>Las contraseñas no coinciden</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Teléfono</mat-label>
+        <input matInput formControlName="phoneNumber">
+        @if (form.get('phoneNumber')?.hasError('required') && form.get('phoneNumber')?.touched) {
+          <mat-error>El teléfono es requerido</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="w-full flex flex-col gap-2">
+        <label class="text-sm text-gray-600">Foto de perfil</label>
+
+        <input
+          type="file"
+          accept="image/*"
+          (change)="onFileSelected($event)"
+          class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer file:mr-3 file:py-2 file:px-4 file:border-0 file:bg-green-50 file:text-green-700"
+        >
+
+        @if (subiendoImagen()) {
+          <span class="text-xs text-gray-500">Subiendo imagen...</span>
+        }
+
+        @if (previewUrl()) {
+          <img [src]="previewUrl()" class="w-20 h-20 object-cover rounded-full border" alt="preview">
+        }
+      </div>
+
+      <mat-form-field appearance="outline" class="w-full h-fit">
+        <mat-label>Rol</mat-label>
+        <mat-select formControlName="rolId">
+          @for (r of roles(); track r.idRol) {
+            <mat-option [value]="r.idRol">{{ r.nameRol }}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('rolId')?.hasError('required') && form.get('rolId')?.touched) {
+          <mat-error>El rol es requerido</mat-error>
+        }
+      </mat-form-field>
+
+    </div>
+
+    <div class="flex justify-end">
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+        Guardar
+      </button>
+    </div>
+
+  </form>
+</div>

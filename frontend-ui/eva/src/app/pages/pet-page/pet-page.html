@@ -1,10 +1,37 @@
-
 <app-pet-form></app-pet-form>
 
-<div class="p-4">
-  <app-generic-table
-    [data]="pets()"
-    [columns]="columns"
-    [actions]="actions"
-  />
+<div class="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  @for (pet of pets(); track pet.idEva) {
+    <mat-card class="relative overflow-hidden">
+      <div class="flex w-full justify-between px-4 pt-3">
+        <span class="text-xs font-mono text-gray-500">
+          EXP {{ pet.experiencie }}
+        </span>
+
+        <span class="bg-green-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+          Nv. {{ pet.level }}
+        </span>
+      </div>
+
+      <mat-card-content class="pt-8 pb-2">
+        <h3 class="text-lg font-semibold text-left">{{ pet.name }}</h3>
+        <p class="text-sm text-gray-500 text-left mt-1">{{ pet.description }}</p>
+
+        <span [style.color]=" pet.status | statusPetColor" class="inline-block mt-3 text-xs px-2 py-0.5 rounded-full border border-gray-300 text-gray-600">
+          {{ pet.status }}
+        </span>
+      </mat-card-content>
+
+      <hr class="mt-2">
+
+      <mat-card-actions class="flex justify-end gap-1 px-2 pb-2">
+        @for (action of actions; track action.label) {
+          <button mat-icon-button [matTooltip]="action.label" (click)="action.action(pet)">
+            <mat-icon>{{ action.icon }}</mat-icon>
+          </button>
+        }
+      </mat-card-actions>
+
+    </mat-card>
+  }
 </div>

@@ -1,0 +1,30 @@
+<app-user-form></app-user-form>
+
+<div class="py-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ">
+  @for (user of users(); track user.idUser) {
+    <mat-card class="flex flex-col items-center text-center pt-6 pb-4 relative">
+
+      <img
+        [src]="user.image_url"
+        alt="avatar"
+        class="w-20 h-20 rounded-full object-cover border-2 border-green-500 mb-3"
+      >
+
+      <h3 class="text-base font-semibold">{{ user.name }} {{ user.lastName }}</h3>
+      <p class="text-sm text-gray-500">{{ user.mail }}</p>
+
+      <span class="mt-2 text-xs px-2 py-0.5 rounded-full bg-green-50 text-green-700 border border-green-300">
+        {{ user.nameRol }}
+      </span>
+
+      <mat-card-actions class="flex justify-center gap-1 mt-3">
+        @for (action of actions; track action.label) {
+          <button mat-icon-button [matTooltip]="action.label" (click)="action.action(user)">
+            <mat-icon>{{ action.icon }}</mat-icon>
+          </button>
+        }
+      </mat-card-actions>
+
+    </mat-card>
+  }
+</div>

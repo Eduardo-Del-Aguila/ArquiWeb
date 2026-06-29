@@ -17,6 +17,10 @@ export const routes: Routes = [
         path:'rol',
         loadComponent: () => import('./pages/RolPage/rol-page').then(m => m.RolPage)
       },
+      {
+        path:'users',
+        loadComponent: () => import('./pages/users-page/users-page').then(m => m.UsersPage)
+      },
 
     ]
   },

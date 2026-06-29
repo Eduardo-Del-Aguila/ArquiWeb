@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, inject, OnInit, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { RolService } from '../../core/services/Rol';
+import { RolService } from '../../core/services/rol';
 import { RolShowDTO } from '../../core/interfaces/rol';
 import { TableAction, TableColumn } from '../../core/interfaces/table';
 import { ConfirmDialog } from '../../core/components/ConfirmDialog/ConfirmDialog';
@@ -42,7 +42,7 @@ export class RolPage implements OnInit {
         if (data.length > 0) {
 
           this.columns = Object.keys(data[0]).map(key => ({ key, label: key }));
-          console.log('columnas: ',this.columns);
+          console.log('columnas: ', this.columns);
         }
         this.roles.set(data);
       },
