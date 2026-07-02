@@ -19,6 +19,6 @@ public interface IEvaPetService {
     public List<String> listByName();
     public List<EvaPet> findTopByPatientOrderedByLevel(Long id);
 
-    public List<EvaPet> findByPatientId(Long id);
+    public List<EvaPet> findByPatientEmail(String email);
 
 }

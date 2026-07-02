@@ -27,6 +27,10 @@ export class EvaPetService {
     return this.http.get<EvaPetShow[]>(`${this.url}/pet/listar`, { headers: this.getHeaders() });
   }
 
+  listByUserId(email: string) {
+    return this.http.get<EvaPetShow[]>(`${this.url}/pet/listar-patient/${email}`, { headers: this.getHeaders() });
+  }
+
   insertar(dto: EvaPetInsert) {
     return this.http.post<EvaPetShow>(`${this.url}/pet/insertar`, dto, { headers: this.getHeaders() });
   }

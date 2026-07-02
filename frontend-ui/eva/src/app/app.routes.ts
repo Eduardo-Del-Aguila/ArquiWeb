@@ -18,11 +18,13 @@ export const routes: Routes = [
       },
       {
         path:'rol',
-        loadComponent: () => import('./pages/RolPage/rol-page').then(m => m.RolPage)
+        loadComponent: () => import('./pages/RolPage/rol-page').then(m => m.RolPage),
+        canActivate: [securityGuard, roleGuard(['ADMIN'])],
       },
       {
         path:'users',
-        loadComponent: () => import('./pages/users-page/users-page').then(m => m.UsersPage)
+        loadComponent: () => import('./pages/users-page/users-page').then(m => m.UsersPage),
+        canActivate: [securityGuard, roleGuard(['ADMIN'])],
       },
 
     ]

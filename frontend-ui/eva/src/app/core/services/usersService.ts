@@ -23,7 +23,7 @@ export class UserService {
     return this.http.get<UserShowDTO[]>(`${this.url}/listar`, { headers: this.getHeaders() });
   }
 
-  listarPorId(id: number) {
+  listById(id: number) {
     return this.http.get<UserShowDTO>(`${this.url}/listar/${id}`, { headers: this.getHeaders() });
   }
 

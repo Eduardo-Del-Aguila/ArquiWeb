@@ -46,4 +46,23 @@ export class LoginService {
     return decodedToken.roles;
   }
 
+  showMail(): string | null {
+
+    if (!this.isBrowser()) {
+      return null;
+    }
+
+    const token = sessionStorage.getItem('token');
+
+    if (!token) {
+      return null;
+    }
+    const helper = new JwtHelperService();
+    const decodedToken = helper.decodeToken(token);
+
+    console.log('Token decodificado:', decodedToken);
+
+    return decodedToken.sub;
+  }
+
 }

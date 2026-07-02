@@ -24,7 +24,7 @@ export class RolService {
     return this.http.get<RolShowDTO[]>(`${this.url}/listar`, { headers: this.getHeaders() });
   }
 
-  listarPorId(id: number) {
+  listById(id: number) {
     return this.http.get<RolShowDTO>(`${this.url}/listar/${id}`, { headers: this.getHeaders() });
   }
 

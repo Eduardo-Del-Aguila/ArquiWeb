@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { StatusPetColorPipe } from '../../shared/pipes/status-pet-color-pipe';
+import { LoginService } from '../../core/services/auth/Login.service';
 
 @Component({
   selector: 'app-pet-page',
@@ -25,6 +26,10 @@ export class PetPage implements OnInit {
   private petService = inject(EvaPetService);
   private stateService = inject(PetStateService);
   private dialog = inject(MatDialog);
+  private loginService = inject(LoginService);
+
+  role = signal<string>('');
+  mail = signal<string>('');
 
   pets = signal<EvaPetShow[]>([]);
 
@@ -36,7 +41,13 @@ export class PetPage implements OnInit {
     { label: 'Eliminar', icon: 'delete', action: (row) => this.eliminar(row) }
   ];
 
-  ngOnInit() { this.cargar(); }
+  ngOnInit() {
+    if (this.loginService.verificar()) {
+      this.role.set(this.loginService.showRole() ?? '');
+      this.mail.set(this.loginService.showMail() ?? '');
+    }
+    this.cargar();
+   }
 
   private recargarEffect = effect(() => {
     this.stateService.recargar();
@@ -44,6 +55,8 @@ export class PetPage implements OnInit {
   });
   //TOOD: no olvides dessuscribirte a todas las suscrpciones que hagas
   cargar() {
+    if(this.role() === 'ADMIN'){
+
     this.petService.listar().subscribe({
       next: data => {
         console.log('DATA DE PETS',data);
@@ -57,6 +70,25 @@ export class PetPage implements OnInit {
       },
       error: err => console.error(err)
     });
+    } else {
+      this.petService.listByUserId('rodriguez%40gmail.com').subscribe({
+      next: data => {
+        console.log('DATA DE PETS',data);
+        if (data.length > 0) {
+          this.columns = Object.keys(data[0]).map(key => ({
+            key,
+            label: key
+          }));
+        }
+        this.pets.set(data);
+      },
+      error: err => console.error(err)
+    });
+
+    }
+
+
+
   }
 
   editar(row: EvaPetShow) {

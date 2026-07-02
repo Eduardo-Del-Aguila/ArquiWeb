@@ -52,8 +52,8 @@ public class EvaPetServiceImplements implements IEvaPetService {
     }
 
     @Override
-    public List<EvaPet> findByPatientId(Long id) {
-        return eR.listByUserId(id);
+    public List<EvaPet> findByPatientEmail(String email) {
+        return eR.listByUserId(email);
     }
 
 
