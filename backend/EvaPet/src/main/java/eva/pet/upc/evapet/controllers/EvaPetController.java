@@ -73,6 +73,24 @@ public class EvaPetController {
     }
 
     @PreAuthorize("hasAuthority('PATIENT') or hasAuthority('ADMIN')")
+    @GetMapping("listar-patient/{id}")
+    public ResponseEntity<?> listByPatientId(@PathVariable Long id, Authentication authentication){
+        ModelMapper m = new ModelMapper();
+
+        String mail = authentication.getName();
+        Optional<User> user = uR.findUserByMail(mail);
+        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
+        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
+
+        List<EvaPet> myEva = eS.findByPatientId(id);
+        if((long) myEva.size() == 0) return  ResponseEntity.badRequest().body("No exisite una mascota con el id: " + id);
+
+        List<EvaPetShowDTO> evita = myEva.stream().map(evi -> m.map(evi, EvaPetShowDTO.class)).toList();
+
+        return ResponseEntity.ok(evita);
+    }
+
+    @PreAuthorize("hasAuthority('PATIENT') or hasAuthority('ADMIN')")
     @PostMapping("/insertar")
     public ResponseEntity<?> insert(@RequestBody EvaPetInsertDTO dto, Authentication authentication) {
         ModelMapper m = new ModelMapper();

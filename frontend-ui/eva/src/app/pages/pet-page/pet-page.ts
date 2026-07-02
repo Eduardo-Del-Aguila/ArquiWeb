@@ -46,6 +46,7 @@ export class PetPage implements OnInit {
   cargar() {
     this.petService.listar().subscribe({
       next: data => {
+        console.log('DATA DE PETS',data);
         if (data.length > 0) {
           this.columns = Object.keys(data[0]).map(key => ({
             key,

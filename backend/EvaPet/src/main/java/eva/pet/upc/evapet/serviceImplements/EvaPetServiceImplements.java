@@ -51,6 +51,12 @@ public class EvaPetServiceImplements implements IEvaPetService {
         return findTopByPatientOrderedByLevel(id);
     }
 
+    @Override
+    public List<EvaPet> findByPatientId(Long id) {
+        return eR.listByUserId(id);
+    }
+
+
 //    @Override
 //    public List<String> getAllNames() {
 //        return eR.listNames();
