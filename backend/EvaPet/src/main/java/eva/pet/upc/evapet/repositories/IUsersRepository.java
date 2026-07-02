@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface IUsersRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.mail = :mail")
-    Optional<User> findUserByMail(@Param("mail") String mail);
+    public Optional<User>  findUserByMail(@Param("mail") String mail);
 
 }

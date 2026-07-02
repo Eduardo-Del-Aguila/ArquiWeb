@@ -3,11 +3,12 @@
   <h2 class="text-2xl font-bold text-white text-center tracking-wide">Eva</h2>
 
     <div class="">
-      <h2 class="text-xl text-white rounded-4xl border bg-yellow-600 p-2"> ADMIN </h2>
+      <h2 class="text-xl text-white rounded-4xl border bg-yellow-600 p-2"> {{ role() }} </h2>
     </div>
-
   <nav class="w-full ">
     <ul class="flex flex-col gap-4">
+      @if (isPatient() || isAdmin()  ){
+
       <li>
         <a [routerLink]="['/layout/pets']"
            routerLinkActive="bg-green-700/60 text-white"
@@ -15,6 +16,9 @@
            Pets
         </a>
       </li>
+      }
+      @if (isAdmin()) {
+
       <li>
         <a [routerLink]="['/layout/rol']"
            routerLinkActive="bg-green-700/60 text-white"
@@ -22,6 +26,9 @@
            Roles
         </a>
       </li>
+      }
+
+      @if (isAdmin()) {
       <li>
         <a [routerLink]="['/layout/users']"
            routerLinkActive="bg-green-700/60 text-white"
@@ -29,7 +36,11 @@
            Usuarios
         </a>
       </li>
+      }
+
     </ul>
   </nav>
+
+  <p class="text-red-500">PAPITA CON CREMA</p>
 
 </div>

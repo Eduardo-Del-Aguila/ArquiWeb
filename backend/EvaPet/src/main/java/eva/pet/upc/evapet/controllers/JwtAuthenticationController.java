@@ -28,13 +28,8 @@ public class JwtAuthenticationController {
     private JwtUserDetailsService userDetailsService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody JwtRequestDTO req) {
-        try {
-            authenticate(req.getMail(), req.getPassword());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-
+    public ResponseEntity<JwtResponseDTO> login(@RequestBody JwtRequestDTO req) throws  Exception {
+        authenticate(req.getMail(), req.getPassword());
         final UserDetails userDetails = userDetailsService.loadUserByUsername(req.getMail());
         final String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponseDTO(token));

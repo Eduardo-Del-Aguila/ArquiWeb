@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { securityGuard } from './core/guards/security.guard';
+import { roleGuard } from './core/guards/rol-guard';
 
 export const routes: Routes = [
   {
@@ -11,7 +13,8 @@ export const routes: Routes = [
     children: [
       {
         path:'pets',
-        loadComponent: () => import('../app/pages/pet-page/pet-page').then(m => m.PetPage)
+        loadComponent: () => import('../app/pages/pet-page/pet-page').then(m => m.PetPage),
+        canActivate: [securityGuard, roleGuard(['ADMIN', 'PATIENT'])],
       },
       {
         path:'rol',
@@ -26,11 +29,11 @@ export const routes: Routes = [
   },
   {
     path: 'home',
-    loadComponent: () => import('../app/landing-page/landing').then(m => m.Landing)
+    loadComponent: () => import('../app/landing-page/landing').then(m => m.Landing),
   },
   {
     path: '**',
-    redirectTo: 'home'
+    redirectTo: 'home',
   },
 
 ];

@@ -15,7 +15,6 @@ export class RolService {
 
   private getHeaders(): HttpHeaders {
     const token = this.authService.getToken();
-    console.log('token:', token);
     return new HttpHeaders({
       Authorization: `Bearer ${token}`
     });

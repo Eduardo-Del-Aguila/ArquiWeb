@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from "@angular/router";
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from "@angular/router";
+import { LoginService } from '../../../core/services/auth/Login.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -7,4 +8,36 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
   templateUrl: './sidebar.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Sidebar {}
+export class Sidebar {
+
+  role = signal<string>('');
+  usuario = signal<string>('');
+
+  private loginService = inject(LoginService);
+  private router = inject(Router)
+
+  cerrar() {
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
+  }
+
+
+  ngOnInit() {
+    if (this.loginService.verificar()) {
+      this.role.set(this.loginService.showRole() ?? '');
+    }
+  }
+
+  isAdmin() {
+    return this.role() === 'ADMIN';
+  }
+  isFamily() {
+    return this.role() === 'FAMILY';
+  }
+  isPatient() {
+    return this.role() === 'PATIENT';
+  }
+  isDoctor(){
+    return this.role() === 'DOCTOR';
+  }
+}
