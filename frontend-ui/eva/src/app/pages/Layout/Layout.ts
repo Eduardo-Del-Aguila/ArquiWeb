@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { Sidebar } from '../../shared/components/sidebar/sidebar';
 import { RouterOutlet } from '@angular/router';
 import { JamendoService } from '../../core/services/jamendo.service';
-import { CommonModule } from '@angular/common'; // Asegúrate de tener esto
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-layout',
@@ -13,11 +13,12 @@ import { CommonModule } from '@angular/common'; // Asegúrate de tener esto
 })
 export class Layout implements OnInit {
   
-  // Aquí guardaremos las canciones
-pistasMusicales: any[] = [];
+  pistasMusicales: any[] = [];
+  indiceActual: number = 0;
+
   constructor(
     private jamendoService: JamendoService,
-    private cdr: ChangeDetectorRef // <-- Súper importante por usar OnPush
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -27,15 +28,41 @@ pistasMusicales: any[] = [];
   cargarMusica() {
     this.jamendoService.getMusicaRelajante().subscribe({
       next: (respuesta) => {
-        console.log('Música de Jamendo:', respuesta);
-        this.pistasMusicales = respuesta.results;
-        console.log('Primera pista:', this.pistasMusicales[0]); // <--- Agrega esto
-        // Como usamos OnPush, le avisamos a Angular que redibuje la pantalla con las canciones
-        this.cdr.markForCheck(); 
+        if (respuesta.results && respuesta.results.length > 0) {
+          this.pistasMusicales = respuesta.results;
+          this.cdr.markForCheck(); // Le avisamos a la vista que hay datos
+        }
       },
-      error: (error) => {
-        console.error('Error al cargar la música:', error);
-      }
+      error: (error) => console.error('Error al cargar la música:', error)
     });
+  }
+
+  // Recibimos el elemento HTML del reproductor para manipularlo
+  siguienteCancion(reproductor: HTMLAudioElement) {
+    if (this.indiceActual < this.pistasMusicales.length - 1) {
+      this.indiceActual++;
+    } else {
+      this.indiceActual = 0;
+    }
+    this.forzarReproduccion(reproductor);
+  }
+
+  cancionAnterior(reproductor: HTMLAudioElement) {
+    if (this.indiceActual > 0) {
+      this.indiceActual--;
+    } else {
+      this.indiceActual = this.pistasMusicales.length - 1;
+    }
+    this.forzarReproduccion(reproductor);
+  }
+
+  forzarReproduccion(reproductor: HTMLAudioElement) {
+    this.cdr.markForCheck(); // Actualiza el HTML con la nueva URL
+    
+    // Le damos un respiro minúsculo a Angular para que cambie el [src] y luego forzamos el play
+    setTimeout(() => {
+      reproductor.load(); // Obliga al navegador a descargar el nuevo archivo
+      reproductor.play(); // Le da play automáticamente
+    }, 50);
   }
 }
