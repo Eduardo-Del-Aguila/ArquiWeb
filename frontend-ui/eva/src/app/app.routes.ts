@@ -17,6 +17,10 @@ export const routes: Routes = [
         path:'rol',
         loadComponent: () => import('./pages/RolPage/rol-page').then(m => m.RolPage)
       },
+      {
+        path: 'alerts',
+        loadComponent: () => import('./pages/alert-page/alert-page').then(m => m.AlertPage)
+      }
 
     ]
   },
