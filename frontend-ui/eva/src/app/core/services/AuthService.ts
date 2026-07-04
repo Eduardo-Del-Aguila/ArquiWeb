@@ -18,22 +18,21 @@ export class AuthService {
   login(dto: LoginRequest) {
     return this.http.post<LoginResponse>(this.url, dto).pipe(
       tap(res => {
-        console.log('respuesta login:', res);
-        localStorage.setItem('token', res.jwttoken);
+        sessionStorage.setItem('token', res.jwttoken);
       })
     );
   }
 
   logout() {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     this.router.navigate(['/login']);
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return sessionStorage.getItem('token');
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+    return !!sessionStorage.getItem('token');
   }
 }

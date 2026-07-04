@@ -16,7 +16,7 @@ export const roleGuard = (rolesPermitidos: string[]): CanActivateFn => {
       return true;
     }
 
-    router.navigate(['/layout/home']);
+    router.navigate(['/layout/pets']);
     return false;
   };
 };

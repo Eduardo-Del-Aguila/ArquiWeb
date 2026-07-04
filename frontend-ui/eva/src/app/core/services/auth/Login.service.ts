@@ -42,7 +42,6 @@ export class LoginService {
     }
     const helper = new JwtHelperService();
     const decodedToken = helper.decodeToken(token);
-    console.log('Token decodificado:', decodedToken);
     return decodedToken.roles;
   }
 
@@ -60,7 +59,6 @@ export class LoginService {
     const helper = new JwtHelperService();
     const decodedToken = helper.decodeToken(token);
 
-    console.log('Token decodificado:', decodedToken);
 
     return decodedToken.sub;
   }

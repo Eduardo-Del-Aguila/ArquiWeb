@@ -1,4 +1,4 @@
 export class JwtRequestDTO {
-    mail: string = ''
-    password: string = ''
+    mail: string = 'eduardodelaguila10@gmail.com'
+    password: string = 'hachi2010'
 }

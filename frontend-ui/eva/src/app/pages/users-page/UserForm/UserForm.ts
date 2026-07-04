@@ -6,11 +6,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { UserService } from '../../../core/services/usersService';
-import { RolService } from '../../../core/services/rol';
+import { RolService } from '../../../core/services/rolService';
 import { UserStateService } from '../../../core/services/state/UserStateService';
 import { RolShowDTO } from '../../../core/interfaces/rol';
 import { UserInsertDTO } from '../../../core/interfaces/users.interface';
-import { CloudinaryService } from '../../../core/services/CloudinaryService';
+import { CloudinaryService } from '../../../core/services/cloudinaryService';
 @Component({
   selector: 'app-user-form',
   imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSelectModule, MatIconModule],
@@ -67,7 +67,7 @@ export class UserForm implements OnInit {
     this.archivoSeleccionado.set(file);
     this.previewUrl.set(URL.createObjectURL(file));
   }
-  
+
   guardar() {
     if (this.form.invalid) return;
 

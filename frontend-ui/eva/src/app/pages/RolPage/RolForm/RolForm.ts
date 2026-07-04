@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RolService } from '../../../core/services/rol';
+import { RolService } from '../../../core/services/rolService';
 import { RolStateService } from '../../../core/services/state/RolStateService';
 import { RolInsertDTO, UserRol } from '../../../core/interfaces/rol';
 import { MatSelectModule } from '@angular/material/select';

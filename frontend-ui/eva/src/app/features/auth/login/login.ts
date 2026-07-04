@@ -38,10 +38,9 @@ export class Login {
     this.loginService.login(request).subscribe({
       next: (data: any) => {
         sessionStorage.setItem('token', data.jwttoken);
-        this.router.navigate(['homes']);
+        this.router.navigate(['/layout/pets']);
       },
       error: (error) => {
-        console.log(error);
 
         if (error.status === 401) {
           this.snackBar.open(

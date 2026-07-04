@@ -11,7 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { RolService } from '../../core/services/rol';
+import { RolService } from '../../core/services/rolService';
 import { RolShowDTO } from '../../core/interfaces/rol';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
@@ -65,7 +65,6 @@ export class UsersPage {
     this.userService.listar().subscribe({
       next: data => {
         this.users.set(data)
-        console.log('Soy la data: ',data);
       },
       error: err => console.error(err)
     });

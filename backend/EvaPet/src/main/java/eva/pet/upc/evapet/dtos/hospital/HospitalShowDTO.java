@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @JsonPropertyOrder({ "name", "direction", "phone", "city" })
 public class HospitalShowDTO {
+    private long idHospital;
     private String name;
     private String direction;
     private String phone;

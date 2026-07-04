@@ -59,7 +59,6 @@ export class PetPage implements OnInit {
 
     this.petService.listar().subscribe({
       next: data => {
-        console.log('DATA DE PETS',data);
         if (data.length > 0) {
           this.columns = Object.keys(data[0]).map(key => ({
             key,
@@ -73,7 +72,6 @@ export class PetPage implements OnInit {
     } else {
       this.petService.listByUserId('rodriguez%40gmail.com').subscribe({
       next: data => {
-        console.log('DATA DE PETS',data);
         if (data.length > 0) {
           this.columns = Object.keys(data[0]).map(key => ({
             key,
