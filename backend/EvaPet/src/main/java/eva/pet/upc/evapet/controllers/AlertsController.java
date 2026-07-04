@@ -51,7 +51,7 @@ public class AlertsController {
         return ResponseEntity.ok(listaAlertas);
     }
 
-    //@PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
     @PostMapping("/insertar")
     public ResponseEntity<?> registrar(@RequestBody AlertsInsertDTO dto, Authentication authentication) {
         if (dto.getMessage() == null || dto.getMessage().trim().isEmpty()) {

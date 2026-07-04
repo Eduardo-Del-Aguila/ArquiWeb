@@ -20,10 +20,9 @@ export class AlertForm {
   protected stateService = inject(AlertStateService);
 
   // Tipos de alerta (puedes cambiarlos según la lógica de EvaPet)
-  alertTypes: string[] = ['INFO', 'WARNING', 'CRITICAL'];
-
+alertTypes: string[] = ['BEHAVIOR', 'INACTIVITY', 'MEDICATION', 'HEALTH'];
   form = this.fb.group({
-    type: ['INFO', Validators.required],
+    type: ['BEHAVIOR', Validators.required],
     message: ['', [Validators.required, Validators.maxLength(255)]],
     // Inicializamos en null para que el usuario deba ingresarlos o seleccionarlos
     idPatient: [null as number | null, [Validators.required, Validators.min(1)]],
