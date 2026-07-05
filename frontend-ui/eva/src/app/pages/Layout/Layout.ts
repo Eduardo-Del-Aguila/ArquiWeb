@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Layout implements OnInit {
-  
+
   pistasMusicales: any[] = [];
   indiceActual: number = 0;
 
@@ -30,14 +30,13 @@ export class Layout implements OnInit {
       next: (respuesta) => {
         if (respuesta.results && respuesta.results.length > 0) {
           this.pistasMusicales = respuesta.results;
-          this.cdr.markForCheck(); // Le avisamos a la vista que hay datos
+          this.cdr.markForCheck();
         }
       },
       error: (error) => console.error('Error al cargar la música:', error)
     });
   }
 
-  // Recibimos el elemento HTML del reproductor para manipularlo
   siguienteCancion(reproductor: HTMLAudioElement) {
     if (this.indiceActual < this.pistasMusicales.length - 1) {
       this.indiceActual++;
@@ -57,12 +56,11 @@ export class Layout implements OnInit {
   }
 
   forzarReproduccion(reproductor: HTMLAudioElement) {
-    this.cdr.markForCheck(); // Actualiza el HTML con la nueva URL
-    
-    // Le damos un respiro minúsculo a Angular para que cambie el [src] y luego forzamos el play
+    this.cdr.markForCheck();
+
     setTimeout(() => {
-      reproductor.load(); // Obliga al navegador a descargar el nuevo archivo
-      reproductor.play(); // Le da play automáticamente
+      reproductor.load();
+      reproductor.play();
     }, 50);
   }
 }
