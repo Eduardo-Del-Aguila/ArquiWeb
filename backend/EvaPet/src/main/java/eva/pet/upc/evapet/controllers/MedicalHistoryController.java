@@ -47,38 +47,11 @@ public class MedicalHistoryController {
         List<MedicalHistoryShowDTO> medicalShow = histories.stream().map(h-> m.map(h, MedicalHistoryShowDTO.class)).toList();
         return ResponseEntity.ok(medicalShow);
     }
-    // GET /api/historial-medico/paciente/3
-    // GET /api/historial-medico/doctor/3
-//    @GetMapping("/{rol}/{id}")
-//    public ResponseEntity<?> listByRol(@PathVariable String rol,
-//                                       @PathVariable Long id,
-//                                       Authentication authentication) {
-//        String mail = authentication.getName();
-//        Optional<User> user = uR.findUserByMail(mail);
-//        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
-//        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
-//
-//        Optional<MedicalHistory> result = switch (rol.toLowerCase()) {
-//            case "paciente" -> mS.ListByIdPatient(id);
-//            case "doctor"   -> mS.ListByIdDoctor(id);
-//            default -> null;
-//        };
-//
-//        if (result == null)
-//            return ResponseEntity.badRequest().body("Rol no válido. Usa: paciente, doctor");
-//        if (result.isEmpty())
-//            return ResponseEntity.ok("No hay historiales para este " + rol);
-//
-//        ModelMapper m = new ModelMapper();
-//        MedicalHistoryInsertDTO dto = m.map(result.get(), MedicalHistoryInsertDTO.class);
-//        return ResponseEntity.ok(dto);
-//    }
 
-    // POST /api/historial-medico/insertar/eva/1/paciente/2
     @PostMapping("/insertar/eva/{evaId}/hospital/{hospitalId}")
     public ResponseEntity<?> insert(@PathVariable Long evaId,
                                     @PathVariable Long hospitalId,
-                                    @RequestBody MedicalHistoryShowDTO dto,
+                                    @RequestBody MedicalHistoryInsertDTO dto,
                                     Authentication authentication) {
         String mail = authentication.getName();
         Optional<User> user = uR.findUserByMail(mail);
@@ -87,18 +60,8 @@ public class MedicalHistoryController {
 
         try {
             MedicalHistory saved = mS.insert(dto, evaId, hospitalId);
-
-            MedicalHistoryInsertDTO response = new MedicalHistoryInsertDTO();
-            response.setReason(saved.getReason());
-            response.setTreatment(saved.getTreatment());
-            response.setObservations(saved.getObservations());
-            response.setDiagnostics(saved.getDiagnostics());
-            response.setStatus(saved.getStatus());
-            response.setEvaName(saved.getEva().getName());
-            response.setPatientName(saved.getPatient().getName());
-            response.setDoctorName(saved.getDoctor() != null ? saved.getDoctor().getName() : "Sin asignar");
-            response.setNameHospital(saved.getHospital().getName());
-
+            ModelMapper m = new ModelMapper();
+            MedicalHistoryShowDTO response = m.map(saved, MedicalHistoryShowDTO.class);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

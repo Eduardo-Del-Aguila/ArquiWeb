@@ -57,23 +57,22 @@ public class MedicalServiceImplements implements IMedicalServiceInterface {
     }
 
     @Override
-    public MedicalHistory insert(MedicalHistoryShowDTO dto, Long evaId, Long hospitalId) {
+    public MedicalHistory insert(MedicalHistoryInsertDTO dto, Long evaId, Long hospitalId) {
         EvaPet eva = eR.findById(evaId)
                 .orElseThrow(() -> new RuntimeException("Eva Pet no encontrada con id: " + evaId));
-        Long patientId = eva.getPatient().getId();
 
         Hospital hospital = hR.findById(hospitalId)
-                .orElseThrow(() -> new RuntimeException("Paciente no encontrado con id: " + hospitalId));
+                .orElseThrow(() -> new RuntimeException("Hospital no encontrado con id: " + hospitalId));
 
-        User patient = uR.findById(patientId)
-                .orElseThrow(() -> new RuntimeException("Paciente no encontrado con id: " + patientId));
+        User patient = uR.findById(eva.getPatient().getId())
+                .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
 
         MedicalHistory history = new MedicalHistory();
         history.setReason(dto.getReason());
-        history.setTreatment(dto.getTreatment());
-        history.setObservations(dto.getObservations());
-        history.setDiagnostics(dto.getDiagnostics());
-        history.setStatus(dto.getStatus() != null ? dto.getStatus() : MedicalStatus.PENDING);
+        history.setTreatment("");
+        history.setObservations("");
+        history.setDiagnostics(null);
+        history.setStatus(MedicalStatus.PENDING);
         history.setActive(true);
         history.setRegisterAt(LocalDateTime.now());
         history.setEva(eva);
@@ -81,10 +80,8 @@ public class MedicalServiceImplements implements IMedicalServiceInterface {
         history.setDoctor(null);
         history.setHospital(hospital);
 
-
         return mR.save(history);
     }
-
     @Override
     public MedicalHistory update(Long id, MedicalHistoryShowDTO dto) {
         MedicalHistory history = mR.findById(id)
