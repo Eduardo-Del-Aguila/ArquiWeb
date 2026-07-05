@@ -1,0 +1,78 @@
+<div class="flex flex-col gap-6 p-4">
+
+  <div class="border border-black/50 rounded-2xl shadow-xl p-4">
+    <h3 class="text-3xl mb-4">Historiales Médicos</h3>
+    <hr class="mb-4">
+
+    <mat-accordion>
+      @for (historial of historiales(); track historial.id) {
+        <mat-expansion-panel class="mb-2">
+
+          <mat-expansion-panel-header>
+            <mat-panel-title class="flex items-center gap-2">
+              <mat-icon>medical_services</mat-icon>
+              <span class="font-semibold">{{ historial.reason }}</span>
+            </mat-panel-title>
+            <mat-panel-description class="flex items-center gap-3">
+              <span class="text-xs text-gray-500">{{ historial.patientName }}</span>
+              <mat-chip [color]="colorStatus(historial.status)" highlighted>
+                {{ historial.status }}
+              </mat-chip>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+
+            <div class="flex flex-col gap-1">
+              <span class="text-xs font-semibold text-gray-400 uppercase">Tratamiento</span>
+              <span class="text-sm">{{ historial.treatment || '—' }}</span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <span class="text-xs font-semibold text-gray-400 uppercase">Observaciones</span>
+              <span class="text-sm">{{ historial.observations || '—' }}</span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <span class="text-xs font-semibold text-gray-400 uppercase">Diagnóstico</span>
+              <span class="text-sm">{{ historial.diagnostics || '—' }}</span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <span class="text-xs font-semibold text-gray-400 uppercase">Mascota</span>
+              <span class="text-sm">{{ historial.evaName || '—' }}</span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <span class="text-xs font-semibold text-gray-400 uppercase">Doctor</span>
+              <span class="text-sm">{{ historial.doctorName || 'Sin asignar' }}</span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <span class="text-xs font-semibold text-gray-400 uppercase">Hospital</span>
+              <span class="text-sm">{{ historial.nameHospital || '—' }}</span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <span class="text-xs font-semibold text-gray-400 uppercase">Fecha</span>
+              <span class="text-sm">{{ historial.registerAt | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+
+          </div>
+
+          <mat-action-row>
+            <button mat-icon-button color="accent" matTooltip="Editar" (click)="editar(historial)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" matTooltip="Eliminar" (click)="eliminar(historial)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-action-row>
+
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+
+  </div>
+
+</div>

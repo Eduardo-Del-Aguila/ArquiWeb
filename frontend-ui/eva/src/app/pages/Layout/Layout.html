@@ -10,28 +10,43 @@
 
 </div>
 @if (pistasMusicales.length > 0) {
-  <div class="fixed bottom-5 right-5 z-50 bg-[#1e293b] p-4 rounded-xl shadow-2xl border border-gray-600 flex flex-col items-center">
+  <div class="fixed bottom-5 right-5 z-50">
 
-    <p class="text-white text-xs font-bold mb-2 truncate max-w-62.5">
-      🎵 {{ pistasMusicales[indiceActual].name }}
-    </p>
-
-    <div class="flex items-center gap-2">
-      <button (click)="cancionAnterior(miAudio)" class="text-white hover:text-gray-400 text-2xl transition-transform active:scale-90">
-        ⏪
+    @if (!playerAbierto()) {
+      <button
+        (click)="playerAbierto.set(true)"
+        class="w-14 h-14 rounded-full bg-[#1e293b] border border-gray-600 shadow-2xl flex items-center justify-center text-white text-2xl hover:scale-110 transition-transform">
+        🎵
       </button>
+    } @else {
+      <div class="bg-[#1e293b] p-4 rounded-2xl shadow-2xl border border-gray-600 flex flex-col items-center gap-3 w-72">
 
-      <audio
-        #miAudio
-        controls
-        class="h-10 w-48 rounded-full bg-gray-100"
-        [src]="pistasMusicales[indiceActual].audio">
-      </audio>
+        <div class="flex w-full justify-between items-center">
+          <p class="text-white text-xs font-bold truncate max-w-52">
+            🎵 {{ pistasMusicales[indiceActual].name }}
+          </p>
+          <button (click)="playerAbierto.set(false)" class="text-gray-400 hover:text-white transition-colors">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
 
-      <button (click)="siguienteCancion(miAudio)" class="text-white hover:text-gray-400 text-2xl transition-transform active:scale-90">
-        ⏩
-      </button>
-    </div>
+        <div class="flex items-center gap-2">
+          <button (click)="cancionAnterior(miAudio)" class="text-white hover:text-gray-400 text-2xl transition-transform active:scale-90">
+            ⏪
+          </button>
+          <audio
+            #miAudio
+            controls
+            class="h-10 w-44 rounded-full bg-gray-100"
+            [src]="pistasMusicales[indiceActual].audio">
+          </audio>
+          <button (click)="siguienteCancion(miAudio)" class="text-white hover:text-gray-400 text-2xl transition-transform active:scale-90">
+            ⏩
+          </button>
+        </div>
+
+      </div>
+    }
 
   </div>
 }

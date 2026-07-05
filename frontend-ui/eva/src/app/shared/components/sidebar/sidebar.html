@@ -19,13 +19,27 @@
       }
       @if (isAdmin()) {
 
-      <li>
-        <a [routerLink]="['/layout/rol']"
-           routerLinkActive="bg-green-700/60 text-white"
-           class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer">
-           Roles
-        </a>
-      </li>
+    <li>
+      <button
+        mat-button
+        [matMenuTriggerFor]="rolesMenu"
+        class="w-full flex items-center justify-between px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white">
+
+        <span>Roles</span>
+
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+
+      <mat-menu #rolesMenu="matMenu">
+        <button mat-menu-item [routerLink]="['/layout/rol']">
+          <span>Listado</span>
+        </button>
+
+        <button mat-menu-item [routerLink]="['/layout/rol/reportes']">
+          <span>Reportes</span>
+        </button>
+      </mat-menu>
+    </li>
       }
 
       @if (isAdmin()) {
@@ -48,9 +62,20 @@
       </li>
       }
 
+       @if (isAdmin() || isDoctor() ) {
+      <li>
+        <a [routerLink]="['/layout/medical-history']"
+           routerLinkActive="bg-green-700/60 text-white"
+           class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer">
+           Historiales médicos
+        </a>
+      </li>
+      }
+
+
+
     </ul>
   </nav>
 
-  <p class="text-red-500">PAPITA CON CREMA</p>
 
 </div>

@@ -1,13 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
 import { Sidebar } from '../../shared/components/sidebar/sidebar';
 import { RouterOutlet } from '@angular/router';
 import { JamendoService } from '../../core/services/jamendo.service';
 import { CommonModule } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [Sidebar, RouterOutlet , CommonModule],
+  imports: [Sidebar, RouterOutlet , CommonModule, MatIcon],
   templateUrl: './Layout.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -15,6 +16,7 @@ export class Layout implements OnInit {
 
   pistasMusicales: any[] = [];
   indiceActual: number = 0;
+  playerAbierto = signal<boolean>(false);
 
   constructor(
     private jamendoService: JamendoService,

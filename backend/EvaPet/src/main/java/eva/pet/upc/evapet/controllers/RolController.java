@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-//@PreAuthorize("hasAuthority('ADMIN')")
 
 @RestController
 @RequestMapping("/api/rol")
@@ -32,14 +31,8 @@ public class RolController {
     @Autowired
     private IUsersRepository uR;
 
-    @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
     @GetMapping("/listar")
-    public ResponseEntity<?> listar(Authentication authentication) {
-        String mail = authentication.getName();
-        Optional<User> currentUser = uR.findUserByMail(mail);
-        if (currentUser.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autorizado");
-        }
+    public ResponseEntity<?> listar() {
 
         ModelMapper m = new ModelMapper();
         List<RolShowDTO> listaRoles = rS.list().stream()

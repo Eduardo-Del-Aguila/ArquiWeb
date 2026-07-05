@@ -21,9 +21,9 @@ public class MedicalHistory {
     // Para la tabla insert
     @Column(name = "reason", nullable = false)
     private String reason;
-    @Column(name = "treatment", nullable = false)
+    @Column(name = "treatment", nullable = true)
     private String treatment;
-    @Column(name = "observations", nullable = false)
+    @Column(name = "observations", nullable = true)
     private String observations;
     @Column(name = "diagnostics", nullable = true)
     private String  diagnostics;

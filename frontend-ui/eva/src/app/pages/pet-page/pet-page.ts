@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { StatusPetColorPipe } from '../../shared/pipes/status-pet-color-pipe';
 import { LoginService } from '../../core/services/auth/Login.service';
+import { MedicalHistoryDialog } from '../MedicalHistory/MedicalHistoryDialog/MedicalHistoryDialog';
 
 @Component({
   selector: 'app-pet-page',
@@ -27,6 +28,14 @@ export class PetPage implements OnInit {
   private stateService = inject(PetStateService);
   private dialog = inject(MatDialog);
   private loginService = inject(LoginService);
+
+  crearHistorial(pet: EvaPetShow) {
+    this.dialog.open(MedicalHistoryDialog, {
+      width: '450px',
+      data: pet
+    });
+  }
+
 
   role = signal<string>('');
   mail = signal<string>('');

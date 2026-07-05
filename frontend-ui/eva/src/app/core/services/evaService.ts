@@ -41,6 +41,9 @@ export class EvaPetService {
   eliminar(id: number) {
     return this.http.delete(`${this.url}/pet/eliminar/${id}`, { headers: this.getHeaders(), responseType: 'text' });
   }
+  listarPorEmail(email: string) {
+    return this.http.get<EvaPetShow[]>(`${this.url}/pet/listar-patient/${email}`, { headers: this.getHeaders() });
+  }
 
   listarPorNivel() {
     return this.http.get<EvaPetShow[]>(`${this.url}/pet/mis-mascotas/por-nivel`, { headers: this.getHeaders() });

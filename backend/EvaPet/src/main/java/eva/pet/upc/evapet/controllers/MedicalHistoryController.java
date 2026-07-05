@@ -31,7 +31,7 @@ public class MedicalHistoryController {
     @Autowired
     IEvaPetRepository eR;
 
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR') ")
+    //@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR') ")
     @GetMapping("/historiales")
     public ResponseEntity<?> ListAll(Authentication authentication){
         ModelMapper m = new ModelMapper();

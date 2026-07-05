@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
@@ -24,6 +24,9 @@ export class Login {
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
   private loginService = inject(LoginService);
+  role = signal<string>('');
+
+
 
   showPassword = signal(false);
   togglePassword() { this.showPassword.set(!this.showPassword()); }
@@ -33,14 +36,35 @@ export class Login {
     password: ['hachi2010', Validators.required]
   });
 
+
   login() {
     const request = new JwtRequestDTO();
     request.mail = this.form.controls.mail.value;
     request.password = this.form.controls.password.value;
+    console.log('Soy el rol:', this.role());
     this.loginService.login(request).subscribe({
       next: (data: any) => {
         sessionStorage.setItem('token', data.jwttoken);
-        this.router.navigate(['/layout/pets']);
+        if (this.loginService.verificar()) {
+          this.role.set(this.loginService.showRole() ?? '');
+        }
+        switch(this.role()){
+          case 'ADMIN':
+            this.router.navigate(['/layout/users']);
+            break;
+          case 'FAMILY':
+            this.router.navigate(['/layout']);
+            break;
+            case 'PATIENT':
+              this.router.navigate(['/layout/pets']);
+              break;
+            case 'DOCTOR':
+              this.router.navigate(['/layout/medical-history']);
+              break;
+            default:
+            this.router.navigate(['/layout']);
+        }
+
       },
       error: (error) => {
 

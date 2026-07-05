@@ -1,0 +1,35 @@
+<div class="p-4 w-full">
+  <h2 class="text-lg font-semibold mb-1">Crear Historial Médico</h2>
+  <p class="text-sm text-gray-500 mb-4">Mascota: <strong>{{ data.name }}</strong></p>
+
+  <form [formGroup]="form" (ngSubmit)="guardar()" class="flex flex-col gap-4">
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Motivo de consulta</mat-label>
+      <textarea matInput formControlName="reason" rows="3" placeholder="Describe el motivo..."></textarea>
+      @if (form.get('reason')?.hasError('required') && form.get('reason')?.touched) {
+        <mat-error>El motivo es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Hospital</mat-label>
+      <mat-select formControlName="hospitalId">
+        @for (h of hospitales(); track h.idHospital) {
+          <mat-option [value]="h.idHospital">{{ h.name }} — {{ h.city }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('hospitalId')?.hasError('required') && form.get('hospitalId')?.touched) {
+        <mat-error>El hospital es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="flex justify-end gap-2">
+      <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+        Crear historial
+      </button>
+    </div>
+
+  </form>
+</div>

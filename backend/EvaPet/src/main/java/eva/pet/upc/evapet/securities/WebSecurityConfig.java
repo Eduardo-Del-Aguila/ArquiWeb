@@ -64,14 +64,19 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(req -> req
 
                         // Swagger
-                        .requestMatchers(
-                                "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/v3/api-docs/**",
-                                "/v3/api-docs.yaml",
-                                "/webjars/**",
-                                "/auth/login", "/api/rol/insertar, /api/sintomas/severity-count , /api/alerts/listar"
-                        ).permitAll()
+                                .requestMatchers(
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html",
+                                        "/v3/api-docs/**",
+                                        "/v3/api-docs.yaml",
+                                        "/webjars/**",
+                                        "/auth/login",
+                                        "/api/rol/insertar",
+                                        "/api/rol/listar",
+                                        "/api/sintomas/severity-count",
+                                        "/api/alerts/listar",
+                                        "/api/usuario/insertar"
+                                ).permitAll()
 //                        .anyRequest().permitAll()
                         // Todo lo demás requiere autenticación
                         .anyRequest().authenticated()

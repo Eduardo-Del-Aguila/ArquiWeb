@@ -24,12 +24,19 @@
 
       <hr class="mt-2">
 
-      <mat-card-actions class="flex justify-end gap-1 px-2 pb-2">
-        @for (action of actions; track action.label) {
-          <button mat-icon-button [matTooltip]="action.label" (click)="action.action(pet)">
-            <mat-icon>{{ action.icon }}</mat-icon>
-          </button>
-        }
+      <mat-card-actions class="flex justify-between gap-1 px-2 pb-2">
+        <button mat-stroked-button color="primary" (click)="crearHistorial(pet)">
+          <mat-icon>medical_services</mat-icon>
+          Historial
+        </button>
+
+        <div class="flex gap-1">
+          @for (action of actions; track action.label) {
+            <button mat-icon-button [matTooltip]="action.label" (click)="action.action(pet)">
+              <mat-icon>{{ action.icon }}</mat-icon>
+            </button>
+          }
+        </div>
       </mat-card-actions>
 
     </mat-card>

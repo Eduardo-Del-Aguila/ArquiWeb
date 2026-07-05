@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-@PreAuthorize("hasAuthority('ADMIN')"  )
+//@PreAuthorize("hasAuthority('ADMIN')"  )
 @RestController
 @RequestMapping("/api/usuario")
 public class UserController {
@@ -72,7 +72,7 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasAuthority('FAMILY') || hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('FAMILY') || hasAuthority('ADMIN')")
     @PostMapping(value = "/insertar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> insert(
             @RequestParam("name") String name,

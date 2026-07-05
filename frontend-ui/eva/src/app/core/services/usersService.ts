@@ -31,7 +31,7 @@ export class UserService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.authService.getToken()}`
     });
-    return this.http.post<UserShowDTO>(`${this.url}/insertar`, formData, { headers });
+    return this.http.post<UserShowDTO>(`${this.url}/insertar`, formData);
   }
 
   actualizar(id: number, formData: FormData) {

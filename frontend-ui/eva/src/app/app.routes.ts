@@ -38,6 +38,10 @@ export const routes: Routes = [
       {
         path: 'alerts',
         loadComponent: () => import('./pages/alert-page/alert-page').then(m => m.AlertPage)
+      },
+      {
+        path: 'medical-history',
+        loadComponent: () => import('./pages/MedicalHistory/MedicalHistory-page').then(m => m.MedicalHistory)
       }
 
     ]
