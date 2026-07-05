@@ -3,6 +3,7 @@ package eva.pet.upc.evapet.controllers;
 
 import eva.pet.upc.evapet.dtos.eva.EvaPetDTO;
 import eva.pet.upc.evapet.dtos.eva.EvaPetInsertDTO;
+import eva.pet.upc.evapet.dtos.eva.EvaPetReportDTO;
 import eva.pet.upc.evapet.dtos.eva.EvaPetShowDTO;
 import eva.pet.upc.evapet.enums.StatusPet;
 import eva.pet.upc.evapet.models.EvaPet;
@@ -186,6 +187,20 @@ public class EvaPetController {
 
         List<EvaPetDTO> myPets = pets.stream().map(p -> m.map(p, EvaPetDTO.class)).toList();
         return ResponseEntity.ok(myPets);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/reporte/nivel")
+    public ResponseEntity<?> reporteNivel(Authentication authentication) {
+        String mail = authentication.getName();
+        Optional<User> user = uR.findUserByMail(mail);
+        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
+        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
+
+        List<EvaPetReportDTO> reporte = eS.getPetsReport();
+        if (reporte.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay mascotas registradas");
+
+        return ResponseEntity.ok(reporte);
     }
 
 }

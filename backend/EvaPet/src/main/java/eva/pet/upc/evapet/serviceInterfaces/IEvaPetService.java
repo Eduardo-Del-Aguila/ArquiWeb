@@ -1,5 +1,6 @@
 package eva.pet.upc.evapet.serviceInterfaces;
 
+import eva.pet.upc.evapet.dtos.eva.EvaPetReportDTO;
 import eva.pet.upc.evapet.models.Alerts;
 import eva.pet.upc.evapet.models.EvaPet;
 import org.springframework.data.jpa.repository.Query;
@@ -20,5 +21,5 @@ public interface IEvaPetService {
     public List<EvaPet> findTopByPatientOrderedByLevel(Long id);
 
     public List<EvaPet> findByPatientEmail(String email);
-
+    public List<EvaPetReportDTO> getPetsReport();
 }

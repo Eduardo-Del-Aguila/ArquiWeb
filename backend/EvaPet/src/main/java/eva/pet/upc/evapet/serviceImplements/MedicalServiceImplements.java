@@ -80,20 +80,49 @@ public class MedicalServiceImplements implements IMedicalServiceInterface {
         history.setDoctor(null);
         history.setHospital(hospital);
 
-        return mR.save(history);
+        MedicalHistory saved = mR.save(history);
+
+        int nuevaExp = eva.getExperiencie() + 25;
+        if (nuevaExp >= 100) {
+            eva.setLevel(eva.getLevel() + 1);
+            eva.setExperiencie(0);
+        } else {
+            eva.setExperiencie(nuevaExp);
+        }
+        eR.save(eva);
+
+        return saved;
     }
     @Override
     public MedicalHistory update(Long id, MedicalHistoryShowDTO dto) {
         MedicalHistory history = mR.findById(id)
                 .orElseThrow(() -> new RuntimeException("Historial médico no encontrado con id: " + id));
 
-        if (dto.getReason() != null)      history.setReason(dto.getReason());
-        if (dto.getTreatment() != null)   history.setTreatment(dto.getTreatment());
+        if (dto.getReason() != null)       history.setReason(dto.getReason());
+        if (dto.getTreatment() != null)    history.setTreatment(dto.getTreatment());
         if (dto.getObservations() != null) history.setObservations(dto.getObservations());
-        if (dto.getDiagnostics() != null) history.setDiagnostics(dto.getDiagnostics());
-        if (dto.getStatus() != null)      history.setStatus(dto.getStatus());
-        history.setUpdateAt(LocalDateTime.now());
+        if (dto.getDiagnostics() != null)  history.setDiagnostics(dto.getDiagnostics());
 
+        if (dto.getStatus() != null && dto.getStatus() == MedicalStatus.CLOSED
+                && history.getStatus() != MedicalStatus.CLOSED) {
+
+            history.setStatus(MedicalStatus.CLOSED);
+
+            EvaPet eva = history.getEva();
+            int nuevaExp = eva.getExperiencie() + 15;
+            if (nuevaExp >= 100) {
+                eva.setLevel(eva.getLevel() + 1);
+                eva.setExperiencie(0);
+            } else {
+                eva.setExperiencie(nuevaExp);
+            }
+            eR.save(eva);
+
+        } else if (dto.getStatus() != null) {
+            history.setStatus(dto.getStatus());
+        }
+
+        history.setUpdateAt(LocalDateTime.now());
         return mR.save(history);
     }
 

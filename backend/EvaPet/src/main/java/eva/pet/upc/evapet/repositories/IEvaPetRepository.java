@@ -30,5 +30,7 @@ public interface IEvaPetRepository extends JpaRepository<EvaPet, Long> {
 
     @Query("SELECT e FROM EvaPet e WHERE e.patient.mail = :email")
     List<EvaPet> listByUserId(@Param("email") String email);
-
+    
+    @Query("SELECT e.name, e.level, e.patient.name FROM EvaPet e ORDER BY e.level DESC")
+    List<Object[]> findPetsWithLevelAndOwner();
 }

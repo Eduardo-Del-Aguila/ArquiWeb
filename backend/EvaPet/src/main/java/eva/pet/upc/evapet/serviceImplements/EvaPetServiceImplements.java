@@ -1,5 +1,6 @@
 package eva.pet.upc.evapet.serviceImplements;
 
+import eva.pet.upc.evapet.dtos.eva.EvaPetReportDTO;
 import eva.pet.upc.evapet.models.EvaPet;
 import eva.pet.upc.evapet.repositories.IEvaPetRepository;
 import eva.pet.upc.evapet.serviceInterfaces.IEvaPetService;
@@ -56,9 +57,16 @@ public class EvaPetServiceImplements implements IEvaPetService {
         return eR.listByUserId(email);
     }
 
+    @Override
+    public List<EvaPetReportDTO> getPetsReport() {
+        return eR.findPetsWithLevelAndOwner()
+                .stream()
+                .map(row -> new EvaPetReportDTO(
+                        (String) row[0],
+                        (int) row[1],
+                        (String) row[2]
+                ))
+                .toList();
+    }
 
-//    @Override
-//    public List<String> getAllNames() {
-//        return eR.listNames();
-//    }
 }
