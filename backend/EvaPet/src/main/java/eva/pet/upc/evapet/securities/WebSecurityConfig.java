@@ -70,11 +70,15 @@ public class WebSecurityConfig {
                                 "/v3/api-docs/**",
                                 "/v3/api-docs.yaml",
                                 "/webjars/**",
+                                "/api/medicamentos/listar/**",
+                                "/api/medicamentos/insertar",
+                                "/api/medicamentos/eliminar/**",
+                                "/api/medicamentos/actualizar",
                                 "/auth/login", "/api/rol/insertar, /api/sintomas/severity-count , /api/alerts/listar"
                         ).permitAll()
 //                        .anyRequest().permitAll()
                         // Todo lo demás requiere autenticación
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
 
                 .httpBasic(AbstractHttpConfigurer::disable)
