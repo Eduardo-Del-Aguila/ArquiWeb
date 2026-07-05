@@ -1,5 +1,6 @@
 package eva.pet.upc.evapet.serviceImplements;
 
+import eva.pet.upc.evapet.dtos.user.UserRolReportDTO;
 import eva.pet.upc.evapet.models.User;
 import eva.pet.upc.evapet.repositories.IUsersRepository;
 import eva.pet.upc.evapet.serviceInterfaces.IUsersService;
@@ -50,5 +51,15 @@ public class UsersServiceImplement implements IUsersService {
         return uR.findUserByMail(mail);
     }
 
+    @Override
+    public List<UserRolReportDTO> getRolReport() {
+        return uR.countByRol()
+                .stream()
+                .map(row -> new UserRolReportDTO(
+                        row[0].toString(),
+                        (Long) row[1]
+                ))
+                .toList();
+    }
 
 }

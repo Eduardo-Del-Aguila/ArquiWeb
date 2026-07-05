@@ -2,15 +2,13 @@ package eva.pet.upc.evapet.controllers;
 
 import eva.pet.upc.evapet.dtos.eva.EvaPetDTO;
 import eva.pet.upc.evapet.dtos.eva.EvaPetInsertDTO;
-import eva.pet.upc.evapet.dtos.user.UserDTO;
-import eva.pet.upc.evapet.dtos.user.UserShowDTO;
-import eva.pet.upc.evapet.dtos.user.UserUpdateSImple;
-import eva.pet.upc.evapet.dtos.user.UsersInsertDTO;
+import eva.pet.upc.evapet.dtos.user.*;
 import eva.pet.upc.evapet.enums.UserRol;
 import eva.pet.upc.evapet.models.EvaPet;
 import eva.pet.upc.evapet.models.Rol;
 import eva.pet.upc.evapet.models.User;
 import eva.pet.upc.evapet.repositories.IRolRepository;
+import eva.pet.upc.evapet.repositories.IUsersRepository;
 import eva.pet.upc.evapet.serviceImplements.CloudinaryService;
 import eva.pet.upc.evapet.serviceImplements.RolServiceImplement;
 import eva.pet.upc.evapet.serviceImplements.UsersServiceImplement;
@@ -22,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +38,8 @@ public class UserController {
 
     @Autowired
     public UsersServiceImplement uS;
+    @Autowired
+    public IUsersRepository uR;
     @Autowired
     public RolServiceImplement rS;
     @Autowired
@@ -196,6 +197,20 @@ public class UserController {
         existing.get().setActive(false);
         uS.update(existing.get());
         return ResponseEntity.ok("Usuario " + id + " eliminado correctamente");
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/reporte/roles")
+    public ResponseEntity<?> reporteRoles(Authentication authentication) {
+        String mail = authentication.getName();
+        Optional<User> user = uR.findUserByMail(mail);
+        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
+        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
+
+        List<UserRolReportDTO> reporte = uS.getRolReport();
+        if (reporte.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay usuarios registrados");
+
+        return ResponseEntity.ok(reporte);
     }
 
 }

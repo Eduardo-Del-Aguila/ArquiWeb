@@ -1,5 +1,6 @@
 package eva.pet.upc.evapet.serviceInterfaces;
 
+import eva.pet.upc.evapet.dtos.user.UserRolReportDTO;
 import eva.pet.upc.evapet.models.Hospital;
 import eva.pet.upc.evapet.models.User;
 
@@ -19,5 +20,5 @@ public interface IUsersService {
 
     public Optional<User> findUserByMail(String mail);
 
-
+    List<UserRolReportDTO> getRolReport();
 }

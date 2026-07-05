@@ -14,5 +14,6 @@ public interface IUsersRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.mail = :mail")
     public Optional<User>  findUserByMail(@Param("mail") String mail);
-
+    @Query("SELECT u.rol.nameRol, COUNT(u) FROM User u WHERE u.rol.nameRol != 'ADMIN' GROUP BY u.rol.nameRol")
+    List<Object[]> countByRol();
 }
