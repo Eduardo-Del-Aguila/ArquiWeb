@@ -17,8 +17,18 @@ export const routes: Routes = [
     children: [
       {
         path:'pets',
-        loadComponent: () => import('../app/pages/pet-page/pet-page').then(m => m.PetPage),
         canActivate: [securityGuard, roleGuard(['ADMIN', 'PATIENT'])],
+        children: [
+          {
+            path:'eva',
+            loadComponent: () => import('../app/pages/pet-page/pet-page').then(m => m.PetPage),
+          },
+          {
+            path:'reporte',
+            loadComponent: () => import('../app/pages/pet-page/EvaPetReport/EvaPetReport').then(m => m.EvaPetReport),
+          },
+        ]
+
       },
       {
         path:'rol',

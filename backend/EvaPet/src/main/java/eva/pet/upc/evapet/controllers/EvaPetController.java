@@ -190,8 +190,8 @@ public class EvaPetController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/reporte/nivel")
-    public ResponseEntity<?> reporteNivel(Authentication authentication) {
+    @GetMapping("/reporte/experience")
+    public ResponseEntity<?> reporteExperience(Authentication authentication) {
         String mail = authentication.getName();
         Optional<User> user = uR.findUserByMail(mail);
         if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");

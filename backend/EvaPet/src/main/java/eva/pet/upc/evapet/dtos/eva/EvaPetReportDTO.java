@@ -7,6 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class EvaPetReportDTO {
     private String petName;
-    private int level;
+    private int experience;
     private String ownerName;
 }

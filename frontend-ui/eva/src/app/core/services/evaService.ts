@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { EvaPetInsert, EvaPetShow } from '../interfaces/pet.interface';
 import { AuthService } from './AuthService';
 import { environment } from '../../env/environment';
+import { EvaPetReportDTO } from '../interfaces/evaPetReport';
 
 const base_url = environment.base_url
 
@@ -47,5 +48,9 @@ export class EvaPetService {
 
   listarPorNivel() {
     return this.http.get<EvaPetShow[]>(`${this.url}/pet/mis-mascotas/por-nivel`, { headers: this.getHeaders() });
+  }
+
+  reporteNivel() {
+    return this.http.get<EvaPetReportDTO[]>(`${this.url}/pet/reporte/experience`, { headers: this.getHeaders() });
   }
 }
