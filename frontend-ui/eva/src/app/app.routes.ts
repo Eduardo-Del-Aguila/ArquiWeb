@@ -28,7 +28,7 @@ export const routes: Routes = [
       },
       {
         path:'hospitals',
-        loadComponent: () => import('./pages/users-page/users-page').then(m => m.UsersPage),
+        loadComponent: () => import('./pages/hospitales-page/hospitales-page').then(m => m.HospitalesPage),
         canActivate: [securityGuard, roleGuard(['ADMIN', 'DOCTOR'])],
       },
 

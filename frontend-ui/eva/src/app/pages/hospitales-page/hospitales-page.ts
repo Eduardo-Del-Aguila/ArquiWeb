@@ -6,6 +6,8 @@ import { HospitalShowDTO } from '../../core/interfaces/hospital.interface';
 import { TableAction, TableColumn } from '../../core/interfaces/table';
 import { GenericTable } from '../../core/components/generic-table/generic-table';
 import { HospitalForm } from './HospitalForm/HospitalForm';
+import { ConfirmDialog } from '../../core/components/ConfirmDialog/ConfirmDialog';
+import { HospitalEditDialog } from './HospitalEditDialog/HospitalEditDialog';
 
 @Component({
   selector: 'app-hospitales-page',
@@ -26,7 +28,7 @@ export class HospitalesPage {
     { label: 'Eliminar', icon: 'delete', action: (row) => this.eliminar(row) }
   ];
 
-  private recargarEffect = computed(() => {
+  private recargarEffect = effect(() => {
     this.stateService.recargar();
     this.cargar();
   });
@@ -34,6 +36,7 @@ export class HospitalesPage {
   cargar() {
     this.hospitalService.listar().subscribe({
       next: data => {
+        console.log('Hospitales Data: ', data);
         if (data.length > 0) {
           this.columns = Object.keys(data[0]).map(key => ({ key, label: key }));
         }
@@ -45,31 +48,31 @@ export class HospitalesPage {
 
   editar(row: HospitalShowDTO) {
     console.log('editar', row);
-    // const ref = this.dialog.open(HospitalEditDialog, {
-    //   width: '400px',
-    //   data: row
-    // });
-    // ref.afterClosed().subscribe(actualizado => {
-    //   if (actualizado) this.stateService.notificarRecarga();
-    // });
+    const ref = this.dialog.open(HospitalEditDialog, {
+      width: '400px',
+      data: row
+    });
+    ref.afterClosed().subscribe(actualizado => {
+      if (actualizado) this.stateService.notificarRecarga();
+    });
   }
 
   eliminar(row: HospitalShowDTO) {
-    // const ref = this.dialog.open(ConfirmDialog, {
-    //   width: '350px',
-    //   data: {
-    //     titulo: `¿Deseas eliminar ${row.name}?`,
-    //     mensaje: 'Esta acción no se puede deshacer.'
-    //   }
-    // });
-    // ref.afterClosed().subscribe(confirmado => {
-    //   if (confirmado) {
-    //     this.hospitalService.eliminar(row.idHospital).subscribe({
-    //       next: () => this.stateService.notificarRecarga(),
-    //       error: err => console.error(err)
-    //     });
-    //   }
-    // });
+    const ref = this.dialog.open(ConfirmDialog, {
+      width: '350px',
+      data: {
+        titulo: `¿Deseas eliminar ${row.name}?`,
+        mensaje: 'Esta acción no se puede deshacer.'
+      }
+    });
+    ref.afterClosed().subscribe(confirmado => {
+      if (confirmado) {
+        this.hospitalService.eliminar(row.idHospital).subscribe({
+          next: () => this.stateService.notificarRecarga(),
+          error: err => console.error(err)
+        });
+      }
+    });
     console.log('editar', row);
   }
 }
