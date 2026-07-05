@@ -1,9 +1,19 @@
-<app-alert-form></app-alert-form>
+<div class="p-6 flex flex-col gap-6">
 
-<div class="p-4">
-  <app-generic-table
-    [data]="alerts()"
-    [columns]="columns"
-    [actions]="actions"
-  />
+  <h1 class="text-2xl font-bold text-white mb-2">Gestión de Alertas</h1>
+
+<div class="w-full p-0"> 
+  <h2 class="text-lg font-semibold text-white mb-4">Nueva Alerta</h2>
+  <app-alert-form></app-alert-form>
+</div>
+
+  <div class="w-full bg-gray-800 rounded-xl border border-gray-700 shadow-lg p-2">
+  <div class="w-full mt-4 bg-gray-800 rounded-xl border border-gray-700 shadow-lg p-2">
+    <app-generic-table
+      [data]="alerts()"
+      [columns]="columns"
+      [actions]="actions"
+    />
+  </div>
+
 </div>

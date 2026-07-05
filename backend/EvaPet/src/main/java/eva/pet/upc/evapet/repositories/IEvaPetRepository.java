@@ -31,4 +31,5 @@ public interface IEvaPetRepository extends JpaRepository<EvaPet, Long> {
     @Query("SELECT e FROM EvaPet e WHERE e.patient.mail = :email")
     List<EvaPet> listByUserId(@Param("email") String email);
 
+    Optional<EvaPet> findByPatientId(Long patientId);
 }

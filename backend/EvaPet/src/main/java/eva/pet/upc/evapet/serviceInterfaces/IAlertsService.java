@@ -13,5 +13,5 @@ public interface IAlertsService {
     public void update(Alerts a);
     public void delete(Long id);
     List<Alerts> listarNoLeidasPorPaciente(Long idPaciente);
-
+    public List<Object[]> obtenerReporteAlertasPorTipo();
 }

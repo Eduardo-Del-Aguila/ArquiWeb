@@ -45,4 +45,9 @@ export class AlertService {
   listarNoLeidas(idPaciente: number) {
     return this.http.get<ShowAlertsDTO[]>(`${this.url}/no-leidas/${idPaciente}`, { headers: this.getHeaders() });
   }
+
+
+  getReporteTipos() {
+    return this.http.get<any[]>(`${this.url}/reporte-tipos`, { headers: this.getHeaders() });
+  }
 }

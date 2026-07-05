@@ -26,6 +26,12 @@ export const routes: Routes = [
         canActivate: [securityGuard, roleGuard(['ADMIN'])],
       },
       {
+        path: 'rol/reportes',
+        // Asegúrate de que la ruta al archivo y el nombre del componente (ReportsPage) coincidan con el que creaste
+        loadComponent: () => import('./pages/reports-page/reports-page').then(m => m.ReportsPage),
+        canActivate: [securityGuard, roleGuard(['ADMIN'])],
+      },
+      {
         path:'users',
         loadComponent: () => import('./pages/users-page/users-page').then(m => m.UsersPage),
         canActivate: [securityGuard, roleGuard(['ADMIN'])],
@@ -38,8 +44,13 @@ export const routes: Routes = [
       {
         path: 'alerts',
         loadComponent: () => import('./pages/alert-page/alert-page').then(m => m.AlertPage)
-      }
-
+      },
+      {
+        path: 'alerts/reportes',
+        // Asegúrate de que la ruta al archivo apunte a la página de reportes que creaste
+        loadComponent: () => import('./pages/reports-page/reports-page').then(m => m.ReportsPage)
+      },
+      
     ]
   },
   {

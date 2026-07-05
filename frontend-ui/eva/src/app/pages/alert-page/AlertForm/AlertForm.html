@@ -3,7 +3,7 @@
 
     <h2 class="text-lg font-semibold">Nueva Alerta</h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Mensaje</mat-label>
@@ -23,18 +23,14 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="w-full">
-        <mat-label>ID Paciente</mat-label>
-        <input matInput type="number" formControlName="idPatient">
+        <mat-label>Paciente</mat-label>
+          <mat-select formControlName="idPatient">
+          @for (p of pacientes; track $index) {
+            <mat-option [value]="p.id || p.idUser">{{ p.name }} {{ p.lastName }}</mat-option>
+          }
+        </mat-select>
         @if (form.get('idPatient')?.hasError('required') && form.get('idPatient')?.touched) {
-          <mat-error>El ID es requerido</mat-error>
-        }
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>ID Mascota</mat-label>
-        <input matInput type="number" formControlName="idEva">
-        @if (form.get('idEva')?.hasError('required') && form.get('idEva')?.touched) {
-          <mat-error>El ID es requerido</mat-error>
+          <mat-error>El paciente es requerido</mat-error>
         }
       </mat-form-field>
 
