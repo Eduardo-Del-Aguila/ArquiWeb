@@ -7,4 +7,6 @@ import { RouterLink } from "@angular/router";
   templateUrl: './sidebar.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Sidebar {}
+export class Sidebar {
+  
+}
