@@ -1,0 +1,80 @@
+<div class="p-4 w-full">
+
+    <h2 class="text-lg font-semibold mb-4">
+
+        Editar Medicamento
+
+    </h2>
+
+    <form
+        [formGroup]="form"
+        (ngSubmit)="guardar()"
+        class="flex flex-col gap-4">
+
+        <mat-form-field appearance="outline">
+
+            <mat-label>Nombre</mat-label>
+
+            <input
+                matInput
+                formControlName="name">
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+
+            <mat-label>Descripción</mat-label>
+
+            <input
+                matInput
+                formControlName="description">
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+
+            <mat-label>Estado</mat-label>
+
+            <mat-select formControlName="active">
+
+                <mat-option [value]="true">
+
+                    Activo
+
+                </mat-option>
+
+                <mat-option [value]="false">
+
+                    Inactivo
+
+                </mat-option>
+
+            </mat-select>
+
+        </mat-form-field>
+
+        <div class="flex justify-end gap-2">
+
+            <button
+                mat-button
+                type="button"
+                (click)="cancelar()">
+
+                Cancelar
+
+            </button>
+
+            <button
+                mat-raised-button
+                color="primary"
+                type="submit">
+
+                Actualizar
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>

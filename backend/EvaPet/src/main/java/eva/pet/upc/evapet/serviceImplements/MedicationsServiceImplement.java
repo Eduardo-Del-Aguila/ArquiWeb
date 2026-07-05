@@ -37,7 +37,16 @@ public class MedicationsServiceImplement implements IMedicationsService {
 
     @Override
     public void delete(int id) {
-        mRepo.deleteById(id);
+        try {
+
+            mRepo.deleteById(id);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            throw e;
+        }
 
     }
 

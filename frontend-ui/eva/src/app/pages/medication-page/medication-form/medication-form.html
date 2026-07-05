@@ -1,0 +1,53 @@
+<form [formGroup]="form" (ngSubmit)="guardar()">
+
+    <br>
+    <br>
+    <h2 class="text-lg font-semibold">Nuevo Medicamento</h2>
+    <br>
+    <br>
+    <mat-form-field appearance="outline">
+
+        <mat-label>Nombre</mat-label>
+
+        <input matInput formControlName="name">
+
+    </mat-form-field>
+
+    <br>
+
+    <mat-form-field appearance="outline">
+
+        <mat-label>Descripción</mat-label>
+
+        <input matInput formControlName="description">
+
+    </mat-form-field>
+
+    <br>
+
+    <mat-form-field>
+
+        <mat-label>Estado</mat-label>
+
+        <mat-select formControlName="active">
+
+            <mat-option [value]="true">
+                Activo
+            </mat-option>
+
+            <mat-option [value]="false">
+                Inactivo
+            </mat-option>
+
+        </mat-select>
+
+    </mat-form-field>
+    <br><br>
+
+    <button mat-raised-button color="primary" type="submit">
+
+        Registrar
+
+    </button>
+
+</form>
