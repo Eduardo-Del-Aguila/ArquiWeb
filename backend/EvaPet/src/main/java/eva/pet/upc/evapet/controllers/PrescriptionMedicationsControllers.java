@@ -3,6 +3,7 @@ package eva.pet.upc.evapet.controllers;
 import eva.pet.upc.evapet.dtos.medications.MedicationUseDTO;
 import eva.pet.upc.evapet.dtos.prescriptionmedications.PrescriptionMedicationsDTO;
 import eva.pet.upc.evapet.dtos.prescriptionmedications.PrescriptionMedicationsInsertDTO;
+import eva.pet.upc.evapet.dtos.prescriptionmedications.PrescriptionMedicationsShowDTO;
 import eva.pet.upc.evapet.models.PrescriptionMedications;
 import eva.pet.upc.evapet.models.User;
 import eva.pet.upc.evapet.repositories.IUsersRepository;
@@ -31,14 +32,36 @@ public class PrescriptionMedicationsControllers {
     private IPrescriptionMedicationsService pMS;
 
     @GetMapping("/listar")
-    public ResponseEntity<List<PrescriptionMedicationsDTO>> listar() {
+    public ResponseEntity<List<PrescriptionMedicationsShowDTO>> listar() {
         ModelMapper m = new ModelMapper();
 
-        List<PrescriptionMedicationsDTO> lista = pMS.list().stream()
-                .map(y -> m.map(y, PrescriptionMedicationsDTO.class))
+        List<PrescriptionMedicationsShowDTO> lista = pMS.list().stream()
+                .map(y -> m.map(y, PrescriptionMedicationsShowDTO.class))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/listar/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable int id) {
+
+        ModelMapper m = new ModelMapper();
+
+        Optional<PrescriptionMedications> pm = pMS.listId(id);
+
+        if (pm.isPresent()) {
+
+            PrescriptionMedicationsShowDTO dto =
+                    m.map(pm.get(), PrescriptionMedicationsShowDTO.class);
+
+            return ResponseEntity.ok(dto);
+
+        } else {
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Registro no encontrado");
+
+        }
     }
 
     @PostMapping("/insertar")
@@ -119,8 +142,8 @@ public class PrescriptionMedicationsControllers {
         return ResponseEntity.ok(respuesta);
     }
 
-    @PutMapping("/actualizar")
-    public ResponseEntity<?> actualizar(@RequestBody PrescriptionMedicationsInsertDTO dto, Authentication a) {
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<?> actualizar(@RequestBody PrescriptionMedicationsInsertDTO dto,@PathVariable int id, Authentication a) {
 
         String mail = a.getName();
         Optional<User> user = uR.findUserByMail(mail);
