@@ -10,7 +10,7 @@ import { RolService } from '../../../core/services/rolService';
 import { UserStateService } from '../../../core/services/state/UserStateService';
 import { RolShowDTO } from '../../../core/interfaces/rol';
 import { UserInsertDTO } from '../../../core/interfaces/users.interface';
-import { CloudinaryService } from '../../../core/services/cloudinaryService';
+import { CloudinaryService } from '../../../core/services/CloudinaryService';
 @Component({
   selector: 'app-user-form',
   imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSelectModule, MatIconModule],

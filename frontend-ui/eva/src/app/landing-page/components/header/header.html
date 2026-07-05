@@ -1,32 +1,72 @@
-<div class="flex justify-between items-center max-w-7xl mx-auto bg-[#b8b3b3] my-4">
-  <div>
-    <img src="" alt="logo" class="h-15 w-15">
-  </div>
-  <div class="hidden lg:flex">
-    <app-navbar></app-navbar>
-  </div>
+<header class="sticky top-0 z-50 bg-white shadow-sm">
+  <div class="max-w-7xl mx-auto h-20 px-6 flex items-center justify-between">
 
-  <div class="hidden lg:flex"> <button>Reservar cita</button> </div>
+    <a href="/" class="flex items-center gap-3">
+      <img src="assets/logo.svg" alt="Logo" class="w-10 h-10">
 
-  <div class="flex lg:hidden">
-    <button (click)="openMenu()">
-    <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" viewBox="0 0 24 24">
-      <path d="M0 0h24v24H0z" fill="none" />
-      <path fill="currentColor" d="M3 18v-2h18v2zm0-5v-2h18v2zm0-5V6h18v2z" />
-    </svg>
+      <span class="text-3xl font-bold text-[#0A2F7D]">
+        Eva
+      </span>
+    </a>
+
+    <div class="hidden lg:flex">
+      <app-navbar></app-navbar>
+    </div>
+
+    <div class="hidden lg:block">
+      <button
+        class="bg-[#0A2F7D] hover:bg-[#08265f] text-white font-semibold px-8 py-3 rounded-full transition duration-300">
+        Registrar
+      </button>
+    </div>
+
+    <button
+      class="lg:hidden text-[#0A2F7D]"
+      (click)="openMenu()">
+
+      <svg xmlns="http://www.w3.org/2000/svg"
+        class="w-9 h-9"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor">
+
+        <path stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+
     </button>
+
   </div>
 
   @if(menuOpen()){
-    <div class="fixed top-0 left-0 lg:hidden w-full min-h-screen bg-gray-500">
-      <div class="flex flex-col justify-center items-center gap-3 w-full min-h-screen ">
-        <div (click)="closeMenu()" class="text-red-600 border px-4 rounded-full">
-          X
-        </div>
-        <app-navbar></app-navbar>
-      </div>
+
+  <div class="fixed inset-0 bg-white z-50 lg:hidden">
+
+    <div class="flex justify-end p-6">
+
+      <button
+        (click)="closeMenu()"
+        class="text-4xl font-light">
+        ×
+      </button>
+
     </div>
+
+    <div class="flex flex-col items-center justify-center gap-10 h-[80%]">
+
+      <app-navbar></app-navbar>
+
+      <button
+        class="bg-[#0A2F7D] text-white px-8 py-3 rounded-full">
+        Reservar cita
+      </button>
+
+    </div>
+
+  </div>
+
   }
 
-
-</div>
+</header>

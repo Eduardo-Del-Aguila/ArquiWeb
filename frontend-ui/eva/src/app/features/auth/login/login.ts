@@ -14,7 +14,7 @@ import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink, RouterLinkActive, MatIcon,MatButtonModule, MatCardModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule],
+  imports: [RouterLink, MatIcon,MatButtonModule, MatCardModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule],
   templateUrl: './login.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
