@@ -35,6 +35,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/hospitales-page/hospitales-page').then(m => m.HospitalesPage),
         canActivate: [securityGuard, roleGuard(['ADMIN', 'DOCTOR'])],
       },
+      {
+        path: 'alerts',
+        loadComponent: () => import('./pages/alert-page/alert-page').then(m => m.AlertPage)
+      }
 
     ]
   },

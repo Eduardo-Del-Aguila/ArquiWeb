@@ -1,12 +1,37 @@
-<div class="flex">
+<div class="flex h-screen overflow-hidden bg-gray-50">
 
-  <div>
+  <div class="w-64 flex-shrink-0 bg-[#0f172a] text-white p-5 flex flex-col">
     <app-sidebar></app-sidebar>
   </div>
 
-  <div class="flex-1 py-10 px-5">
+  <div class="flex-1 overflow-y-auto p-5">
     <router-outlet></router-outlet>
   </div>
 
-
 </div>
+@if (pistasMusicales.length > 0) {
+  <div class="fixed bottom-5 right-5 z-50 bg-[#1e293b] p-4 rounded-xl shadow-2xl border border-gray-600 flex flex-col items-center">
+
+    <p class="text-white text-xs font-bold mb-2 truncate max-w-[250px]">
+      🎵 {{ pistasMusicales[indiceActual].name }}
+    </p>
+
+    <div class="flex items-center gap-2">
+      <button (click)="cancionAnterior(miAudio)" class="text-white hover:text-gray-400 text-2xl transition-transform active:scale-90">
+        ⏪
+      </button>
+
+      <audio
+        #miAudio
+        controls
+        class="h-10 w-48 rounded-full bg-gray-100"
+        [src]="pistasMusicales[indiceActual].audio">
+      </audio>
+
+      <button (click)="siguienteCancion(miAudio)" class="text-white hover:text-gray-400 text-2xl transition-transform active:scale-90">
+        ⏩
+      </button>
+    </div>
+
+  </div>
+}

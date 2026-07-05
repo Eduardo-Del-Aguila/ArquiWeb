@@ -1,0 +1,35 @@
+<div class="p-4 w-full">
+  <h2 class="text-lg font-semibold mb-4">Editar Alerta</h2>
+
+  <form [formGroup]="form" (ngSubmit)="guardar()" class="flex flex-col gap-4">
+
+    <div class="grid grid-cols-1 gap-4">
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Mensaje</mat-label>
+        <input matInput formControlName="message" maxlength="255">
+        @if (form.get('message')?.hasError('required') && form.get('message')?.touched) {
+          <mat-error>El mensaje es requerido</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Tipo</mat-label>
+        <mat-select formControlName="type">
+          @for (t of alertTypes; track t) {
+            <mat-option [value]="t">{{ t }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+
+    <div class="flex justify-end gap-2">
+      <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+        Actualizar
+      </button>
+    </div>
+
+  </form>
+</div>

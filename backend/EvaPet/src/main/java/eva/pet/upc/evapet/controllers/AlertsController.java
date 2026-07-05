@@ -92,16 +92,24 @@ public class AlertsController {
 
     @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
     @GetMapping("/listar/{id}")
-    public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
-        ModelMapper m = new ModelMapper();
+    public ResponseEntity<?> buscarPorId(@PathVariable Long id, Authentication authentication) {
+
+        String mail = authentication.getName();
+        Optional<User> currentUser = uR.findUserByMail(mail);
+        if (currentUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autorizado");
+        }
+
         Optional<Alerts> alerta = aS.listId(id);
 
-        if (alerta.isPresent()) {
-            AlertsInsertDTO dto = m.map(alerta.get(), AlertsInsertDTO.class);
-            return ResponseEntity.ok(dto);
-        } else {
+        if (alerta.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Alerta no encontrada");
         }
+
+        ModelMapper m = new ModelMapper();
+        AlertsInsertDTO dto = m.map(alerta.get(), AlertsInsertDTO.class);
+
+        return ResponseEntity.ok(dto);
     }
 
     //TODO:Logica a elimnarse(quizas)
@@ -109,7 +117,6 @@ public class AlertsController {
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<?> actualizar(@RequestBody AlertsInsertDTO dto, @PathVariable Long id, Authentication authentication) {
         ModelMapper m = new ModelMapper();
-        // CORRECCIÓN 6: Ahora sí utilizamos el objeto Authentication para validar la sesión
         String mail = authentication.getName();
         Optional<User> currentUser = uR.findUserByMail(mail);
         if (currentUser.isEmpty()) {
@@ -135,15 +142,22 @@ public class AlertsController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<String> eliminar(@PathVariable Long id) {
+    public ResponseEntity<String> eliminar(@PathVariable Long id, Authentication authentication) {
+
+        String mail = authentication.getName();
+        Optional<User> currentUser = uR.findUserByMail(mail);
+        if (currentUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autorizado para realizar esta acción");
+        }
+
         Optional<Alerts> alerta = aS.listId(id);
 
-        if (alerta.isPresent()) {
-            aS.delete(id);
-            return ResponseEntity.ok("Alerta eliminada correctamente");
-        } else {
+        if (alerta.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Alerta no encontrada");
         }
+
+        aS.delete(id);
+        return ResponseEntity.ok("Alerta eliminada correctamente");
     }
 
     @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
