@@ -1,11 +1,19 @@
 package eva.pet.upc.evapet.dtos.prescription;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
-public class PrescriptionInsertDTO {
+@JsonPropertyOrder({
+        "idPrescription",
+        "idUserPatient",
+        "idEva",
+        "diagnosis",
+        "date"
+})
+public class PrescriptionShowDTO {
 
     private int idPrescription;
     private int idUserPatient;
