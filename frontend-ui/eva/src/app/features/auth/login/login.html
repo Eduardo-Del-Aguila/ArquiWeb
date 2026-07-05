@@ -1,15 +1,20 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50">
-  <mat-card class="w-full max-w-sm p-6">
-    <mat-card-header class="mb-4">
-      <mat-card-title>Iniciar sesión</mat-card-title>
-    </mat-card-header>
+<div class="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-gray-100">
+  <mat-card class="w-full max-w-sm px-8 py-10 rounded-2xl shadow-xl">
 
-    <mat-card-content>
-      <form [formGroup]="form" (ngSubmit)="login()" class="flex flex-col gap-4">
+    <div class="flex flex-col items-center mb-6">
+      <div class="w-20 h-20 rounded-full overflow-hidden border-4 border-blue-100 shadow mb-3">
+        <!-- <img src="assets/eva-logo.png" alt="Eva Pet" class="w-full h-full object-cover"> -->
+      </div>
+      <h1 class="text-2xl font-bold text-gray-700">Bienvenido de nuevo</h1>
+      <p class="text-sm text-gray-400 mt-1">Tu amigo digital listo para ayudarte</p>
+    </div>
 
+    <form [formGroup]="form" (ngSubmit)="login()" class="flex flex-col gap-5">
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-semibold text-gray-600">Email Address</label>
         <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Correo</mat-label>
-          <input matInput formControlName="mail" type="email">
+          <input matInput formControlName="mail" type="email" placeholder="e.g., name@example.com">
           @if (form.get('mail')?.hasError('required') && form.get('mail')?.touched) {
             <mat-error>El correo es requerido</mat-error>
           }
@@ -17,20 +22,40 @@
             <mat-error>Correo inválido</mat-error>
           }
         </mat-form-field>
+      </div>
 
+      <div class="flex flex-col gap-1">
+        <div class="flex justify-between items-center">
+          <label class="text-sm font-semibold text-gray-600">Password</label>
+          <a class="text-xs text-blue-400 hover:underline cursor-pointer">Forgot Password?</a>
+        </div>
         <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Contraseña</mat-label>
-          <input matInput formControlName="password" type="password">
+          <input matInput formControlName="password"
+            [type]="showPassword() ? 'text' : 'password'"
+            placeholder="Enter your password">
+          <button mat-icon-button matSuffix type="button" (click)="togglePassword()">
+            <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
           @if (form.get('password')?.hasError('required') && form.get('password')?.touched) {
             <mat-error>La contraseña es requerida</mat-error>
           }
         </mat-form-field>
+      </div>
 
-        <button mat-raised-button color="primary" type="submit" class="w-full">
-          Ingresar
-        </button>
+      <button mat-raised-button color="primary" type="submit"
+        class="w-full py-3 rounded-xl text-white font-semibold"
+        [disabled]="form.invalid">
+        Login
+      </button>
 
-      </form>
-    </mat-card-content>
+    </form>
+
+    <p class="text-center text-sm text-gray-400 mt-6">
+      Don't have an account?
+      <a [routerLink]="['/register']" class="text-blue-500 font-bold hover:underline cursor-pointer">
+        Register here
+      </a>
+    </p>
+
   </mat-card>
 </div>

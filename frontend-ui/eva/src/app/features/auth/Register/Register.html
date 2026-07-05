@@ -1,0 +1,151 @@
+<div class="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-gray-100">
+  <mat-card class="w-full max-w-md px-8 py-10 rounded-2xl shadow-xl my-8">
+
+    <!-- Header -->
+    <div class="flex flex-col items-center mb-6">
+      <div class="relative">
+        <div class="w-20 h-20 rounded-full overflow-hidden border-4 border-blue-100 shadow cursor-pointer"
+          (click)="fileInput.click()">
+          @if (previewUrl()) {
+            <img [src]="previewUrl()" alt="avatar" class="w-full h-full object-cover">
+          } @else {
+            <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+              <mat-icon class="text-gray-400 text-4xl">person</mat-icon>
+            </div>
+          }
+        </div>
+        <span class="absolute bottom-1 right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></span>
+      </div>
+      <input #fileInput type="file" accept="image/*" class="hidden" (change)="onFileSelected($event)">
+      <h1 class="text-2xl font-bold text-gray-700 mt-3">Eva corporation</h1>
+      <p class="text-sm text-blue-400 text-center mt-1">Empecemos creando tu perfil</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="registrar()" class="flex flex-col gap-4">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-semibold text-gray-600">Nombre</label>
+          <mat-form-field appearance="outline" class="w-full">
+            <input matInput formControlName="name" placeholder="Tu nombre">
+            @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+              <mat-error>Requerido</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-semibold text-gray-600">Apellido</label>
+          <mat-form-field appearance="outline" class="w-full">
+            <input matInput formControlName="lastName" placeholder="Tu apellido">
+            @if (form.get('lastName')?.hasError('required') && form.get('lastName')?.touched) {
+              <mat-error>Requerido</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-semibold text-gray-600">Email Address</label>
+        <mat-form-field appearance="outline" class="w-full">
+          <input matInput formControlName="mail" type="email" placeholder="email@example.com">
+          @if (form.get('mail')?.hasError('required') && form.get('mail')?.touched) {
+            <mat-error>El correo es requerido</mat-error>
+          }
+          @if (form.get('mail')?.hasError('email') && form.get('mail')?.touched) {
+            <mat-error>Correo inválido</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-semibold text-gray-600">Teléfono</label>
+        <mat-form-field appearance="outline" class="w-full">
+          <input matInput formControlName="phoneNumber" placeholder="Tu teléfono">
+          @if (form.get('phoneNumber')?.hasError('required') && form.get('phoneNumber')?.touched) {
+            <mat-error>El teléfono es requerido</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-semibold text-gray-600">Password</label>
+          <mat-form-field appearance="outline" class="w-full">
+            <input matInput formControlName="password"
+              [type]="showPassword() ? 'text' : 'password'"
+              placeholder="Min. 6 chars">
+            <button mat-icon-button matSuffix type="button" (click)="togglePassword()">
+              <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            @if (form.get('password')?.hasError('minlength') && form.get('password')?.touched) {
+              <mat-error>Mínimo 6 caracteres</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-semibold text-gray-600">Confirm</label>
+          <mat-form-field appearance="outline" class="w-full">
+            <input matInput formControlName="confirmPassword"
+              [type]="showConfirmPassword() ? 'text' : 'password'"
+              placeholder="Repeat password">
+            <button mat-icon-button matSuffix type="button" (click)="toggleConfirmPassword()">
+              <mat-icon>{{ showConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            @if (form.hasError('passwordsMismatch') && form.get('confirmPassword')?.touched) {
+              <mat-error>No coinciden</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-semibold text-gray-600">Rol</label>
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Selecciona tu rol</mat-label>
+          <mat-select formControlName="rolId">
+            @for (r of roles(); track r.idRol) {
+              <mat-option [value]="r.idRol">{{ r.nameRol }}</mat-option>
+            }
+          </mat-select>
+          @if (form.get('rolId')?.hasError('required') && form.get('rolId')?.touched) {
+            <mat-error>El rol es requerido</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <!-- Términos -->
+      <div class="flex items-center gap-2">
+        <mat-checkbox (change)="aceptaTerminos.set($event.checked)"></mat-checkbox>
+        <span class="text-sm text-gray-500">
+          I agree to the
+          <a class="text-blue-500 font-semibold hover:underline cursor-pointer">Terms of Service</a>
+          and
+          <a class="text-blue-500 font-semibold hover:underline cursor-pointer">Privacy Policy</a>
+        </span>
+      </div>
+
+      <button mat-raised-button color="primary" type="submit"
+        class="w-full py-3 rounded-xl font-semibold mt-2"
+        [disabled]="form.invalid || !aceptaTerminos()">
+        Create Account →
+      </button>
+
+    </form>
+
+    <hr class="my-5 border-gray-200">
+
+    <div class="flex flex-col items-center gap-2">
+      <p class="text-sm text-gray-400">Already have an account?</p>
+      <a [routerLink]="['/login']" mat-stroked-button class="w-full text-center">
+        Log in
+      </a>
+    </div>
+
+  </mat-card>
+</div>
