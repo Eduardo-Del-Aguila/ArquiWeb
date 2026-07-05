@@ -3,6 +3,7 @@ import { environment } from '../../env/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MedicationInsert, MedicationShow } from '../interfaces/medication.interface';
 import { AuthService } from './AuthService';
+import { ActiveMedicationDTO } from '../interfaces/ActiveMedicationDTO';
 
 const base_url = environment.base_url
 
@@ -70,5 +71,11 @@ private http = inject(HttpClient);
       { headers:this.getHeaders()}
     );
   }
+  
+  getActiveMedications() {
+  return this.http.get<ActiveMedicationDTO[]>(
+    `${this.url}/medicamentos-activos`
+  );
+}
 
 }

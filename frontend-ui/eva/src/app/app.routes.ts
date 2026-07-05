@@ -37,8 +37,8 @@ export const routes: Routes = [
       {
         path: 'medications-active',
         loadComponent: () =>
-          import('./pages/medications-active-page/medications-active-page').then(
-            (m) => m.MedicationsActivePage,
+          import('./pages/report-medicationactive/report-medicationactive').then(
+            (m) => m.ReportMedicationactive,
           ),
       },
       {
