@@ -30,16 +30,16 @@ export class UserForm implements OnInit {
   subiendoImagen = signal(false);
   previewUrl = signal<string | null>(null);
 
-  form = this.fb.group({
-    name: ['', Validators.required],
-    lastName: ['', Validators.required],
-    mail: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-    confirmPassword: ['', Validators.required],
-    image_url: [''],
-    phoneNumber: ['', Validators.required],
-    rolId: [null as number | null, Validators.required]
-  }, { validators: this.passwordsMatch });
+form = this.fb.group({
+  name: ['Renata', Validators.required],
+  lastName: ['Campos', Validators.required],
+  mail: ['renata.campos@example.com', [Validators.required, Validators.email]],
+  password: ['Password123', [Validators.required, Validators.minLength(6)]],
+  confirmPassword: ['Password123', Validators.required],
+  image_url: [''],
+  phoneNumber: ['980123456', Validators.required],
+  rolId: [null as number | null, Validators.required]
+}, { validators: this.passwordsMatch });
 
   private passwordsMatch(group: AbstractControl) {
     const pass = group.get('password')?.value;

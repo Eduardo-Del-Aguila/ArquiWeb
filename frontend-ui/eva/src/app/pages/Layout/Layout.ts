@@ -4,11 +4,12 @@ import { RouterOutlet } from '@angular/router';
 import { JamendoService } from '../../core/services/jamendo.service';
 import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
+import { SafeUrlPipe } from '../../shared/pipes/SafeUrlPipe-pipe';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [Sidebar, RouterOutlet , CommonModule, MatIcon],
+  imports: [Sidebar, RouterOutlet , CommonModule, MatIcon, SafeUrlPipe],
   templateUrl: './Layout.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -18,6 +19,11 @@ export class Layout implements OnInit {
   indiceActual: number = 0;
   playerAbierto = signal<boolean>(false);
 
+  videoAbierto = signal<boolean>(false);
+  jitsiActivo = signal<boolean>(false);
+  nombreSala = signal<string>('');
+  videoMinimizado = signal<boolean>(false);
+  
   constructor(
     private jamendoService: JamendoService,
     private cdr: ChangeDetectorRef
@@ -65,4 +71,21 @@ export class Layout implements OnInit {
       reproductor.play();
     }, 50);
   }
+
+  abrirJitsi() {
+    if (!this.nombreSala()) return;
+    this.jitsiActivo.set(true);
+  }
+
+  cerrarVideo() {
+    this.videoAbierto.set(false);
+    this.jitsiActivo.set(false);
+    this.nombreSala.set('');
+  }
+
+  getSalaUrl(): string {
+    return `https://meet.jit.si/evapet-${this.nombreSala()}`;
+  }
+
+
 }

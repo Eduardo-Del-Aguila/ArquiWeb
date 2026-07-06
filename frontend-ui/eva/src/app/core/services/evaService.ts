@@ -4,6 +4,7 @@ import { EvaPetInsert, EvaPetShow } from '../interfaces/pet.interface';
 import { AuthService } from './AuthService';
 import { environment } from '../../env/environment';
 import { EvaPetReportDTO } from '../interfaces/evaPetReport';
+import { UserRolReportDTO } from '../interfaces/users.interface';
 
 const base_url = environment.base_url
 
@@ -53,4 +54,7 @@ export class EvaPetService {
   reporteNivel() {
     return this.http.get<EvaPetReportDTO[]>(`${this.url}/pet/reporte/experience`, { headers: this.getHeaders() });
   }
+
+
+
 }

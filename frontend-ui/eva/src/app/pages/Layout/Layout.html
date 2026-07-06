@@ -1,17 +1,81 @@
 <div class="flex h-screen overflow-hidden bg-gray-50">
-
   <div class="w-64 shrink-0 bg-[#0f172a] text-white p-5 flex flex-col">
     <app-sidebar></app-sidebar>
   </div>
-
   <div class="flex-1 overflow-y-auto p-5">
     <router-outlet></router-outlet>
   </div>
-
 </div>
+
+<div class="fixed bottom-24 right-5 z-50">
+  @if (!videoAbierto()) {
+    <button
+      (click)="videoAbierto.set(true)"
+      class="w-14 h-14 rounded-full bg-[#1e293b] border border-gray-600 shadow-2xl flex items-center justify-center text-white text-2xl hover:scale-110 transition-transform">
+      📹
+    </button>
+  } @else {
+    <div class="bg-[#1e293b] rounded-2xl shadow-2xl border border-gray-600 flex flex-col overflow-hidden"
+      [class]="jitsiActivo() && !videoMinimizado() ? 'fixed top-5 right-5 w-180 h-[calc(100vh-2.5rem)]' : 'w-80 p-4'">
+
+      <div class="flex w-full justify-between items-center px-4 pt-3 pb-2">
+        <p class="text-white text-sm font-bold">📹 Videollamada</p>
+        <div class="flex gap-2">
+          @if (jitsiActivo()) {
+            <button (click)="videoMinimizado.set(!videoMinimizado())" class="text-gray-400 hover:text-white transition-colors">
+              <mat-icon>{{ videoMinimizado() ? 'open_in_full' : 'remove' }}</mat-icon>
+            </button>
+          }
+          <button (click)="cerrarVideo()" class="text-gray-400 hover:text-white transition-colors">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      @if (!jitsiActivo()) {
+        <div class="flex flex-col gap-3 px-4 pb-4">
+          <p class="text-gray-400 text-xs">Escribe el nombre de la sala y compártelo con quien quieras que se una.</p>
+          <input
+            type="text"
+            placeholder="ej: consulta-martes"
+            [value]="nombreSala()"
+            (input)="nombreSala.set($any($event.target).value)"
+            class="w-full rounded-lg px-3 py-2 text-sm bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-green-500">
+          <p class="text-gray-500 text-xs truncate">
+            Sala: <span class="text-green-400">evapet-{{ nombreSala() || '...' }}</span>
+          </p>
+          <button
+            (click)="abrirJitsi()"
+            [disabled]="!nombreSala()"
+            class="w-full py-2 rounded-lg bg-green-600 text-white text-sm font-semibold hover:bg-green-500 disabled:opacity-50 transition-colors">
+            Unirse a la sala
+          </button>
+        </div>
+      } @else {
+        @if (!videoMinimizado()) {
+          <iframe
+            [src]="getSalaUrl() | safeUrl"
+            allow="camera; microphone; fullscreen; display-capture"
+            class="w-full h-full border-0 rounded-b-2xl">
+          </iframe>
+        } @else {
+          <div class="px-4 pb-3">
+            <p class="text-green-400 text-xs">🟢 Llamada activa: <span class="font-semibold">evapet-{{ nombreSala() }}</span></p>
+            <button
+              (click)="videoMinimizado.set(false)"
+              class="mt-2 w-full py-1.5 rounded-lg bg-green-600 text-white text-xs font-semibold hover:bg-green-500 transition-colors">
+              Volver a la llamada
+            </button>
+          </div>
+        }
+      }
+
+    </div>
+  }
+</div>
+
 @if (pistasMusicales.length > 0) {
   <div class="fixed bottom-5 right-5 z-50">
-
     @if (!playerAbierto()) {
       <button
         (click)="playerAbierto.set(true)"
@@ -20,7 +84,6 @@
       </button>
     } @else {
       <div class="bg-[#1e293b] p-4 rounded-2xl shadow-2xl border border-gray-600 flex flex-col items-center gap-3 w-72">
-
         <div class="flex w-full justify-between items-center">
           <p class="text-white text-xs font-bold truncate max-w-52">
             🎵 {{ pistasMusicales[indiceActual].name }}
@@ -29,7 +92,6 @@
             <mat-icon>close</mat-icon>
           </button>
         </div>
-
         <div class="flex items-center gap-2">
           <button (click)="cancionAnterior(miAudio)" class="text-white hover:text-gray-400 text-2xl transition-transform active:scale-90">
             ⏪
@@ -44,9 +106,7 @@
             ⏩
           </button>
         </div>
-
       </div>
     }
-
   </div>
 }

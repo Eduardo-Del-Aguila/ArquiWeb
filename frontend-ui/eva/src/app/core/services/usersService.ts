@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { AuthService } from './AuthService';
 import { environment } from '../../env/environment';
-import { UserInsertDTO, UserShowDTO } from '../interfaces/users.interface';
+import { UserInsertDTO, UserRolReportDTO, UserShowDTO } from '../interfaces/users.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -43,5 +43,8 @@ export class UserService {
 
   eliminar(id: number) {
     return this.http.delete(`${this.url}/eliminar/${id}`, { headers: this.getHeaders(), responseType: 'text' });
+  }
+  reporteRoles() {
+    return this.http.get<UserRolReportDTO[]>(`${this.url}/reporte/roles`, { headers: this.getHeaders() });
   }
 }

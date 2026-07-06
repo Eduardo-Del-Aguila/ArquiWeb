@@ -17,3 +17,8 @@ export interface UserShowDTO {
   image_url: string;
   nameRol: string;
 }
+
+export interface UserRolReportDTO {
+  rol: string;
+  cantidad: number;
+}

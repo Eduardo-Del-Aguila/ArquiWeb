@@ -1,8 +1,8 @@
-import { Chart, registerables } from 'chart.js';
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, OnDestroy, ViewChild, viewChild } from '@angular/core';
 import { EvaPetService } from '../../../core/services/evaService';
 import { EvaPetReportDTO } from '../../../core/interfaces/evaPetReport';
 import { filter, map } from 'rxjs';
+import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 @Component({
   selector: 'app-eva-pet-report',

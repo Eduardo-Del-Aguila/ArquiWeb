@@ -56,13 +56,27 @@
       }
 
       @if (isAdmin()) {
-      <li>
-        <a [routerLink]="['/layout/users']"
-           routerLinkActive="bg-green-700/60 text-white"
-           class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer">
-           Usuarios
-        </a>
-      </li>
+    <li>
+      <button
+        mat-button
+        [matMenuTriggerFor]="rolesMenu"
+        class="w-full flex items-center justify-between px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white">
+
+        <span>Usuarios</span>
+
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+
+      <mat-menu #rolesMenu="matMenu">
+        <button mat-menu-item [routerLink]="['/layout/users/list']">
+          <span>Lista</span>
+        </button>
+
+        <button mat-menu-item [routerLink]="['/layout/users/report']">
+          <span>Reportes</span>
+        </button>
+      </mat-menu>
+    </li>
       }
 
        @if (isAdmin()) {

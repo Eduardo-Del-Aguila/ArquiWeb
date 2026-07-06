@@ -199,13 +199,13 @@ public class UserController {
         return ResponseEntity.ok("Usuario " + id + " eliminado correctamente");
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/reporte/roles")
-    public ResponseEntity<?> reporteRoles(Authentication authentication) {
-        String mail = authentication.getName();
-        Optional<User> user = uR.findUserByMail(mail);
-        if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
-        if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
+    public ResponseEntity<?> reporteRoles() {
+        //String mail = authentication.getName();
+        //Optional<User> user = uR.findUserByMail(mail);
+        //if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
+        //if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
 
         List<UserRolReportDTO> reporte = uS.getRolReport();
         if (reporte.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay usuarios registrados");
