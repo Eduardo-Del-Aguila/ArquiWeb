@@ -1,11 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../env/environment';
 import {
   PrescriptionMedicationInsert,
   PrescriptionMedicationShow
 } from '../interfaces/prescription-medication.interface';
 import { MedicationUse } from '../interfaces/medication-use.interface';
+import { AuthService } from './AuthService';
 
 @Injectable({
   providedIn: 'root'
@@ -13,20 +14,32 @@ import { MedicationUse } from '../interfaces/medication-use.interface';
 export class PrescriptionMedication {
 
   private http = inject(HttpClient);
+  private authService = inject(AuthService);
+  private getHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
 
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+  }
   private url = `${environment.base_url}/prescripcion-medicamentos`;
 
   listar() {
     return this.http.get<PrescriptionMedicationShow[]>(
-      `${this.url}/listar`
+      `${this.url}/listar`,
+    { headers: this.getHeaders() }
+
     );
   }
 
   insertar(dto: PrescriptionMedicationInsert) {
     return this.http.post(
       `${this.url}/insertar`,
-      dto
+      dto,
+    { headers: this.getHeaders() }
+
     );
+
   }
 
   listarPorId(id:number) {
@@ -53,9 +66,9 @@ export class PrescriptionMedication {
 
   return this.http.get<MedicationUse[]>(
 
-    `${this.url}/medicamentos-mas-usados`
+    `${this.url}/medicamentos-mas-usados`,
 
-    // { headers: this.getHeaders() }
+    { headers: this.getHeaders() }
 
   );
 

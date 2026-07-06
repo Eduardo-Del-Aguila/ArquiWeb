@@ -25,7 +25,7 @@ export class Prescription {
   listar() {
     return this.http.get<PrescriptionShow[]>(
       `${this.url}/listar`,
-      //{ headers: this.getHeaders() }
+      { headers: this.getHeaders() }
     );
   }
 
@@ -33,7 +33,7 @@ export class Prescription {
     return this.http.post<PrescriptionShow>(
       `${this.url}/insertar`,
       dto,
-      //{ headers: this.getHeaders() }
+      { headers: this.getHeaders() }
     );
   }
 
@@ -59,8 +59,8 @@ export class Prescription {
 
   recipesPerPatient() {
   return this.http.get<RecipesPatient[]>(
-    `${this.url}/recetas-por-paciente`
-    // { headers: this.getHeaders() }
+    `${this.url}/recetas-por-paciente`,
+    { headers: this.getHeaders() }
   );
 }
 }

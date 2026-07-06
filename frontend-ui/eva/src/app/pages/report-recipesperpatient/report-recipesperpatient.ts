@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, ElementRef, OnInit, viewChild } from '@angular/core';
 import { Prescription } from '../../core/services/prescription';
+import { MatIconModule } from '@angular/material/icon';
+import { BaseChartDirective } from 'ng2-charts';
+import { Chart, registerables } from 'chart.js';
 
+Chart.register(...registerables);
 @Component({
   selector: 'app-report-recipesperpatient',
-  imports: [BaseChartDirective, MatIconModule],
+  imports: [MatIconModule],
   templateUrl: './report-recipesperpatient.html',
   styleUrl: './report-recipesperpatient.css',
 })
@@ -11,50 +15,63 @@ export class ReportRecipesperpatient implements OnInit {
 
   hasData = false;
 
-  barChartOptions: ChartOptions = {
-    responsive: true,
-  };
+  chart!: Chart;
 
-  barChartLegend = true;
+  dataChart: any[] = [];
 
-  barChartLabels: string[] = [];
+  canvas = viewChild<ElementRef<HTMLCanvasElement>>('chart');
 
-  barChartData: ChartDataset[] = [];
+  constructor(private pS: Prescription) {
 
-  barChartType: ChartType = 'bar';
+    effect(() => {
 
-  constructor(private pS: Prescription) {}
+      const canvas = this.canvas();
+
+      if (!canvas || this.dataChart.length === 0) return;
+
+      this.createChart(canvas.nativeElement);
+
+    });
+
+  }
 
   ngOnInit(): void {
 
-    this.pS.recipesPerPatient().subscribe((data) => {
+    this.pS.recipesPerPatient().subscribe(data => {
 
-      if (data.length > 0) {
+      this.hasData = data.length > 0;
 
-        this.hasData = true;
+      if (!this.hasData) return;
 
-        this.barChartLabels = data.map(item => item.idUserPatient);
+      this.dataChart = data;
 
-        this.barChartData = [
-          {
-            data: data.map(item => item.totalRecetas),
-            label: 'Recetas por Paciente',
-            backgroundColor: [
-              '#2196F3',
-              '#4CAF50',
-              '#FFC107',
-              '#F44336',
-              '#9C27B0'
-            ]
-          }
-        ];
+    });
 
-      } else {
+  }
 
-        this.hasData = false;
+  createChart(canvas: HTMLCanvasElement) {
 
+    this.chart?.destroy();
+
+    this.chart = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: this.dataChart.map(x => x.idUserPatient),
+        datasets: [{
+          label: 'Recetas por Paciente',
+          data: this.dataChart.map(x => x.totalRecetas),
+          backgroundColor: [
+            '#2196F3',
+            '#4CAF50',
+            '#FFC107',
+            '#F44336',
+            '#9C27B0'
+          ]
+        }]
+      },
+      options: {
+        responsive: true
       }
-
     });
 
   }

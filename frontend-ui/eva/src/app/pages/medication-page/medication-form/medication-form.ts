@@ -37,11 +37,10 @@ export class MedicationForm {
 
   guardar() {
     if (this.form.invalid) return;
-
     const dto: MedicationInsert = {
       name: this.form.value.name!,
       description: this.form.value.description!,
-      active: this.form.value.active!,
+      active: true,
     };
 
     this.medicationService.insertar(dto).subscribe({

@@ -1,48 +1,78 @@
-import { Component, OnInit } from '@angular/core';
-import { ChartDataset, ChartOptions, ChartType } from 'chart.js';
+import { Component, effect, ElementRef, OnInit, viewChild } from '@angular/core';
 import { Medication } from '../../core/services/medication';
-
+import { MatIconModule } from '@angular/material/icon';
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-report-medicationactive',
-  imports: [],
+  imports: [MatIconModule],
   templateUrl: './report-medicationactive.html',
   styleUrl: './report-medicationactive.css',
 })
 export class ReportMedicationactive implements OnInit {
+
   hasData = false;
 
-  barChartOptions: ChartOptions = {
-    responsive: true,
-  };
+  chart!: Chart;
 
-  barChartLegend = true;
+  dataChart: any[] = [];
 
-  barChartLabels: string[] = [];
+  canvas = viewChild<ElementRef<HTMLCanvasElement>>('chart');
 
-  barChartData: ChartDataset[] = [];
+  constructor(private mS: Medication) {
 
-  barChartType: ChartType = 'bar';
+    effect(() => {
 
-  constructor(private mS: Medication) {}
+      const canvas = this.canvas();
+
+      if (!canvas || this.dataChart.length === 0) return;
+
+      this.createChart(canvas.nativeElement);
+
+    });
+
+  }
 
   ngOnInit(): void {
-    this.mS.getActiveMedications().subscribe((data) => {
-      if (data.length > 0) {
-        this.hasData = true;
 
-        this.barChartLabels = data.map((item) => item.name);
+    this.mS.getActiveMedications().subscribe(data => {
+      console.log('Soy la dadta:',data);
+      this.hasData = data.length > 0;
 
-        this.barChartData = [
-          {
-            data: data.map((item) => item.isActive),
-            label: 'Medicamentos Activos',
-            backgroundColor: ['#4CAF50', '#2196F3', '#FF9800', '#E91E63', '#9C27B0'],
-          },
-        ];
-      } else {
-        this.hasData = false;
+      if (!this.hasData) return;
+
+      this.dataChart = data;
+
+    });
+
+  }
+
+  createChart(canvas: HTMLCanvasElement) {
+
+    this.chart?.destroy();
+
+    this.chart = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: this.dataChart.map(x => x.name),
+        datasets: [{
+          label: 'Medicamentos Activos',
+          data: this.dataChart.map(x => x.isActive),
+          backgroundColor: [
+            '#4CAF50',
+            '#2196F3',
+            '#FF9800',
+            '#E91E63',
+            '#9C27B0'
+          ]
+        }]
+      },
+      options: {
+        responsive: true
       }
     });
+
   }
+
 }

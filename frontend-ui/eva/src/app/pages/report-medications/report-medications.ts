@@ -1,68 +1,82 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, ElementRef, OnInit, viewChild } from '@angular/core';
 import { ChartDataset, ChartOptions, ChartType } from 'chart.js';
-import { BaseChartDirective } from 'ng2-charts';
 import { MatIconModule } from '@angular/material/icon';
 import { Medication } from '../../core/services/medication';
 import { PrescriptionMedication } from '../../core/services/prescription-medication';
+import { BaseChartDirective } from 'ng2-charts';
 
-
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-report-medications',
-  imports: [BaseChartDirective, MatIconModule],
+  imports: [MatIconModule],
   templateUrl: './report-medications.html',
   styleUrl: './report-medications.css',
 })
 export class ReportMedications implements OnInit {
 
-    hasData = false;
+  hasData = false;
 
-    barChartOptions: ChartOptions = {
-        responsive: true,
-    };
+  chart!: Chart;
 
-    barChartLegend = true;
+  dataChart: any[] = [];
 
-    barChartLabels: string[] = [];
+  canvas = viewChild<ElementRef<HTMLCanvasElement>>('chart');
 
-    barChartData: ChartDataset[] = [];
+  constructor(private mS: PrescriptionMedication) {
 
-    barChartType: ChartType = 'bar';
+    effect(() => {
 
-    constructor(private mS: PrescriptionMedication){}
+      const canvas = this.canvas();
 
-    ngOnInit(): void {
+      if (!canvas || this.dataChart.length === 0) return;
 
-        this.mS.mostUsedMedications().subscribe(data=>{
+      this.createChart(canvas.nativeElement);
 
-            if(data.length>0){
+    });
 
-                this.hasData=true;
+  }
 
-                this.barChartLabels=data.map(item=>item.name);
+  ngOnInit(): void {
 
-                this.barChartData=[
-                    {
-                        data:data.map(item=>item.totalUso),
-                        label:'Medicamentos más usados',
-                        backgroundColor:[
-                            '#2196F3',
-                            '#4CAF50',
-                            '#FF9800',
-                            '#E91E63',
-                            '#9C27B0'
-                        ]
-                    }
-                ];
+    this.mS.mostUsedMedications().subscribe(data => {
 
-            }else{
+      this.hasData = data.length > 0;
 
-                this.hasData=false;
+      if (!this.hasData) return;
 
-            }
+      this.dataChart = data;
 
-        });
+    });
 
-    }
+  }
+
+  createChart(canvas: HTMLCanvasElement) {
+
+    this.chart?.destroy();
+
+    this.chart = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: this.dataChart.map(x => x.name),
+        datasets: [{
+          label: 'Medicamentos más usados',
+          data: this.dataChart.map(x => x.totalUso),
+          backgroundColor: [
+            '#2196F3',
+            '#4CAF50',
+            '#FF9800',
+            '#E91E63',
+            '#9C27B0'
+          ]
+        }]
+      },
+      options: {
+        responsive: true
+      }
+    });
+
+  }
 
 }

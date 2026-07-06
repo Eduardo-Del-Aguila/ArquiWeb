@@ -28,7 +28,7 @@ private http = inject(HttpClient);
   listar() {
     return this.http.get<MedicationShow[]>(
       `${this.url}/listar`,
-      //{ headers: this.getHeaders() }
+      { headers: this.getHeaders() }
     );
   }
 
@@ -36,7 +36,7 @@ private http = inject(HttpClient);
     return this.http.post<MedicationShow>(
       `${this.url}/insertar`,
       dto,
-      //{ headers: this.getHeaders() }
+      { headers: this.getHeaders() }
     );
   }
 
@@ -71,10 +71,12 @@ private http = inject(HttpClient);
       { headers:this.getHeaders()}
     );
   }
-  
+
   getActiveMedications() {
   return this.http.get<ActiveMedicationDTO[]>(
-    `${this.url}/medicamentos-activos`
+    `${this.url}/medicamentos-activos`,
+      { headers:this.getHeaders()}
+
   );
 }
 
