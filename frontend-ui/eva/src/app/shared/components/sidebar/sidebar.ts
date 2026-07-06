@@ -3,10 +3,13 @@ import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { LoginService } from '../../../core/services/auth/Login.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterLink, RouterLinkActive, MatMenuModule, MatIcon],
+  imports: [RouterLink, RouterLinkActive, MatMenuModule, MatButtonModule, MatIconModule, MatMenuModule, MatIcon],
   templateUrl: './sidebar.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

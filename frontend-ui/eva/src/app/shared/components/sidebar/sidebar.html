@@ -97,6 +97,27 @@
 
 
 
+     @if (isAdmin()) {
+        <li>
+          <div
+            [matMenuTriggerFor]="alertsMenu"
+            class="flex items-center justify-between px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer w-full select-none">
+
+            <span>Alertas</span>
+            <mat-icon>keyboard_arrow_down</mat-icon>
+          </div>
+
+          <mat-menu #alertsMenu="matMenu">
+            <button mat-menu-item [routerLink]="['/layout/alerts']">
+              <span>Listado</span>
+            </button>
+
+            <button mat-menu-item [routerLink]="['/layout/alerts/reportes']">
+              <span>Reportes</span>
+            </button>
+          </mat-menu>
+        </li>
+      }
     </ul>
   </nav>
 

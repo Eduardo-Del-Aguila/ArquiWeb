@@ -8,10 +8,11 @@ import { AlertStateService } from '../../core/services/state/AlertStateService';
 import { MatDialog } from '@angular/material/dialog';
 import { AlertEditDialog } from './AlertEditDialog/AlertEditDialog'; // Asegúrate de tener un componente para editar alertas
 import { ConfirmDialog } from '../../core/components/ConfirmDialog/ConfirmDialog';
+import { AlertReport } from './alert-report/AlertReport';
 
 @Component({
   selector: 'app-alert-page',
-  imports: [GenericTable, AlertForm],
+  imports: [GenericTable, AlertForm , AlertReport],
   templateUrl: './alert-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -25,7 +26,8 @@ export class AlertPage implements OnInit {
   alerts = signal<AlertsInsertDTO[]>([]);
 
   columns: TableColumn[] = [];
-
+  mostrarFormulario = false; // Inicia cerrado
+  mostrarReporte = false;    // Inicia cerrado
   actions: TableAction<AlertsInsertDTO>[] = [
     { label: 'Editar', icon: 'edit', action: (row) => this.editar(row) },
     { label: 'Eliminar', icon: 'delete', action: (row) => this.eliminar(row) }

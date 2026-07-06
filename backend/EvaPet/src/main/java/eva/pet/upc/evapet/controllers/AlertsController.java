@@ -69,9 +69,12 @@ public class AlertsController {
             return ResponseEntity.badRequest().body("El paciente asignado no existe");
         }
 
-        Optional<EvaPet> pet = eS.listById(dto.getIdEva());
+// Buscamos a la mascota que le pertenece a ese paciente
+// NOTA: Revisa tu IEvaPetService. El método podría llamarse findByUserId, buscarPorPacienteId, etc.
+        Optional<EvaPet> pet = eS.findByPatientId(dto.getIdPatient());
+
         if (pet.isEmpty()) {
-            return ResponseEntity.badRequest().body("La mascota asignada no existe");
+            return ResponseEntity.badRequest().body("El paciente seleccionado no tiene una mascota Eva asignada");
         }
 
         ModelMapper m = new ModelMapper();
@@ -183,5 +186,24 @@ public class AlertsController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(response);
+    }
+    
+    @PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('ADMIN')")
+    @GetMapping("/reporte-tipos")
+    public ResponseEntity<?> reporteTiposDeAlerta() {
+        // Ejecutamos la query
+        List<Object[]> resultados = aS.obtenerReporteAlertasPorTipo();
+
+        // Transformamos el resultado para que el JSON se entienda fácil en Angular
+        List<java.util.Map<String, Object>> reporte = new java.util.ArrayList<>();
+
+        for (Object[] fila : resultados) {
+            java.util.Map<String, Object> map = new java.util.HashMap<>();
+            map.put("tipo", fila[0].toString()); // Ej: "BEHAVIOR"
+            map.put("cantidad", fila[1]);        // Ej: 14
+            reporte.add(map);
+        }
+
+        return ResponseEntity.ok(reporte);
     }
 }

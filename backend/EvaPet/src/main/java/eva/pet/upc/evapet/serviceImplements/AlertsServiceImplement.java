@@ -44,4 +44,9 @@ public class AlertsServiceImplement implements IAlertsService {
     public List<Alerts> listarNoLeidasPorPaciente(Long idPaciente) {
         return aR.findNoLeidasPorPaciente(idPaciente);
     }
+
+    @Override
+    public List<Object[]> obtenerReporteAlertasPorTipo() {
+        return aR.countAlertsByType(); // Asumiendo que 'aR' es la variable de tu repositorio
+    }
 }

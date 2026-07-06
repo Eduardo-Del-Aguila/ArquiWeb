@@ -19,4 +19,7 @@ public interface IAlertsRepository extends JpaRepository<Alerts, Long> {
     // Query 2: Contar cuántas alertas no leídas tiene un paciente
     @Query("SELECT COUNT(a) FROM Alerts a WHERE a.patient.id = :idPaciente AND a.isRead = false")
     Long contarAlertasNoLeidasPorPaciente(@Param("idPaciente") Long idPaciente);
+
+    @Query("SELECT a.type, COUNT(a) FROM Alerts a GROUP BY a.type")
+    List<Object[]> countAlertsByType();
 }

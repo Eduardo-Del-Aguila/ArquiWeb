@@ -1,50 +1,72 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AlertService } from '../../../core/services/alertService'; // Ajusta tu ruta
-import { AlertStateService } from '../../../core/services/state/AlertStateService'; // Ajusta tu ruta
-import { AlertsInsertDTO } from '../../../core/interfaces/alert.interface'; // Ajusta tu ruta
+import { AlertService } from '../../../core/services/alertService';
+import { AlertStateService } from '../../../core/services/state/AlertStateService';
+import { AlertsInsertDTO } from '../../../core/interfaces/alert.interface';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
+import { UserService } from '../../../core/services/usersService'; 
+// Asegúrate de importar CommonModule si usas *ngFor en tu HTML, o quítalo si usas la sintaxis @for de Angular 17+
+import { CommonModule } from '@angular/common'; 
 
 @Component({
   selector: 'app-alert-form',
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSelectModule],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSelectModule],
   templateUrl: './AlertForm.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AlertForm {
+export class AlertForm implements OnInit {
   private fb = inject(FormBuilder);
   private alertService = inject(AlertService);
   protected stateService = inject(AlertStateService);
+  
+  // NUEVO: Inyectamos el servicio de usuarios y el detector de cambios
+  private userService = inject(UserService);
+  private cdr = inject(ChangeDetectorRef);
 
-  // Tipos de alerta (puedes cambiarlos según la lógica de EvaPet)
-alertTypes: string[] = ['BEHAVIOR', 'INACTIVITY', 'MEDICATION', 'HEALTH'];
+  alertTypes: string[] = ['BEHAVIOR', 'INACTIVITY', 'MEDICATION', 'HEALTH'];
+  pacientes: any[] = [];
+
   form = this.fb.group({
     type: ['BEHAVIOR', Validators.required],
     message: ['', [Validators.required, Validators.maxLength(255)]],
-    // Inicializamos en null para que el usuario deba ingresarlos o seleccionarlos
-    idPatient: [null as number | null, [Validators.required, Validators.min(1)]],
-    idEva: [null as number | null, [Validators.required, Validators.min(1)]]
+    idPatient: [null as number | null, [Validators.required, Validators.min(1)]]
+    // ⚠️ idEva eliminado completamente de aquí
   });
 
-  guardar() {
-    // Si el formulario es inválido, detenemos la ejecución
-    if (this.form.invalid) return; 
+  ngOnInit(): void {
+    this.cargarPacientes();
+  }
 
-    // Casteamos los valores del formulario a tu DTO
-    const dto = this.form.value as AlertsInsertDTO;
-    
-    this.alertService.insertar(dto).subscribe({
-      next: () => {
-        // Reseteamos el formulario y dejamos 'INFO' por defecto
-        this.form.reset({ type: 'INFO' }); 
-        
-        // Disparamos la recarga de la tabla en alert-page
-        this.stateService.notificarRecarga();
+  cargarPacientes(): void {
+    // ⚠️ Ojo: Cambia 'listar' por el nombre real que tenga tu método en UserService
+    this.userService.listar().subscribe({
+      next: (data) => {
+        this.pacientes = data;
+        // Como usas OnPush, le avisamos a Angular que ya llegaron los datos para que dibuje el mat-select
+        this.cdr.markForCheck();
       },
-      error: err => console.error('Error al guardar la alerta:', err)
+      error: (err) => console.error('Error al cargar la lista de pacientes', err)
     });
   }
+guardar() {
+  if (this.form.invalid) return;
+
+  const dto = this.form.value as AlertsInsertDTO;
+
+  this.alertService.insertar(dto).subscribe({
+    next: () => {
+      this.form.reset({ type: 'BEHAVIOR' });
+      this.stateService.notificarRecarga();
+      alert('Alerta registrada correctamente');
+    },
+    error: (err) => {
+      // Aquí capturamos el mensaje exacto que nos diste
+      console.error('Detalle del error 400:', err.error);
+      alert('Error: ' + (err.error || 'No se pudo guardar la alerta. Verifica que el paciente tenga una mascota asignada.'));
+    }
+  });
+}
 }

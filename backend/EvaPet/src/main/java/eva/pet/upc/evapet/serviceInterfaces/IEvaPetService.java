@@ -16,7 +16,7 @@ public interface IEvaPetService {
     public EvaPet insert(EvaPet e);
     public void update( EvaPet e);
     public void delete(EvaPet e);
-
+    public Optional<EvaPet> findByPatientId(Long id);
     public List<String> listByName();
     public List<EvaPet> findTopByPatientOrderedByLevel(Long id);
 
