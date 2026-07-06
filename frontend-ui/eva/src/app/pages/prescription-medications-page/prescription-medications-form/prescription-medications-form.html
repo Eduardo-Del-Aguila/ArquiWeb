@@ -1,0 +1,73 @@
+<form [formGroup]="form" (ngSubmit)="guardar()">
+<br>
+  <h2 class="text-lg font-semibold">
+    Nueva Prescripción - Medicamento
+  </h2>
+<br>
+<br>
+  <mat-form-field appearance="outline">
+
+    <mat-label>ID Prescripción</mat-label>
+
+    <input
+      matInput
+      type="number"
+      formControlName="idPrescription">
+
+  </mat-form-field>
+<br>
+  <mat-form-field appearance="outline">
+
+    <mat-label>ID Medicamento</mat-label>
+
+    <input
+      matInput
+      type="number"
+      formControlName="idMedication">
+
+  </mat-form-field>
+<br>
+  <mat-form-field appearance="outline">
+
+    <mat-label>Dosis</mat-label>
+
+    <input
+      matInput
+      type="number"
+      formControlName="dose">
+
+  </mat-form-field>
+<br>
+  <mat-form-field appearance="outline">
+
+    <mat-label>Frecuencia</mat-label>
+
+    <input
+      matInput
+      type="number"
+      formControlName="frequency">
+
+  </mat-form-field>
+<br>
+  <mat-form-field appearance="outline">
+
+    <mat-label>Duración</mat-label>
+
+    <input
+      matInput
+      type="number"
+      formControlName="duration">
+
+  </mat-form-field>
+
+  <button
+    mat-raised-button
+    color="primary"
+    type="submit"
+    [disabled]="form.invalid">
+
+    Registrar
+
+  </button>
+
+</form>

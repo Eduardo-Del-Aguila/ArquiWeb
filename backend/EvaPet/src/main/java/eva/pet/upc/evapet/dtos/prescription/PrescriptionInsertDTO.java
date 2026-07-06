@@ -1,51 +1,16 @@
 package eva.pet.upc.evapet.dtos.prescription;
 
+import lombok.Data;
+
 import java.time.LocalDate;
 
+@Data
 public class PrescriptionInsertDTO {
+
     private int idPrescription;
     private int idUserPatient;
     private int idEva;
     private String diagnosis;
     private LocalDate date;
 
-    public int getIdPrescription() {
-        return idPrescription;
-    }
-
-    public void setIdPrescription(int idPrescription) {
-        this.idPrescription = idPrescription;
-    }
-
-    public int getIdUserPatient() {
-        return idUserPatient;
-    }
-
-    public void setIdUserPatient(int idUserPatient) {
-        this.idUserPatient = idUserPatient;
-    }
-
-    public int getIdEva() {
-        return idEva;
-    }
-
-    public void setIdEva(int idEva) {
-        this.idEva = idEva;
-    }
-
-    public String getDiagnosis() {
-        return diagnosis;
-    }
-
-    public void setDiagnosis(String diagnosis) {
-        this.diagnosis = diagnosis;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
 }

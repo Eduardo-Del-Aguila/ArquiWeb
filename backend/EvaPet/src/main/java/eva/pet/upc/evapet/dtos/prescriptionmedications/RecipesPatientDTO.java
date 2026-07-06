@@ -3,7 +3,7 @@ package eva.pet.upc.evapet.dtos.prescriptionmedications;
 public class RecipesPatientDTO {
 
     private int idUserPatient;
-    //private int totalRecetas;
+    private int totalRecetas;
 
     public int getIdUserPatient() {
         return idUserPatient;
@@ -13,11 +13,11 @@ public class RecipesPatientDTO {
         this.idUserPatient = idUserPatient;
     }
 
-    /*public int getTotalRecetas() {
+    public int getTotalRecetas() {
         return totalRecetas;
     }
 
     public void setTotalRecetas(int totalRecetas) {
         this.totalRecetas = totalRecetas;
-    }*/
+    }
 }

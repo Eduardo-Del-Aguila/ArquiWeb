@@ -2,12 +2,11 @@ package eva.pet.upc.evapet.controllers;
 
 import eva.pet.upc.evapet.dtos.medications.MedicationsDTO;
 import eva.pet.upc.evapet.dtos.medications.MedicationsInsertDTO;
+import eva.pet.upc.evapet.dtos.medications.MedicationsShowDTO;
 import eva.pet.upc.evapet.models.Medications;
 import eva.pet.upc.evapet.models.User;
 import eva.pet.upc.evapet.repositories.IUsersRepository;
 import eva.pet.upc.evapet.serviceInterfaces.IMedicationsService;
-import eva.pet.upc.evapet.serviceInterfaces.IUsersService;
-import org.apache.tomcat.util.http.parser.Authorization;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,8 +37,8 @@ public class MedicationsControllers {
         if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
 
         ModelMapper m=new ModelMapper();
-        List<MedicationsDTO> listaMedications=mS.list().stream()
-                .map(y->m.map(y,MedicationsDTO.class))
+        List<MedicationsShowDTO> listaMedications=mS.list().stream()
+                .map(y->m.map(y,MedicationsShowDTO.class))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(listaMedications);
@@ -74,7 +73,7 @@ public class MedicationsControllers {
 
         Medications nuevo = mS.insert(med);
 
-        MedicationsInsertDTO responseDTO = m.map(nuevo, MedicationsInsertDTO.class);
+        MedicationsDTO responseDTO = m.map(nuevo, MedicationsDTO.class);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
@@ -85,7 +84,7 @@ public class MedicationsControllers {
         Optional<Medications> med = mS.listId(id);
 
         if (med.isPresent()) {
-            MedicationsInsertDTO dto = m.map(med.get(), MedicationsInsertDTO.class);
+            MedicationsShowDTO dto = m.map(med.get(), MedicationsShowDTO.class);
             return ResponseEntity.ok(dto);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -93,15 +92,15 @@ public class MedicationsControllers {
         }
     }
 
-    @PutMapping("/actualizar")
-    public ResponseEntity<String> actualizar(@RequestBody MedicationsInsertDTO dto, Authentication a) {
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<String> actualizar(@RequestBody MedicationsInsertDTO dto, @PathVariable int id, Authentication a) {
 
         String mail = a.getName();
         Optional<User> user = uR.findUserByMail(mail);
         if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
         if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
 
-        Optional<Medications> existente = mS.listId(dto.getIdMedication());
+        Optional<Medications> existente = mS.listId(id);
 
         if (existente.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

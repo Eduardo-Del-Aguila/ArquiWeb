@@ -38,7 +38,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             try {
-                mail = jwtTokenUtil.getUsernameFromToken(jwtToken);
+                //mail = jwtTokenUtil.getUsernameFromToken(jwtToken);
+                try {
+
+                    mail = jwtTokenUtil.getUsernameFromToken(jwtToken);
+
+                } catch (Exception e) {
+
+                    chain.doFilter(request, response);
+
+                    return;
+
+                }
             } catch (IllegalArgumentException e) {
                 System.out.println("No se puede encontrar el token JWT");
             } catch (ExpiredJwtException e) {

@@ -1,0 +1,11 @@
+<app-prescription-medications-form></app-prescription-medications-form>
+
+<div class="p-4">
+
+    <app-generic-table
+        [data]="prescriptionMedications()"
+        [columns]="columns"
+        [actions]="actions">
+    </app-generic-table>
+
+</div>

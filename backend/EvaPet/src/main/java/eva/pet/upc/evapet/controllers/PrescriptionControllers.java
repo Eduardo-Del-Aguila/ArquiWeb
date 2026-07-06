@@ -2,6 +2,7 @@ package eva.pet.upc.evapet.controllers;
 
 import eva.pet.upc.evapet.dtos.prescription.PrescriptionDTO;
 import eva.pet.upc.evapet.dtos.prescription.PrescriptionInsertDTO;
+import eva.pet.upc.evapet.dtos.prescription.PrescriptionShowDTO;
 import eva.pet.upc.evapet.dtos.prescriptionmedications.RecipesPatientDTO;
 import eva.pet.upc.evapet.models.Prescription;
 import eva.pet.upc.evapet.models.User;
@@ -31,12 +32,12 @@ public class PrescriptionControllers {
     private IPrescriptionService pS;
 
     @GetMapping("/listar")
-    public ResponseEntity<List<PrescriptionDTO>> listar(){
+    public ResponseEntity<List<PrescriptionShowDTO>> listar(){
         ModelMapper m = new ModelMapper();
 
-        List<PrescriptionDTO> lista = pS.list().stream()
-                .map(y -> m.map(y, PrescriptionDTO.class))
-                .collect(Collectors.toList());
+        List<PrescriptionShowDTO> lista = pS.list().stream()
+                .map(x -> new ModelMapper().map(x, PrescriptionShowDTO.class))
+                .toList();
 
         return ResponseEntity.ok(lista);
     }
@@ -94,15 +95,15 @@ public class PrescriptionControllers {
         }
     }
 
-    @PutMapping("/actualizar")
-    public ResponseEntity<?> actualizar(@RequestBody PrescriptionInsertDTO dto, Authentication a){
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<?> actualizar(@RequestBody PrescriptionInsertDTO dto,@PathVariable int id, Authentication a){
 
         String mail = a.getName();
         Optional<User> user = uR.findUserByMail(mail);
         if (user.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
         if (!user.get().isActive()) return ResponseEntity.badRequest().body("Usuario inactivo");
 
-        Optional<Prescription> existente = pS.listId(dto.getIdPrescription());
+        Optional<Prescription> existente = pS.listId(id);
 
         if(existente.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -176,7 +177,7 @@ public class PrescriptionControllers {
             RecipesPatientDTO dto = new RecipesPatientDTO();
 
             dto.setIdUserPatient(((Number) fila[0]).intValue());
-            //dto.setTotalRecetas(((Number) fila[1]).intValue());
+            dto.setTotalRecetas(((Number) fila[1]).intValue());
 
             respuesta.add(dto);
         }

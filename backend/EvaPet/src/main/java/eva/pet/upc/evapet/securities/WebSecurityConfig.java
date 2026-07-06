@@ -79,7 +79,7 @@ public class WebSecurityConfig {
                                 ).permitAll()
 //                        .anyRequest().permitAll()
                         // Todo lo demás requiere autenticación
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
 
                 .httpBasic(AbstractHttpConfigurer::disable)

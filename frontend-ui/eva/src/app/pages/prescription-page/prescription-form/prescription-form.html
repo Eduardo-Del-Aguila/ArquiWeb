@@ -1,0 +1,78 @@
+<form [formGroup]="form" (ngSubmit)="guardar()">
+
+  <br><br>
+
+  <h2 class="text-lg font-semibold">
+    Nueva Prescripción
+  </h2>
+
+  <br><br>
+
+  <mat-form-field appearance="outline">
+
+    <mat-label>ID Paciente</mat-label>
+
+    <input
+      matInput
+      type="number"
+      formControlName="idUserPatient">
+
+  </mat-form-field>
+
+  <br>
+
+  <mat-form-field appearance="outline">
+
+    <mat-label>ID Eva</mat-label>
+
+    <input
+      matInput
+      type="number"
+      formControlName="idEva">
+
+  </mat-form-field>
+
+  <br>
+
+  <mat-form-field appearance="outline">
+
+    <mat-label>Diagnóstico</mat-label>
+
+    <input
+      matInput
+      formControlName="diagnosis">
+
+  </mat-form-field>
+
+  <br>
+
+  <mat-form-field appearance="outline">
+
+    <mat-label>Fecha</mat-label>
+
+    <input
+      matInput
+      [matDatepicker]="picker"
+      formControlName="date">
+
+    <mat-datepicker-toggle
+      matIconSuffix
+      [for]="picker">
+    </mat-datepicker-toggle>
+
+    <mat-datepicker #picker></mat-datepicker>
+
+  </mat-form-field>
+
+  <br><br>
+
+  <button
+    mat-raised-button
+    color="primary"
+    type="submit">
+
+    Registrar
+
+  </button>
+
+</form>

@@ -1,0 +1,90 @@
+<div class="p-4 w-full">
+  <h2 class="text-lg font-semibold mb-4">Editar Prescripción</h2>
+
+  <form [formGroup]="form" (ngSubmit)="guardar()" class="flex flex-col gap-4">
+
+    <div class="grid grid-cols-1 gap-4">
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>ID Paciente</mat-label>
+        <input matInput type="number" formControlName="idUserPatient">
+
+        @if (form.get('idUserPatient')?.hasError('required') &&
+        form.get('idUserPatient')?.touched) {
+          <mat-error>El ID del paciente es requerido</mat-error>
+        }
+
+        @if (form.get('idUserPatient')?.hasError('min')) {
+          <mat-error>Debe ser mayor a 0</mat-error>
+        }
+
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>ID Eva</mat-label>
+        <input matInput type="number" formControlName="idEva">
+
+        @if (form.get('idEva')?.hasError('required') &&
+        form.get('idEva')?.touched) {
+          <mat-error>El ID de Eva es requerido</mat-error>
+        }
+
+        @if (form.get('idEva')?.hasError('min')) {
+          <mat-error>Debe ser mayor a 0</mat-error>
+        }
+
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Diagnóstico</mat-label>
+        <input matInput formControlName="diagnosis" maxlength="100">
+
+        @if (form.get('diagnosis')?.hasError('required') &&
+        form.get('diagnosis')?.touched) {
+          <mat-error>El diagnóstico es requerido</mat-error>
+        }
+
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Fecha</mat-label>
+
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="date">
+
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="picker">
+        </mat-datepicker-toggle>
+
+        <mat-datepicker #picker></mat-datepicker>
+
+        @if (form.get('date')?.hasError('required') &&
+        form.get('date')?.touched) {
+          <mat-error>La fecha es requerida</mat-error>
+        }
+
+      </mat-form-field>
+
+    </div>
+
+    <div class="flex justify-end gap-2">
+      <button mat-button type="button" (click)="cancelar()">
+        Cancelar
+      </button>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="form.invalid">
+
+        Actualizar
+
+      </button>
+    </div>
+
+  </form>
+</div>
