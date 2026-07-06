@@ -1,1 +1,60 @@
-<p>footer works!</p>,
+<footer class="bg-linear-to-r from-slate-950 via-blue-950 to-slate-900 border-t border-slate-800">
+
+  <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+
+    <div class="flex items-center gap-3">
+
+      <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg">
+        <span class="text-white font-bold text-lg">E</span>
+      </div>
+
+      <div>
+        <h3 class="text-white font-semibold text-lg">
+          EvaPet
+        </h3>
+
+      </div>
+
+    </div>
+
+    <div class="flex items-center gap-6 text-sm">
+
+      <a
+        routerLink="/home"
+        class="text-slate-400 hover:text-blue-400 transition-colors">
+        Inicio
+      </a>
+
+      <a
+        [routerLink]="['/login']"
+        class="text-slate-400 hover:text-blue-400 transition-colors">
+        Iniciar sesión
+      </a>
+
+      <a
+        routerLink="/register"
+        class="text-slate-400 hover:text-blue-400 transition-colors">
+        Registrarse
+      </a>
+
+    </div>
+
+  </div>
+
+  <div class="border-t border-slate-800">
+
+    <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-2">
+
+      <p class="text-slate-500 text-sm">
+        © 2026 EvaPet. Todos los derechos reservados.
+      </p>
+
+      <p class="text-slate-500 text-sm">
+        Desarrollado con Angular • Tailwind CSS
+      </p>
+
+    </div>
+
+  </div>
+
+</footer>

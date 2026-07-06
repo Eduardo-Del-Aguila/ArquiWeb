@@ -41,6 +41,11 @@ public class EvaPetServiceImplements implements IEvaPetService {
         eR.save(e);
     }
 
+    @Override
+    public Optional<EvaPet> findByPatientId(Long id) {
+        return Optional.empty();
+    }
+
     //definir a futuro
     @Override
     public List<String> listByName() {

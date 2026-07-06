@@ -13,213 +13,173 @@
 
   <nav class="flex-1">
 
-    <ul class="space-y-2">
+<ul class="space-y-2">
 
-      @if (isPatient() || isAdmin()) {
+  @if (isPatient() || isAdmin()) {
+  <li>
+    <button
+      mat-button
+      [matMenuTriggerFor]="petsMenu"
+      class="w-full flex! items-center! justify-start! rounded-xl px-4! py-3! text-slate-300 hover:bg-slate-800! hover:text-white!">
 
-      <li>
-        <button
-          mat-button
-          [matMenuTriggerFor]="petsMenu"
-          class="w-full flex! justify-start! text-start items-center! rounded-xl py-3! px-4! text-slate-300 hover:bg-slate-800! hover:text-white!">
+      <span>Mascotas</span>
+      <mat-icon>expand_more</mat-icon>
 
-          <span>Mascotas</span>
+    </button>
 
-          <mat-icon>expand_more</mat-icon>
+    <mat-menu #petsMenu="matMenu">
+      <button mat-menu-item [routerLink]="['/layout/pets/eva']">
+        Eva
+      </button>
 
-        </button>
+      <button mat-menu-item [routerLink]="['/layout/pets/reporte']">
+        Reportes
+      </button>
+    </mat-menu>
+  </li>
+  }
 
-        <mat-menu #petsMenu="matMenu">
-          <button mat-menu-item [routerLink]="['/layout/pets/eva']">
-            Eva
-          </button>
+  @if (isAdmin()) {
+  <li>
+    <button
+      mat-button
+      [matMenuTriggerFor]="rolesMenu"
+      class="w-full flex! items-center! justify-start! rounded-xl px-4! py-3! text-slate-300 hover:bg-slate-800! hover:text-white!">
 
-          <button mat-menu-item [routerLink]="['/layout/pets/reporte']">
-            Reportes
-          </button>
-        </mat-menu>
+      <span>Roles</span>
+      <mat-icon>expand_more</mat-icon>
 
-      </li>
+    </button>
 
-      }
+    <mat-menu #rolesMenu="matMenu">
+      <button mat-menu-item [routerLink]="['/layout/rol']">
+        Listado
+      </button>
+    </mat-menu>
+  </li>
+  }
 
-      @if (isAdmin()) {
+  @if (isAdmin()) {
+  <li>
+    <button
+      mat-button
+      [matMenuTriggerFor]="usersMenu"
+      class="w-full flex! items-center! justify-start! rounded-xl px-4! py-3! text-slate-300 hover:bg-slate-800! hover:text-white!">
 
-      <li>
+      <span>Usuarios</span>
+      <mat-icon>expand_more</mat-icon>
 
-        <button
-          mat-button
-          [matMenuTriggerFor]="rolesMenu"
-          class="w-full flex! justify-start! text-start items-center! rounded-xl py-3! px-4! text-slate-300 hover:bg-slate-800! hover:text-white!">
+    </button>
 
-          <span>Roles</span>
+    <mat-menu #usersMenu="matMenu">
+      <button mat-menu-item [routerLink]="['/layout/users/list']">
+        Lista
+      </button>
 
-          <mat-icon>expand_more</mat-icon>
+      <button mat-menu-item [routerLink]="['/layout/users/report']">
+        Reportes
+      </button>
+    </mat-menu>
+  </li>
+  }
 
-        </button>
+  @if (isAdmin()) {
+  <li>
+    <a
+      [routerLink]="['/layout/hospitals']"
+      routerLinkActive="bg-blue-600 text-white"
+      class="flex rounded-xl px-4 py-3 text-slate-300 hover:bg-slate-800 transition">
+      Hospitales
+    </a>
+  </li>
+  }
 
-        <mat-menu #rolesMenu="matMenu">
+  @if (isAdmin() || isDoctor()) {
+  <li>
+    <a
+      [routerLink]="['/layout/medical-history']"
+      routerLinkActive="bg-blue-600 text-white"
+      class="flex rounded-xl px-4 py-3 text-slate-300 hover:bg-slate-800 transition">
+      Historiales médicos
+    </a>
+  </li>
+  }
 
-          <button mat-menu-item [routerLink]="['/layout/rol']">
-            Listado
-          </button>
+  @if (isAdmin()) {
+  <li>
+    <button
+      mat-button
+      [matMenuTriggerFor]="alertsMenu"
+      class="w-full flex! items-center! justify-start! rounded-xl px-4! py-3! text-slate-300 hover:bg-slate-800! hover:text-white!">
 
-        </mat-menu>
+      <span>Alertas</span>
+      <mat-icon>expand_more</mat-icon>
 
-      </li>
+    </button>
 
-      }
+    <mat-menu #alertsMenu="matMenu">
+      <button mat-menu-item [routerLink]="['/layout/alerts']">
+        Listado
+      </button>
 
-      @if (isAdmin()) {
+      <button mat-menu-item [routerLink]="['/layout/alerts/reportes']">
+        Reportes
+      </button>
+    </mat-menu>
+  </li>
+  }
 
-      <li>
+  <!-- Nuevas opciones -->
 
-        <button
-          mat-button
-          [matMenuTriggerFor]="usersMenu"
-          class="w-full flex! justify-start! text-start items-center! rounded-xl py-3! px-4! text-slate-300 hover:bg-slate-800! hover:text-white!">
+  <li>
+    <a [routerLink]="['/layout/medications']"
+       routerLinkActive="bg-blue-600 text-white"
+       class="flex rounded-xl px-4 py-3 text-slate-300 hover:bg-slate-800 transition">
+      Medicamentos
+    </a>
+  </li>
 
-          <span>Usuarios</span>
+  <li>
+    <a [routerLink]="['/layout/prescriptions']"
+       routerLinkActive="bg-blue-600 text-white"
+       class="flex rounded-xl px-4 py-3 text-slate-300 hover:bg-slate-800 transition">
+      Prescripciones
+    </a>
+  </li>
 
-          <mat-icon>expand_more</mat-icon>
+  <li>
+    <a [routerLink]="['/layout/prescription-medications']"
+       routerLinkActive="bg-blue-600 text-white"
+       class="flex rounded-xl px-4 py-3 text-slate-300 hover:bg-slate-800 transition">
+      Prescripción por medicamento
+    </a>
+  </li>
 
-        </button>
+  <li>
+    <a [routerLink]="['/layout/medications-active']"
+       routerLinkActive="bg-blue-600 text-white"
+       class="flex rounded-xl px-4 py-3 text-slate-300 hover:bg-slate-800 transition">
+      Medicamentos activos
+    </a>
+  </li>
 
-        <mat-menu #usersMenu="matMenu">
+  <li>
+    <a [routerLink]="['/layout/recipes-patient']"
+       routerLinkActive="bg-blue-600 text-white"
+       class="flex rounded-xl px-4 py-3 text-slate-300 hover:bg-slate-800 transition">
+      Recetas por paciente
+    </a>
+  </li>
 
-          <button mat-menu-item [routerLink]="['/layout/users/list']">
-            Lista
-          </button>
+  <li>
+    <a [routerLink]="['/layout/medications-used']"
+       routerLinkActive="bg-blue-600 text-white"
+       class="flex rounded-xl px-4 py-3 text-slate-300 hover:bg-slate-800 transition">
+      Medicamentos más usados
+    </a>
+  </li>
 
-          <button mat-menu-item [routerLink]="['/layout/users/report']">
-            Reportes
-          </button>
-
-        </mat-menu>
-
-      </li>
-
-      }
-
-      @if (isAdmin()) {
-
-      <li>
-
-        <a
-          [routerLink]="['/layout/hospitals']"
-          routerLinkActive="bg-blue-600 text-white"
-          class="flex items-center rounded-xl px-4 py-3 text-slate-300 hover:bg-slate-800 hover:text-white transition">
-
-          Hospitales
-
-        </a>
-      </li>
-      }
-
-
-<div class="bg-gray-900 min-h-dvh h-full w-50 px-4 py-6 flex flex-col gap-6">
-
-  <h2 class="text-2xl font-bold text-white text-center tracking-wide">Eva Pet</h2>
-
-  <nav>
-    <ul class="flex flex-col gap-2">
-      <li>
-        <a [routerLink]="['/layout/pets']" routerLinkActive="bg-green-600 text-white"
-          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer">
-          Pets
-        </a>
-      </li>
-
-
-      @if (isAdmin() || isDoctor()) {
-
-      <li>
-
-        <a
-          [routerLink]="['/layout/medical-history']"
-          routerLinkActive="bg-blue-600 text-white"
-          class="flex items-center rounded-xl px-4 py-3 text-slate-300 hover:bg-slate-800 hover:text-white transition">
-
-          Historiales médicos
-
-        </a>
-
-      </li>
-
-      }
-
-      @if (isAdmin()) {
-
-      <li>
-
-        <button
-          mat-button
-          [matMenuTriggerFor]="alertsMenu"
-          class="w-full flex! justify-start! text-start items-center! rounded-xl py-3! px-4! text-slate-300 hover:bg-slate-800! hover:text-white!">
-
-          <span>Alertas</span>
-
-          <mat-icon>expand_more</mat-icon>
-
-        </button>
-
-        <mat-menu #alertsMenu="matMenu">
-
-          <button mat-menu-item [routerLink]="['/layout/alerts']">
-            Listado
-          </button>
-
-          <button mat-menu-item [routerLink]="['/layout/alerts/reportes']">
-            Reportes
-          </button>
-
-        </mat-menu>
-
-        <a [routerLink]="['/layout/rol']" routerLinkActive="bg-green-600 text-white"
-          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer">
-          Roles
-        </a>
-      </li>
-
-      }
-
-      <li>
-        <a [routerLink]="['/layout/medications']" routerLinkActive="bg-green-600 text-white"
-          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer">
-          Medicamentos
-        </a>
-      </li>
-      <li>
-        <a [routerLink]="['/layout/prescriptions']" routerLinkActive="bg-green-600 text-white"
-          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer">
-          Prescripciones
-        </a>
-      </li>
-      <li>
-        <a [routerLink]="['/layout/prescription-medications']" routerLinkActive="bg-green-600 text-white"
-          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer">
-          Prescripciones por Medicamento
-        </a>
-      </li>
-      <li>
-        <a [routerLink]="['/layout/medications-active']" routerLinkActive="bg-green-600 text-white"
-          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer">
-          Medicamentos Activos
-        </a>
-      </li>
-      <li>
-        <a [routerLink]="['/layout/recipes-patient']" routerLinkActive="bg-green-600 text-white"
-          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer">
-          Recetas por Paciente
-        </a>
-      </li>
-      <li>
-        <a [routerLink]="['/layout/medications-used']" routerLinkActive="bg-green-600 text-white"
-          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer">
-          Medicamentos Más Usados
-        </a>
-      </li>
-    </ul>
+</ul>
 
   </nav>
 </div>

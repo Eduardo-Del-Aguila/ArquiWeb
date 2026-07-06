@@ -19,7 +19,6 @@ export const routes: Routes = [
       import('../app/pages/Layout/Layout').then(m => m.Layout),
     children: [
 
-      // PETS
       {
         path: 'pets',
         canActivate: [securityGuard, roleGuard(['ADMIN', 'PATIENT'])],
@@ -39,7 +38,6 @@ export const routes: Routes = [
         ],
       },
 
-      // ROLES
       {
         path: 'rol',
         canActivate: [securityGuard, roleGuard(['ADMIN'])],
@@ -55,7 +53,6 @@ export const routes: Routes = [
           ),
       },
 
-      // USERS
       {
         path: 'users',
         canActivate: [securityGuard, roleGuard(['ADMIN'])],
@@ -77,7 +74,6 @@ export const routes: Routes = [
         ],
       },
 
-      // HOSPITALS
       {
         path: 'hospitals',
         canActivate: [securityGuard, roleGuard(['ADMIN', 'DOCTOR'])],
@@ -87,7 +83,6 @@ export const routes: Routes = [
           ),
       },
 
-      // ALERTS
       {
         path: 'alerts',
         loadComponent: () =>
@@ -103,7 +98,6 @@ export const routes: Routes = [
           ),
       },
 
-      // MEDICAL HISTORY
       {
         path: 'medical-history',
         canActivate: [securityGuard, roleGuard(['ADMIN', 'DOCTOR'])],
@@ -113,7 +107,6 @@ export const routes: Routes = [
           ),
       },
 
-      // NUEVAS RUTAS
       {
         path: 'medications',
         loadComponent: () =>

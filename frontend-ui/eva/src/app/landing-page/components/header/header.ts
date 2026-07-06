@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { Navbar } from "../navbar/navbar";
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-header',
-  imports: [ Navbar],
+  imports: [ Navbar, RouterLink, RouterLinkActive],
   templateUrl: './header.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

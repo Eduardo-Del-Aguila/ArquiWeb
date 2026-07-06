@@ -3,10 +3,11 @@ import { Header } from "./components/header/header";
 import { HeroPage } from "./pages/hero-page/hero-page";
 import { CardPlan } from "./components/card-plan/card-plan";
 import { AboutEva } from "./pages/about-eva/about-eva";
+import { Footer } from "../shared/components/footer/footer";
 
 @Component({
   selector: 'app-landing',
-  imports: [Header, HeroPage, CardPlan, AboutEva],
+  imports: [Header, HeroPage, CardPlan, AboutEva, Footer],
   templateUrl: './landing.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
