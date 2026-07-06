@@ -12,37 +12,35 @@ export const routes: Routes = [
     loadComponent: () => import('../app/features/auth/Register/Register').then(m => m.Register),
   },
   {
-    path:'layout',
-    loadComponent: () => import('../app/pages/Layout/Layout').then( m => m.Layout),
+    path: 'layout',
+    loadComponent: () => import('../app/pages/Layout/Layout').then(m => m.Layout),
     children: [
       {
-        path:'pets',
+        path: 'pets',
         canActivate: [securityGuard, roleGuard(['ADMIN', 'PATIENT'])],
         children: [
           {
-            path:'eva',
+            path: 'eva',
             loadComponent: () => import('../app/pages/pet-page/pet-page').then(m => m.PetPage),
           },
           {
-            path:'reporte',
+            path: 'reporte',
             loadComponent: () => import('../app/pages/pet-page/EvaPetReport/EvaPetReport').then(m => m.EvaPetReport),
           },
         ]
-
       },
       {
-        path:'rol',
+        path: 'rol',
         loadComponent: () => import('./pages/RolPage/rol-page').then(m => m.RolPage),
         canActivate: [securityGuard, roleGuard(['ADMIN'])],
       },
       {
         path: 'rol/reportes',
-        // Asegúrate de que la ruta al archivo y el nombre del componente (ReportsPage) coincidan con el que creaste
         loadComponent: () => import('./pages/reports-page/reports-page').then(m => m.ReportsPage),
         canActivate: [securityGuard, roleGuard(['ADMIN'])],
       },
       {
-        path:'users',
+        path: 'users',
         canActivate: [securityGuard, roleGuard(['ADMIN'])],
         children: [
           {
@@ -51,32 +49,27 @@ export const routes: Routes = [
           },
           {
             path: 'report',
-            loadComponent: () => import('./pages/users-page//UserReport/UserReport').then(m => m.UserReport),
+            loadComponent: () => import('./pages/users-page/UserReport/UserReport').then(m => m.UserReport),
           },
-
         ]
       },
       {
-        path:'hospitals',
+        path: 'hospitals',
         loadComponent: () => import('./pages/hospitales-page/hospitales-page').then(m => m.HospitalesPage),
         canActivate: [securityGuard, roleGuard(['ADMIN', 'DOCTOR'])],
       },
       {
         path: 'alerts',
-        loadComponent: () => import('./pages/alert-page/alert-page').then(m => m.AlertPage)
-      },
-      {
-        path: 'medical-history',
-        loadComponent: () => import('./pages/MedicalHistory/MedicalHistory-page').then(m => m.MedicalHistory)
-      }
-
+        loadComponent: () => import('./pages/alert-page/alert-page').then(m => m.AlertPage),
       },
       {
         path: 'alerts/reportes',
-        // Asegúrate de que la ruta al archivo apunte a la página de reportes que creaste
-        loadComponent: () => import('./pages/reports-page/reports-page').then(m => m.ReportsPage)
+        loadComponent: () => import('./pages/reports-page/reports-page').then(m => m.ReportsPage),
       },
-
+      {
+        path: 'medical-history',
+        loadComponent: () => import('./pages/MedicalHistory/MedicalHistory-page').then(m => m.MedicalHistory),
+      }
     ]
   },
   {
@@ -86,6 +79,5 @@ export const routes: Routes = [
   {
     path: '**',
     redirectTo: 'home',
-  },
-
+  }
 ];

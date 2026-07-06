@@ -3,7 +3,6 @@ import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { LoginService } from '../../../core/services/auth/Login.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
