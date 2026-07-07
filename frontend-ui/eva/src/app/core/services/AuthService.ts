@@ -13,7 +13,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private url = 'http://localhost:8081/auth/login';
+  private url = 'https://arquiweb-vno8.onrender.com/auth/login';
 
   login(dto: LoginRequest) {
     return this.http.post<LoginResponse>(this.url, dto).pipe(
